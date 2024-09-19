@@ -1,0 +1,40 @@
+Metadata-Version: 2.1
+Name: datatable
+Version: 1.1.0
+Summary: Python library for fast multi-threaded data manipulation and munging.
+Keywords: datatable,data,dataframe,frame,data.table,munging,numpy,pandas,data processing,ETL
+Home-page: https://github.com/h2oai/datatable
+Author: Pasha Stetsenko
+Author-email: pasha.stetsenko@h2o.ai
+Maintainer: Oleksiy Kononenko
+Maintainer-email: oleksiy.kononenko@h2o.ai
+License: Mozilla Public License v2.0
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Requires-Dist: pytest (>=3.1); extra == 'tests'
+Requires-Dist: docutils (>=0.14); extra == 'tests'
+Requires-Dist: numpy; extra == 'optional'
+Requires-Dist: pandas; extra == 'optional'
+Requires-Dist: xlrd; extra == 'optional'
+Provides-Extra: optional
+Provides-Extra: tests
+Requires-Python: >=3.6
+
+This is a Python package for manipulating 2-dimensional tabular data
+structures (aka data frames). It is close in spirit to pandas or SFrame;
+however we put specific emphasis on speed and big data support. As the
+name suggests, the package is closely related to R's data.table and
+attempts to mimic its core algorithms and API.
+
+See https://github.com/h2oai/datatable for more details.
