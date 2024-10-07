@@ -102,7 +102,7 @@ async def main():
     # Fetch and insert the station data into the PostgreSQL database
     await stations.insert_into_database(station_list)
 
-    # # Close the session
+    # Close the session
     await stations.close()
 
 
