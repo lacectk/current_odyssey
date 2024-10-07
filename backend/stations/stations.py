@@ -1,12 +1,8 @@
-import aiohttp
 import asyncio
-from create_database import create_database
-import json
+from backend.create_database import create_database
+from backend.stations.ndbc_stations_data import NDBCDataFetcher
 import os
 import psycopg2
-import xmltodict
-
-STATION_URL = "https://www.ndbc.noaa.gov/activestations.xml"
 
 
 class Station(object):
@@ -18,7 +14,7 @@ class Station(object):
 
 class Stations:
     def __init__(self):
-        self._session = aiohttp.ClientSession()
+        self.fetcher = NDBCDataFetcher()
         self.conn = psycopg2.connect(
             dbname=os.getenv("DB_NAME"),
             user=os.getenv("DB_USER"),
@@ -27,17 +23,8 @@ class Stations:
         )
         self.cursor = self.conn.cursor()
 
-    async def list(self):
-        async with await self._session.get(STATION_URL) as resp:
-            response = await resp.text()
-
-        try:
-            response_dict = xmltodict.parse(response)
-            stations_json = json.dumps(response_dict)
-        except Exception as e:
-            raise Exception(f"Error converting station data to JSON: {e}")
-
-        stations_data = json.loads(stations_json)
+    async def meteorological_stations(self):
+        stations_data = await self.fetcher.fetch_station_data()
         stations_list = {}
 
         for station in stations_data["stations"]["station"]:
@@ -80,6 +67,10 @@ class Stations:
                 """,
                     (station.station_id, station.latitude, station.longitude),
                 )
+
+                if self.cursor.rowcount > 0:
+                    print(f"Inserted new station {station_id}")
+
             except Exception as e:
                 print(f"Error inserting data for station {station_id}: {e}")
                 self.conn.rollback()
@@ -87,7 +78,6 @@ class Stations:
         self.conn.commit()
 
     async def close(self):
-        await self._session.close()
         self.cursor.close()
         self.conn.close()
 
@@ -97,7 +87,7 @@ async def main():
     # Create an instance of the Stations class and fetch the data
     stations = Stations()
     stations.setup_database()
-    station_list = await stations.list()
+    station_list = await stations.meteorological_stations()
 
     # Fetch and insert the station data into the PostgreSQL database
     await stations.insert_into_database(station_list)
