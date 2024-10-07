@@ -180,7 +180,7 @@ class NDBC:
                             )
 
                             # Keep only the necessary columns
-                            df = df[["DateTime", "WVHT"]]
+                            df = df[["DateTime", "WVHT", "DPD", "APD", "MWD"]]
 
                             # Filter out rows with invalid WVHT values
                             #  (non-float or missing "MM")
