@@ -23,4 +23,4 @@ class NDBCDataFetcher:
         return stations_data
 
     async def close(self):
-        await self._sessions.close()
+        await self._session.close()

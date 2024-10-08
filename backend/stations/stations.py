@@ -1,6 +1,7 @@
 import asyncio
 from backend.create_database import create_database
 from backend.stations.ndbc_stations_data import NDBCDataFetcher
+from dotenv import load_dotenv
 import os
 import psycopg2
 
@@ -83,6 +84,7 @@ class Stations:
 
 
 async def main():
+    load_dotenv()
     create_database("stations")
     # Create an instance of the Stations class and fetch the data
     stations = Stations()

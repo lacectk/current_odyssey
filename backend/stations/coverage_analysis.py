@@ -1,8 +1,9 @@
 import asyncio
+from dotenv import load_dotenv
 import psycopg2
 import os
 import matplotlib.pyplot as plt
-from ndbc_stations_data import NDBCDataFetcher
+from backend.stations.ndbc_stations_data import NDBCDataFetcher
 
 
 class CoverageAnalysis:
@@ -24,34 +25,27 @@ class CoverageAnalysis:
         # Fetch all station data (both with and without met data)
         stations_data = await self.fetcher.fetch_station_data()
 
-        # TODO: Shift some code around here. We should only be querying data that's not already in the stations db.
         for station in stations_data["stations"]["station"]:
             station_id = station["@id"]
             latitude = float(station["@lat"])
             longitude = float(station["@lon"])
 
-            # Check if the station has meteorological data
-            if station.get("@met") == "y":
-                # If it has met data, retrieve it from the database
-                try:
-                    self.cursor.execute(
-                        "SELECT latitude, longitude FROM stations WHERE station_id = %s",
-                        (station_id,),
-                    )
-                    row = self.cursor.fetchone()
-                    if row:
-                        lat, lon = row
-                        self.stations_with_met.append((lat, lon))
-                    else:
-                        print(f"No database entry found for station {station_id}")
-                except Exception as e:
-                    print(
-                        f"Error fetching data from database for station {station_id}: {e}"
-                    )
-                    self.conn.rollback()
-            else:
-                # If it does not have met data, collect it directly from the XML
-                self.stations_without_met.append((latitude, longitude))
+            try:
+                self.cursor.execute(
+                    "SELECT latitude, longitude FROM stations WHERE station_id = %s",
+                    (station_id,),
+                )
+                row = self.cursor.fetchone()
+
+                if row:
+                    lat, lon = row
+                    self.stations_with_met.append((lat, lon))
+                else:
+                    # If the station_id doesn't exist, append lat/lon from the XML data
+                    self.stations_without_met.append((latitude, longitude))
+            except Exception as e:
+                print(f"Error fetching data for station {station_id}: {e}")
+                self.conn.rollback()
 
     def plot_coverage(self):
         # Unpack the data for plotting
@@ -90,7 +84,9 @@ class CoverageAnalysis:
 
 
 async def main():
+    load_dotenv()
     analysis = CoverageAnalysis()
+
     await analysis.fetch_stations()  # Fetch the station data (from DB and XML)
     analysis.plot_coverage()  # Plot the coverage
     await analysis.close()  # Close the sessions
