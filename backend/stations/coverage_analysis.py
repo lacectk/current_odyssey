@@ -1,4 +1,6 @@
 import asyncio
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
 from dotenv import load_dotenv
 import psycopg2
 import os
@@ -48,10 +50,19 @@ class CoverageAnalysis:
                 self.conn.rollback()
 
     def plot_coverage(self):
+        projection = ccrs.PlateCarree()
+        fig, ax = plt.subplots(figsize=(10, 7), subplot_kw={"projection": projection})
+
+        ax.coastlines()
+        ax.add_feature(cfeature.BORDERS, linestyle=":")
+
+        ax.add_feature(cfeature.LAND, edgecolor="black", zorder=0)
+        ax.add_feature(cfeature.OCEAN, zorder=0)
+
         # Unpack the data for plotting
         if self.stations_with_met:
             lat_with_met, lon_with_met = zip(*self.stations_with_met)
-            plt.scatter(
+            ax.scatter(
                 lon_with_met,
                 lat_with_met,
                 c="blue",
@@ -61,7 +72,7 @@ class CoverageAnalysis:
 
         if self.stations_without_met:
             lat_without_met, lon_without_met = zip(*self.stations_without_met)
-            plt.scatter(
+            ax.scatter(
                 lon_without_met,
                 lat_without_met,
                 c="red",
