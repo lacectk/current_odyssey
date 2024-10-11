@@ -13,11 +13,11 @@ class Station(object):
         self.longitude = longitude
 
 
-class Stations:
+class StationsFetcher:
     def __init__(self):
         self.fetcher = NDBCDataFetcher()
         self.conn = psycopg2.connect(
-            dbname=os.getenv("DB_NAME"),
+            dbname="stations",
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD"),
             host=os.getenv("DB_HOST"),
@@ -78,6 +78,16 @@ class Stations:
 
         self.conn.commit()
 
+    def fetch_station_ids(self):
+        """Fetch station IDs from the 'stations' table."""
+        try:
+            self.cursor.execute("SELECT station_id FROM stations")
+            station_ids = [row[0] for row in self.cursor.fetchall()]
+            return station_ids
+        except Exception as e:
+            print(f"Error fetching station IDs: {e}")
+            return []
+
     async def close(self):
         self.cursor.close()
         self.conn.close()
@@ -87,7 +97,7 @@ async def main():
     load_dotenv()
     create_database("stations")
     # Create an instance of the Stations class and fetch the data
-    stations = Stations()
+    stations = StationsFetcher()
     stations.setup_database()
     station_list = await stations.meteorological_stations()
 

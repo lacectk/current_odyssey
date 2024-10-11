@@ -24,7 +24,7 @@ def create_database(database_name):
 
     if not exists:
         # Create 'stations' database if it does not exist
-        cursor.execute("CREATE DATABASE {database_name};")
+        cursor.execute(f"CREATE DATABASE {database_name};")
         print("Database '{database_name}' created.")
     else:
         print(f"Database '{database_name}' already exists")

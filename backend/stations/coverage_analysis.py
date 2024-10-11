@@ -11,7 +11,7 @@ from backend.stations.ndbc_stations_data import NDBCDataFetcher
 class CoverageAnalysis:
     def __init__(self):
         self.conn = psycopg2.connect(
-            dbname=os.getenv("DB_NAME"),
+            dbname="stations",
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD"),
             host=os.getenv("DB_HOST"),
