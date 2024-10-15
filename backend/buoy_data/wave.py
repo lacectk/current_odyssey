@@ -1,7 +1,7 @@
 import aiohttp
 import asyncio
 from backend.create_database import create_database
-from backend.stations.stations_fetcher import StationsFetcher
+from backend.stations.stations import StationsFetcher
 from dotenv import load_dotenv
 from io import StringIO
 import pandas as pd
@@ -202,7 +202,7 @@ class WaveDataFetcher:
                 if pd.isnull(row["DateTime"]):
                     print(
                         "Skipping row with NaT in DateTime for"
-                        + f"station {station_id}: {row}"
+                        + "station {station_id}: {row}"
                     )
                     continue  # Skip rows where DateTime is NaT
                 # Use None for missing columns (e.g., DPD, APD, MWD)
