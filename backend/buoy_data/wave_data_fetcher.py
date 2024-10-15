@@ -200,7 +200,10 @@ class WaveDataFetcher:
         try:
             for _, row in data.iterrows():
                 if pd.isnull(row["DateTime"]):
-                    print(f"Skipping row with NaT in DateTime for station {station_id}: {row}")
+                    print(
+                        "Skipping row with NaT in DateTime for"
+                        + f"station {station_id}: {row}"
+                    )
                     continue  # Skip rows where DateTime is NaT
                 # Use None for missing columns (e.g., DPD, APD, MWD)
                 wvht = row["WVHT"] if "WVHT" in data.columns else None
