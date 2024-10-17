@@ -6,7 +6,7 @@ import os
 import psycopg2
 
 
-class Station(object):
+class Station:
     def __init__(self, station_id, latitude, longitude):
         self.station_id = station_id
         self.latitude = latitude
