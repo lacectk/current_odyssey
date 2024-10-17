@@ -1,6 +1,7 @@
 import json
 import eccodes as ec
 import numpy as np
+import os
 import psycopg2
 from scipy.spatial import cKDTree
 
@@ -10,6 +11,25 @@ def load_surf_spots(json_file):
     with open(json_file, "r") as file:
         surf_spots = json.load(file)
     return surf_spots
+
+
+def inspect_grib_file(grib_file):
+    with open(grib_file, "rb") as f:
+        while True:
+            gid = ec.codes_grib_new_from_file(f)
+            if gid is None:
+                break
+
+            # Get and print all key information
+            keys = ec.codes_keys_iterator_new(gid)
+            while ec.codes_keys_iterator_next(keys):
+                key_name = ec.codes_keys_iterator_get_name(keys)
+                try:
+                    value = ec.codes_get(gid, key_name)
+                    print(f"{key_name}: {value}")
+                except Exception:
+                    continue
+            ec.codes_release(gid)
 
 
 # Extract metadata from GRIB
@@ -103,25 +123,27 @@ def process_grib_file(grib_file, surf_spots, conn):
 
 
 def main():
-    json_file = "data/surfspots.json"
-    surf_spots = load_surf_spots(json_file)
+    # json_file = "data/surfspots.json"
+    # surf_spots = load_surf_spots(json_file)
 
-    # Connect to PostgreSQL
-    conn = psycopg2.connect(
-        dbname="your_db_name",
-        user="your_username",
-        password="your_password",
-        host="your_host",
-        port="your_port",
-    )
+    # # Connect to PostgreSQL
+    # conn = psycopg2.connect(
+    #     dbname="stations",
+    #     user=os.getenv("DB_USER"),
+    #     password=os.getenv("DB_PASSWORD"),
+    #     host=os.getenv("DB_HOST"),
+    # )
 
-    try:
-        # Process the GRIB file for all surf spots
-        grib_file = "/path/to/your/grib/file.grib2"
-        process_grib_file(grib_file, surf_spots, conn)
+    # try:
+    #     # Process the GRIB file for all surf spots
+    #     grib_file = os.path.expanduser("~/Downloads/gfswave.t06z.arctic.9km.f000.grib2")
+    #     process_grib_file(grib_file, surf_spots, conn)
 
-    finally:
-        conn.close()
+    # finally:
+    #     conn.close()
+    grib_file = os.path.expanduser("~/Downloads/gfswave.t06z.arctic.9km.f000.grib2")
+    inspect_grib_file(grib_file)
+
 
 
 if __name__ == "__main__":
