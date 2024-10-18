@@ -17,9 +17,9 @@ def create_database(database_name):
     cursor = conn.cursor()
 
     # Check if 'stations' database exists
-    cursor.execute(
-        "SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s;", (database_name,)
-    )
+    query = "SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s;"
+    cursor.execute(query, (database_name,))
+
     exists = cursor.fetchone()
 
     if not exists:

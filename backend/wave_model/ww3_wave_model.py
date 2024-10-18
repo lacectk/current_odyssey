@@ -3,7 +3,7 @@ import requests
 import xarray as xr
 from datetime import datetime
 
-_base_gfs_wave_grib_url = "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.{0}/{3}/wave/gridded/{1}.t{3}z.{2}.f{4}.grib2"
+_base_gfs_wave_grib_url = "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.{0}/{3}/wave/gridded/{1}.t{3}z.{2}.f{4}.grib2"  # noqa: E501
 
 
 class WW3DataFetcher:

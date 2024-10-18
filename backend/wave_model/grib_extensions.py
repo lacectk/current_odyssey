@@ -29,7 +29,9 @@ class GribExtenions:
 def main():
     grib_extensions = GribExtenions()
 
-    grib_file = os.path.expanduser("~/Downloads/gfswave.t06z.arctic.9km.f000.grib2")
+    grib_file = os.path.join(
+        os.getenv("HOME"), "Downloads/gfswave.t06z.arctic.9km.f000.grib2"
+    )
     grib_extensions.find_available_parameters(grib_file)
 
 
