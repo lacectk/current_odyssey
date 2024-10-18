@@ -1,6 +1,6 @@
 import json
 import numpy as np
-import cfgrib
+import pygrib
 import psycopg2
 from scipy.spatial import cKDTree
 import os
@@ -23,27 +23,25 @@ class WaveModel:
             surf_spots = json.load(file)
         return surf_spots
 
-    # Extract GRIB metadata using cfgrib
-    def extract_grib_metadata(self, grib_data):
-        """Extracts and returns relevant metadata from GRIB data."""
-        metadata = {}
-        metadata["units"] = grib_data.units
-        metadata["data_date"] = grib_data.time.dt.strftime("%Y%m%d").item()  # Date
-        metadata["data_time"] = grib_data.time.dt.strftime("%H%M").item()  # Time
-        metadata["forecast_time"] = (
-            grib_data.step_hours.item()
-        )  # Forecast time in hours
+    # Extract GRIB metadata using pygrib
+    def extract_grib_metadata(self, grb):
+        """Extracts and returns relevant metadata from the GRIB message."""
+        metadata = {
+            "units": grb.units,
+            "data_date": grb.analDate.strftime("%Y%m%d"),
+            "data_time": grb.analDate.strftime("%H%M"),
+            "forecast_time": grb.forecastTime,
+        }
         return metadata
 
     # Extract and filter GRIB data
-    def extract_and_filter_data(self, grib_data):
+    def extract_and_filter_data(self, grb):
         """Extracts the data array, lats, and lons from GRIB, and filters missing values."""
-        values = grib_data.values
-        lats = grib_data.latitude.values
-        lons = grib_data.longitude.values
+        values = grb.values
+        lats, lons = grb.latlons()
 
-        # Handle missing data
-        missing_value_indicator = grib_data.missing_value
+        # Handle missing data: PyGRIB uses 9999.0 as a missing value by default
+        missing_value_indicator = 9999.0
         filtered_values = np.where(values == missing_value_indicator, np.nan, values)
 
         return filtered_values, lats, lons
@@ -99,7 +97,7 @@ class WaveModel:
             direction_wind_waves, direction_swell_waves,
             units, date, time, forecast_time)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-        '%s, %s, %s, %s, %s)
+        %s, %s, %s, %s)
         """
 
         self.cursor.execute(
@@ -139,32 +137,31 @@ class WaveModel:
         _, idx = tree.query([surf_spot_lat, surf_spot_lng])
         return idx
 
-    # Process the GRIB file
+    # Process the GRIB file using pygrib
     def process_grib_file(self, grib_file, surf_spots):
         """Processes the GRIB file for each surf spot and inserts data into the PostgreSQL database."""
-        # Load the GRIB file using cfgrib
-        grib_data = cfgrib.open_datasets(grib_file)
+        # Open the GRIB file using pygrib
+        grbs = pygrib.open(grib_file)
 
-        # Assume only one dataset (multiple variables could be handled differently)
-        for dataset in grib_data:
-            # For each variable (wind speed, wave height, etc.)
-            for var in dataset.variables:
-                # Get the data and metadata for this variable
-                data_array = dataset[var]
-                metadata = self.extract_grib_metadata(data_array)
+        for grb in grbs:
+            # Extract metadata from the GRIB message
+            metadata = self.extract_grib_metadata(grb)
 
-                # Extract and filter data
-                values, latitudes, longitudes = self.extract_and_filter_data(data_array)
+            # Extract and filter data
+            values, latitudes, longitudes = self.extract_and_filter_data(grb)
 
-                # Loop over surf spots to extract the nearest value
-                for spot in surf_spots:
-                    idx = self.find_nearest_point(
-                        latitudes, longitudes, float(spot["lat"]), float(spot["lng"])
-                    )
-                    nearest_value = values.ravel()[idx]
+            # Loop over surf spots to extract the nearest value
+            for spot in surf_spots:
+                idx = self.find_nearest_point(
+                    latitudes, longitudes, float(spot["lat"]), float(spot["lng"])
+                )
+                nearest_value = values.ravel()[idx]
 
-                    # Insert the surf spot and GRIB data into the database
-                    self.insert_surf_data(conn, spot, var, nearest_value, metadata)
+                # Define parameters for this spot (you can expand this)
+                params = {grb.name: nearest_value}
+
+                # Insert the surf spot and GRIB data into the database
+                self.insert_surf_data(spot, params, metadata)
 
     async def close(self):
         self.cursor.close()
