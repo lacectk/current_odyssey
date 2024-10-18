@@ -53,19 +53,30 @@ class WaveModel:
             self.cursor.execute(
                 """
                 CREATE TABLE IF NOT EXISTS swell (
-                                id SERIAL PRIMARY KEY,
-                                surf_spot_name VARCHAR(255),
-                                country VARCHAR(255),
-                                lat FLOAT,
-                                lng FLOAT,
-                                parameter_name VARCHAR(255),
-                                value FLOAT,
-                                units VARCHAR(50),
-                                date DATE,
-                                time TIME,
-                                forecast_time TIME,
-                                );
-            """
+                    id SERIAL PRIMARY KEY,
+                    surf_spot_name VARCHAR(255),
+                    country VARCHAR(255),
+                    lat FLOAT,
+                    lng FLOAT,
+                    wind_speed FLOAT,
+                    wind_direction FLOAT,
+                    u_component_of_wind FLOAT,
+                    v_component_of_wind FLOAT,
+                    sig_height_combined_waves FLOAT,
+                    primary_wave_mean_period FLOAT,
+                    primary_wave_direction FLOAT,
+                    sig_height_wind_waves FLOAT,
+                    sig_height_total_swell FLOAT,
+                    mean_period_wind_waves FLOAT,
+                    mean_period_total_swell FLOAT,
+                    direction_wind_waves FLOAT,
+                    direction_swell_waves FLOAT,
+                    units VARCHAR(50),
+                    date DATE,
+                    time TIME,
+                    forecast_time INTERVAL
+                );
+                """
             )
             self.conn.commit()
             print("Table 'swell' checked/created successfully.")
@@ -75,25 +86,42 @@ class WaveModel:
             self.conn.rollback()
 
     # Insert data into PostgreSQL
-    def insert_surf_data(self, conn, spot, param_name, value, metadata):
+    def insert_surf_data(self, spot, params, metadata):
         """Inserts extracted surf data into a PostgreSQL database."""
-        cursor = conn.cursor()
 
         insert_query = """
-        INSERT INTO swell (surf_spot_name, country, lat, lng, 
-        parameter_name, value, units, data_date, data_time, forecast_time)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO swell (surf_spot_name, country, lat, lng,
+            wind_speed, wind_direction, u_component_of_wind,
+            v_component_of_wind, sig_height_combined_waves,
+            primary_wave_mean_period, primary_wave_direction,
+            sig_height_wind_waves, sig_height_total_swell,
+            mean_period_wind_waves, mean_period_total_swell,
+            direction_wind_waves, direction_swell_waves,
+            units, date, time, forecast_time)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+        '%s, %s, %s, %s, %s)
         """
 
-        cursor.execute(
+        self.cursor.execute(
             insert_query,
             (
                 spot["name"],
                 spot["country"],
                 spot["lat"],
                 spot["lng"],
-                param_name,
-                value,
+                params.get("wind_speed"),
+                params.get("wind_direction"),
+                params.get("u_component_of_wind"),
+                params.get("v_component_of_wind"),
+                params.get("sig_height_combined_waves"),
+                params.get("primary_wave_mean_period"),
+                params.get("primary_wave_direction"),
+                params.get("sig_height_wind_waves"),
+                params.get("sig_height_total_swell"),
+                params.get("mean_period_wind_waves"),
+                params.get("mean_period_total_swell"),
+                params.get("direction_wind_waves"),
+                params.get("direction_swell_waves"),
                 metadata["units"],
                 metadata["data_date"],
                 metadata["data_time"],
@@ -101,8 +129,7 @@ class WaveModel:
             ),
         )
 
-        conn.commit()
-        cursor.close()
+        self.conn.commit()
 
     # Find the nearest point for a given lat/lon in the GRIB data
     def find_nearest_point(self, latitudes, longitudes, surf_spot_lat, surf_spot_lng):
@@ -113,7 +140,7 @@ class WaveModel:
         return idx
 
     # Process the GRIB file
-    def process_grib_file(self, grib_file, surf_spots, conn):
+    def process_grib_file(self, grib_file, surf_spots):
         """Processes the GRIB file for each surf spot and inserts data into the PostgreSQL database."""
         # Load the GRIB file using cfgrib
         grib_data = cfgrib.open_datasets(grib_file)
@@ -138,6 +165,10 @@ class WaveModel:
 
                     # Insert the surf spot and GRIB data into the database
                     self.insert_surf_data(conn, spot, var, nearest_value, metadata)
+
+    async def close(self):
+        self.cursor.close()
+        self.conn.close()
 
 
 # Main function to load JSON, process GRIB, and insert into PostgreSQL
