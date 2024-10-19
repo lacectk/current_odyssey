@@ -30,7 +30,7 @@ class WaveModel:
             "units": grb.units,
             "data_date": grb.analDate.strftime("%Y%m%d"),
             "data_time": grb.analDate.strftime("%H%M"),
-            "forecast_time": grb.forecastTime,
+            "forecast_time": f"{grb.forecastTime} hours",  # Format as 'X hours'
         }
         return metadata
 
@@ -227,6 +227,7 @@ class WaveModel:
 # Main function to load JSON, process GRIB, and insert into PostgreSQL
 def main():
     wave_model = WaveModel()
+    wave_model.setup_database()
     # Load surf spots
     json_file = "data/surfspots.json"
     surf_spots = wave_model.load_surf_spots(json_file)
