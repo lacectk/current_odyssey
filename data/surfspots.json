@@ -4152,9 +4152,9 @@
     "name" : "Boskraal Strand"
   },
   {
-    "lng" : "x",
-    "lat" : "x",
-    "country" : "Canada, Great Lakes",
+    "lng" : "-62.075904",
+    "lat" : "46.392976",
+    "country" : "Canada, Prince Edward Island",
     "name" : "Bothwell beach"
   },
   {
@@ -4222,12 +4222,6 @@
     "lat" : "26.545287540158",
     "country" : "USA, South East, South Florida",
     "name" : "Boynton - tortuga beach"
-  },
-  {
-    "lng" : "-72.897441387177",
-    "lat" : "40.721176823505",
-    "country" : "USA, North East, Long Island NY",
-    "name" : "BP"
   },
   {
     "lng" : "-70.648055076599",
@@ -8572,12 +8566,6 @@
     "lat" : "18.365268280799",
     "country" : "Puerto Rico",
     "name" : "Domes"
-  },
-  {
-    "lng" : "x",
-    "lat" : "x",
-    "country" : "USA, California, LA County",
-    "name" : "Dominators"
   },
   {
     "lng" : "-83.86173248291",
@@ -14340,8 +14328,8 @@
     "name" : "Kalyves"
   },
   {
-    "lng" : "x",
-    "lat" : "x",
+    "lng" : "98.28257161648081",
+    "lat" : "7.957309839107673",
     "country" : "Thailand",
     "name" : "Kamala"
   },
@@ -17262,12 +17250,6 @@
     "name" : "Les Laurons - centrale EDF"
   },
   {
-    "lng" : "x",
-    "lat" : "x",
-    "country" : "France, Landes",
-    "name" : "Les Montagnes Mortes"
-  },
-  {
     "lng" : "-3.4982013702393",
     "lat" : "47.731674695035",
     "country" : "France, Brittany South",
@@ -19080,8 +19062,8 @@
     "name" : "Martinhal"
   },
   {
-    "lng" : "x",
-    "lat" : "x",
+    "lng" : "-122.409573",
+    "lat" : "37.375252",
     "country" : "USA, California, San Mateo",
     "name" : "Martins beach"
   },
@@ -21768,8 +21750,8 @@
     "name" : "Ocean City - 7th Street"
   },
   {
-    "lng" : "x",
-    "lat" : "x",
+    "lng" : "-75.079637",
+    "lat" : "38.338268",
     "country" : "USA, North East, New Jersey",
     "name" : "Ocean City - 8th Ave Jetty"
   },
@@ -22416,10 +22398,10 @@
     "name" : "P-Pass"
   },
   {
-    "lng" : "x",
-    "lat" : "x",
+    "lng" : "-125.122096",
+    "lat" : "48.79446",
     "country" : "Canada, West Coast",
-    "name" : "Pachina Bay"
+    "name" : "Pachena Bay"
   },
   {
     "lng" : "-123.97317051888",
@@ -30528,8 +30510,8 @@
     "name" : "Sponge bay"
   },
   {
-    "lng" : "x",
-    "lat" : "x",
+    "lng" : "153.361609",
+    "lat" : "-29.476821",
     "country" : "Australia, NSW, Coal Coast",
     "name" : "Spookies"
   },
@@ -30624,8 +30606,8 @@
     "name" : "St Augustine Pier"
   },
   {
-    "lng" : "x",
-    "lat" : "x",
+    "lng" : "34.456233",
+    "lat" : "-120.356817",
     "country" : "USA, California, Santa Barbara",
     "name" : "St Augustine Point"
   },
@@ -32416,12 +32398,6 @@
     "lat" : "-34.077731836406",
     "country" : "South Africa, South George",
     "name" : "The Heads"
-  },
-  {
-    "lng" : "x",
-    "lat" : "x",
-    "country" : "Canada, Great Lakes",
-    "name" : "the hill"
   },
   {
     "lng" : "18.351287841797",
@@ -35040,8 +35016,8 @@
     "name" : "West punt"
   },
   {
-    "lng" : "x",
-    "lat" : "x",
+    "lng" : "-72.338541",
+    "lat" : "40.887141",
     "country" : "USA, North East, Long Island NY",
     "name" : "West Reef"
   },
