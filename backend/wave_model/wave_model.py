@@ -1,9 +1,9 @@
 import json
 import numpy as np
+import os
 import pygrib
 import psycopg2
-from scipy.spatial import cKDTree
-import os
+from rtree import index
 
 
 class WaveModel:
@@ -18,25 +18,22 @@ class WaveModel:
 
     # Load surf spots from JSON
     def load_surf_spots(self, json_file):
-        """Loads the surf spots JSON file."""
         with open(json_file, "r") as file:
             surf_spots = json.load(file)
         return surf_spots
 
     # Extract GRIB metadata using pygrib
     def extract_grib_metadata(self, grb):
-        """Extracts and returns relevant metadata from the GRIB message."""
         metadata = {
             "units": grb.units,
             "data_date": grb.analDate.strftime("%Y%m%d"),
             "data_time": grb.analDate.strftime("%H%M"),
-            "forecast_time": f"{grb.forecastTime} hours",  # Format as 'X hours'
+            "forecast_time": f"{grb.forecastTime} hours",
         }
         return metadata
 
     # Extract and filter GRIB data
     def extract_and_filter_data(self, grb):
-        """Extracts the data array, lats, and lons from GRIB, and filters missing values."""
         values = grb.values
         lats, lons = grb.latlons()
 
@@ -90,15 +87,12 @@ class WaveModel:
             )
             self.conn.commit()
             print("Table 'swell' checked/created successfully.")
-
         except Exception as e:
             print(f"Error setting up the database: {e}")
             self.conn.rollback()
 
     # Insert data into PostgreSQL
     def insert_swell_data(self, spot, params, metadata):
-        """Inserts extracted surf data into a PostgreSQL database."""
-
         insert_query = """
         INSERT INTO swell (
             surf_spot_name, country, lat, lng,
@@ -169,57 +163,69 @@ class WaveModel:
             print(f"Error inserting data: {e}")
             self.conn.rollback()
 
-    # Find the nearest point for a given lat/lon in the GRIB data
-    def find_nearest_point(self, latitudes, longitudes, surf_spot_lat, surf_spot_lng):
-        """Finds the nearest point in the GRIB data for the given la/lon."""
-        lat_lon_pairs = np.column_stack([latitudes.ravel(), longitudes.ravel()])
-        tree = cKDTree(lat_lon_pairs)
-        _, idx = tree.query([surf_spot_lat, surf_spot_lng])
+    def build_rtree(self, latitudes, longitudes):
+        idx = index.Index()
+
+        for i, (lat, lon) in enumerate(zip(latitudes.ravel(), longitudes.ravel())):
+            idx.insert(i, (lon, lat, lon, lat))
+
         return idx
 
-    # Process the GRIB file using pygrib
+    def find_nearest_point_rtree(self, rtree_idx, surf_spot_lat, surf_spot_lng):
+        nearest = list(
+            rtree_idx.nearest(
+                (surf_spot_lng, surf_spot_lat, surf_spot_lng, surf_spot_lat), 1
+            )
+        )
+        return nearest[0]
+
     def process_grib_file(self, grib_file, surf_spots):
-        """Processes the GRIB file for each surf spot and inserts data into Postgres."""
-        # Open the GRIB file using pygrib
         grbs = pygrib.open(grib_file)
 
         for grb in grbs:
-            # Extract metadata from the GRIB message
             metadata = self.extract_grib_metadata(grb)
-
-            # Extract and filter data
             values, latitudes, longitudes = self.extract_and_filter_data(grb)
+
+            # Build the R-Tree index from lat/lon grid points
+            rtree_idx = self.build_rtree(latitudes, longitudes)
 
             # Loop over surf spots to extract the nearest value
             for spot in surf_spots:
-                idx = self.find_nearest_point(
-                    latitudes, longitudes, float(spot["lat"]), float(spot["lng"])
-                )
-                nearest_value = values.ravel()[idx]
+                try:
+                    # Find the nearest grid point using R-Tree
+                    idx = self.find_nearest_point_rtree(
+                        rtree_idx, float(spot["lat"]), float(spot["lng"])
+                    )
+                    nearest_value = values.ravel()[idx]
 
-                params = {
-                    "wind_speed": None,
-                    "wind_direction": None,
-                    "u_component_of_wind": None,
-                    "v_component_of_wind": None,
-                    "sig_height_combined_waves": None,
-                    "primary_wave_mean_period": None,
-                    "primary_wave_direction": None,
-                    "sig_height_wind_waves": None,
-                    "sig_height_total_swell": None,
-                    "mean_period_wind_waves": None,
-                    "mean_period_total_swell": None,
-                    "direction_wind_waves": None,
-                    "direction_swell_waves": None,
-                }
+                    # Define parameters for this spot
+                    params = {
+                        "wind_speed": None,
+                        "wind_direction": None,
+                        "u_component_of_wind": None,
+                        "v_component_of_wind": None,
+                        "sig_height_combined_waves": None,
+                        "primary_wave_mean_period": None,
+                        "primary_wave_direction": None,
+                        "sig_height_wind_waves": None,
+                        "sig_height_total_swell": None,
+                        "mean_period_wind_waves": None,
+                        "mean_period_total_swell": None,
+                        "direction_wind_waves": None,
+                        "direction_swell_waves": None,
+                    }
 
-                if grb.name in params:
-                    params[grb.name] = nearest_value
+                    # Map the GRIB parameter to the corresponding dictionary key
+                    if grb.name in params:
+                        params[grb.name] = nearest_value
 
-                # Insert the surf spot and GRIB data into the database
-                self.insert_swell_data(spot, params, metadata)
+                    # Insert the surf spot and GRIB data into the database
+                    self.insert_swell_data(spot, params, metadata)
 
-    async def close(self):
+                except Exception as e:
+                    print(f"Error processing spot {spot['name']}: {e}")
+
+    def close(self):
         self.cursor.close()
         self.conn.close()
 
@@ -229,7 +235,7 @@ def main():
     wave_model = WaveModel()
     wave_model.setup_database()
     # Load surf spots
-    json_file = "data/surfspots.json"
+    json_file = "data/surfspots_mini.json"
     surf_spots = wave_model.load_surf_spots(json_file)
 
     try:
