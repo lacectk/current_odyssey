@@ -1,4 +1,5 @@
 import json
+from backend.create_database import create_database
 import numpy as np
 import os
 import pygrib
@@ -9,7 +10,7 @@ from rtree import index
 class WaveModel:
     def __init__(self):
         self.conn = psycopg2.connect(
-            dbname="stations",
+            dbname="swell",
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD"),
             host=os.getenv("DB_HOST"),
@@ -232,6 +233,7 @@ class WaveModel:
 
 # Main function to load JSON, process GRIB, and insert into PostgreSQL
 def main():
+    create_database("swell")
     wave_model = WaveModel()
     wave_model.setup_database()
     # Load surf spots
