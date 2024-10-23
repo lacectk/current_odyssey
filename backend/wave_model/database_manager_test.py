@@ -1,6 +1,6 @@
 import unittest
-from unittest.mock import patch, MagicMock, call
-from backend.wave_model import DatabaseManager
+from unittest.mock import patch, MagicMock
+from backend.wave_model.database_manager import DatabaseManager
 
 
 class DatabaseManagerTest(unittest.TestCase):

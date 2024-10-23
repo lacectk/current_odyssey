@@ -237,7 +237,7 @@ def main():
     wave_model = WaveModel()
     wave_model.setup_database()
     # Load surf spots
-    json_file = "data/surfspots_mini.json"
+    json_file = "data/surfspots.json"
     surf_spots = wave_model.load_surf_spots(json_file)
 
     try:
