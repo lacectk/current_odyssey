@@ -38,8 +38,8 @@ class WaveModelManager:
 # Main entry point
 def main():
     json_file = "data/surfspots.json"
-    start_date = datetime(2024, 10, 1, 0, 0)  # Example start date
-    end_date = datetime(2024, 10, 10, 0, 0)  # Example end date
+    start_date = datetime(2024, 10, 23, 0, 0)  # Example start date
+    end_date = datetime(2024, 10, 24, 0, 0)  # Example end date
 
     wave_model_manager = WaveModelManager()
     wave_model_manager.run(json_file, start_date, end_date)
