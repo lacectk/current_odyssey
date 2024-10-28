@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/usr/local/google/home/lacectk/current_odyssey/my_new_venv/bin/python",
+    "python.pythonPath": "/usr/local/google/home/lacectk/current_odyssey/venv/bin/python",
     "terminal.integrated.cwd": "/usr/local/google/home/lacectk/current_odyssey",
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": true,
