@@ -1,4 +1,3 @@
-import backend.path_setup
 import aiohttp
 import asyncio
 from backend.create_database import create_database
@@ -238,7 +237,7 @@ class WaveDataFetcher:
     def make_forecast(self, model, last_row):
         """Make a forecast using the trained model."""
         last_features = last_row[
-            ["WVHT_lag1", "DPD_lag1", "APD_lag1", "MWD_lag1"]
+            ["wvht_lag1", "dpd_lag1", "apd_lag1", "mwd_lag1"]
         ].values.reshape(1, -1)
         forecast = model.predict(last_features)
         print(f"Forecasted WVHT: {forecast[0]}")
