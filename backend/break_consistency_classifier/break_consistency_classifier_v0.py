@@ -26,7 +26,7 @@ class WaveConsistencyClassifier:
         self.conn = None
         self.model = None
         self.scaler = StandardScaler()
-        self.imputer = SimpleImputer(strategy="mean")  # Imputer for missing values
+        self.imputer = SimpleImputer(strategy="mean")
 
     def connect_to_db(self):
         """
@@ -71,11 +71,17 @@ class WaveConsistencyClassifier:
         # Define features
         X = df[["wvht", "dpd", "apd", "mwd"]]
 
-        # Impute missing values in features
+        # Drop rows where all feature values are missing
+        X = X.dropna(how="all")
+
+        # Impute missing values for remaining features
         X_imputed = self.imputer.fit_transform(X)
 
         if self.target_column and self.target_column in df.columns:
-            y = df[self.target_column]
+            y = df[self.target_column].loc[
+                X.index
+            ]  # Align target with imputed features
+
             # Split the data into train and test sets
             X_train, X_test, y_train, y_test = train_test_split(
                 X_imputed, y, test_size=0.2, random_state=42
@@ -85,10 +91,11 @@ class WaveConsistencyClassifier:
             X_test_scaled = self.scaler.transform(X_test)
 
             return X_train_scaled, X_test_scaled, y_train, y_test
+
         else:
             # If no target column, only scale the features for clustering
             X_scaled = self.scaler.fit_transform(X_imputed)
-            return X_scaled, df
+            return X_scaled, None
 
     def train_random_forest(self, X_train, y_train):
         """
@@ -121,9 +128,9 @@ class WaveConsistencyClassifier:
         """
         Define initial rule-based labeling for wave consistency.
         """
-        if row["WVHT"] > 2.0 and row["DPD"] > 10:
+        if row["wvht"] > 2.0 and row["dpd"] > 10:
             return "High Consistency"
-        elif 1.0 <= row["WVHT"] <= 2.0 and 6 <= row["DPD"] <= 10:
+        elif 1.0 <= row["wvht"] <= 2.0 and 6 <= row["dpd"] <= 10:
             return "Moderate Consistency"
         else:
             return "Low Consistency"
@@ -140,15 +147,18 @@ class WaveConsistencyClassifier:
 
         if self.target_column:
             # Supervised Learning
-            X_train, X_test, y_train, y_test = self.prepare_data(df)
+            results = self.prepare_data(df)
+            if len(results) == 4:  # Ensure we have train/test split
+                X_train, X_test, y_train, y_test = results
 
-            if X_train is not None:
                 # Train and evaluate the model
                 self.train_random_forest(X_train, y_train)
                 self.evaluate_model(X_test, y_test)
+            else:
+                print("Insufficient data for supervised learning.")
         else:
             # Unsupervised Clustering
-            X, df = self.prepare_data(df)
+            X, _ = self.prepare_data(df)
 
             if X is not None:
                 # Perform clustering
@@ -164,10 +174,10 @@ class WaveConsistencyClassifier:
                 print(
                     df[
                         [
-                            "WVHT",
-                            "DPD",
-                            "APD",
-                            "MWD",
+                            "wvht",
+                            "dpd",
+                            "apd",
+                            "mwd",
                             "Consistency_Cluster",
                             "Initial_Consistency_Label",
                         ]
@@ -179,7 +189,7 @@ class WaveConsistencyClassifier:
     def predict(self, wave_data):
         """
         Predict the wave consistency category for new wave data, handling missing values.
-        :param wave_data: A dictionary with keys 'WVHT', 'DPD', 'APD', 'MWD'.
+        :param wave_data: A dictionary with keys 'wvht', 'dpd', 'apd', 'mwd'.
         :return: Predicted category or consistency cluster.
         """
         if not self.model:
@@ -189,10 +199,10 @@ class WaveConsistencyClassifier:
         # Handle missing values by using imputer
         wave_features = [
             [
-                wave_data.get("WVHT", None),
-                wave_data.get("DPD", None),
-                wave_data.get("APD", None),
-                wave_data.get("MWD", None),
+                wave_data.get("wvht", None),
+                wave_data.get("dpd", None),
+                wave_data.get("apd", None),
+                wave_data.get("mwd", None),
             ]
         ]
         wave_features_imputed = self.imputer.transform(wave_features)
