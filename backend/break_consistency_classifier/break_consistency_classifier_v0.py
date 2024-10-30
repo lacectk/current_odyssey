@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
 import matplotlib.pyplot as plt
 import os
 
@@ -69,26 +70,28 @@ class WaveConsistencyClustering:
 
     def find_optimal_clusters(self, X):
         """
-        Use the Elbow method to determine the optimal number of clusters.
+        Use the Silhouette method to determine the optimal number of clusters.
         """
-        inertia = []
+        silhouette_scores = []
         cluster_range = range(2, 11)
 
         for k in cluster_range:
             kmeans = KMeans(n_clusters=k, random_state=42)
-            kmeans.fit(X)
-            inertia.append(kmeans.inertia_)
+            labels = kmeans.fit_predict(X)
+            score = silhouette_score(X, labels)
+            silhouette_scores.append(score)
 
+        # Plot Silhouette scores for each k
         plt.figure(figsize=(10, 6))
-        plt.plot(cluster_range, inertia, marker="o")
+        plt.plot(cluster_range, silhouette_scores, marker="o")
         plt.xlabel("Number of clusters")
-        plt.ylabel("Inertia")
-        plt.title("Elbow Method for Optimal Clusters")
+        plt.ylabel("Silhouette Score")
+        plt.title("Silhouette Method for Optimal Clusters")
         plt.show()
 
-        optimal_k = int(
-            input("Enter the optimal number of clusters (based on the Elbow plot): ")
-        )
+        # Get the optimal number of clusters with the highest Silhouette score
+        optimal_k = cluster_range[silhouette_scores.index(max(silhouette_scores))]
+        print(f"Optimal number of clusters based on Silhouette score: {optimal_k}")
         return optimal_k
 
     def cluster_data(self, X, n_clusters):
@@ -162,7 +165,6 @@ class WaveConsistencyClustering:
         self.generate_per_station_chart(df)
 
 
-# Example usage:
 if __name__ == "__main__":
     # Initialize and run the clustering workflow
     clustering = WaveConsistencyClustering()
