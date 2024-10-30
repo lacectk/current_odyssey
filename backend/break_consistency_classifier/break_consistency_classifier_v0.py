@@ -5,6 +5,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 import matplotlib.pyplot as plt
+import numpy as np
 import os
 
 
@@ -68,17 +69,24 @@ class WaveConsistencyClustering:
 
         return X_scaled
 
-    def find_optimal_clusters(self, X):
+    def find_optimal_clusters(self, X, sample_size=10000):
         """
         Use the Silhouette method to determine the optimal number of clusters.
         """
+        # Sample data to reduce computation time
+        if len(X) > sample_size:
+            X_sample = X[np.random.choice(X.shape[0], sample_size, replace=False)]
+            print(f"Using a sample of {sample_size} records for Silhouette analysis.")
+        else:
+            X_sample = X
+
         silhouette_scores = []
-        cluster_range = range(2, 11)
+        cluster_range = range(3, 8)
 
         for k in cluster_range:
-            kmeans = KMeans(n_clusters=k, random_state=42)
-            labels = kmeans.fit_predict(X)
-            score = silhouette_score(X, labels)
+            kmeans = KMeans(n_clusters=k, random_state=42, n_init="auto")
+            labels = kmeans.fit_predict(X_sample)
+            score = silhouette_score(X_sample, labels)
             silhouette_scores.append(score)
 
         # Plot Silhouette scores for each k
@@ -87,6 +95,10 @@ class WaveConsistencyClustering:
         plt.xlabel("Number of clusters")
         plt.ylabel("Silhouette Score")
         plt.title("Silhouette Method for Optimal Clusters")
+
+        for i, score in enumerate(silhouette_scores):
+            plt.text(cluster_range[i], score, f"{score:.2f}", ha="center", va="bottom")
+
         plt.show()
 
         # Get the optimal number of clusters with the highest Silhouette score
