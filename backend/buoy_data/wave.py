@@ -11,7 +11,7 @@ import psycopg2
 OBSERVATION_BASE_URL = "https://www.ndbc.noaa.gov/data/realtime2/"
 
 
-class WaveDataFetcher:
+class Wave:
     def __init__(self, station_ids):
         """Initialize with a list of station IDs."""
         self.station_ids = station_ids

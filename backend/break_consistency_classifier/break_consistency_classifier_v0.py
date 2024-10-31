@@ -69,7 +69,7 @@ class WaveConsistencyClustering:
 
         return X_scaled
 
-    def find_optimal_clusters(self, X, sample_size=10000):
+    def find_optimal_clusters(self, X, sample_size=60000):
         """
         Use the Silhouette method to determine the optimal number of clusters.
         """
