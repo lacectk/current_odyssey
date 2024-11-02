@@ -15,7 +15,7 @@ class WaveConsistencyClustering:
         user = os.getenv("DB_USER")
         password = os.getenv("DB_PASSWORD")
         host = os.getenv("DB_HOST")
-        dbname = "wave_data"
+        dbname = "localized_wave_data"
         self.db_url = f"postgresql://{user}:{password}@{host}/{dbname}"
         self.engine = None
         self.scaler = StandardScaler()
@@ -33,7 +33,7 @@ class WaveConsistencyClustering:
 
     def load_data_from_db(self):
         """
-        Load wave data from the 'wave_data' table in the database.
+        Load wave data from the 'localized_wave_data' table in the database.
         """
         if not self.engine:
             print("No active database connection.")
@@ -41,16 +41,16 @@ class WaveConsistencyClustering:
 
         try:
             query = """
-                SELECT station_id, datetime, wvht, dpd, apd, mwd
-                FROM wave_data;
+                SELECT station_id, latitude, longitude, datetime, wvht, dpd, apd, mwd
+                FROM localized_wave_data;
             """
             df = pd.read_sql(query, self.engine)
 
             if df.empty:
-                print("No data found in the 'wave_data' table.")
+                print("No data found in the 'localized_wave_data' table.")
                 return None
 
-            print(f"Loaded {len(df)} records from the 'wave_data' table.")
+            print(f"Loaded {len(df)} records from the 'localized_wave_data' table.")
             return df
 
         except Exception as e:

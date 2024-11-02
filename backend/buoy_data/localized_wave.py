@@ -15,27 +15,20 @@ class LocalizedWaveDataFetcher:
     def __init__(self, station_ids):
         """Initialize with a list of station IDs."""
         self.station_ids = station_ids
-        self._session = aiohttp.ClientSession()
         self.conn = psycopg2.connect(
-            dbname="wave_data",
+            dbname="localized_wave_data",
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD"),
             host=os.getenv("DB_HOST"),
         )
         self.cursor = self.conn.cursor()
 
-    async def close(self):
-        """Close the session and database connection."""
-        await self._session.close()
-        self.cursor.close()
-        self.conn.close()
-
-    def setup_combined_data_table(self):
-        """Create the combined_wave_data table with latitude and longitude."""
+    def setup_localized_data_table(self):
+        """Create the localized_wave_data table with latitude and longitude."""
         try:
             self.cursor.execute(
                 """
-                CREATE TABLE IF NOT EXISTS combined_wave_data (
+                CREATE TABLE IF NOT EXISTS localized_wave_data (
                     station_id VARCHAR NOT NULL,
                     datetime TIMESTAMP NOT NULL,
                     latitude FLOAT,
@@ -49,20 +42,23 @@ class LocalizedWaveDataFetcher:
                 """
             )
             self.conn.commit()
-            print("Table 'combined_wave_data' checked/created successfully.")
+            print("Table 'localized_wave_data' checked/created successfully.")
         except Exception as e:
-            print(f"Error setting up the combined data table: {e}")
+            print(f"Error setting up the localized data table: {e}")
             self.conn.rollback()
 
     async def fetch_station_wave_data(self):
-        """Fetch wave data for each station in the input list and insert combined data."""
-        for station_id in self.station_ids:
-            print(f"Fetching wave data for station: {station_id}")
-            data, lat, lon = await self.get_station_data(station_id)  # Unpack the tuple
-            if data is not None and not data.empty:  # Check if data is valid
-                await self.insert_combined_wave_data_into_db(station_id, data)
+        """Fetch wave data for each station and insert localized data."""
+        async with aiohttp.ClientSession() as session:
+            for station_id in self.station_ids:
+                print(f"Fetching wave data for station: {station_id}")
+                data, lat, lon = await self.get_station_data(session, station_id)
+                if data is not None and not data.empty:  # Check if data is valid
+                    await self.insert_localized_wave_data_into_db(
+                        station_id, data, lat, lon
+                    )
 
-    async def get_station_data(self, station_id):
+    async def get_station_data(self, session, station_id):
         """Get wave observation data from NOAA, including potential latitude and longitude."""
         file_variants = [
             f"{station_id}.spec",
@@ -75,7 +71,7 @@ class LocalizedWaveDataFetcher:
         for file_name in file_variants:
             request_url = f"{OBSERVATION_BASE_URL}{file_name}"
             try:
-                async with self._session.get(request_url) as resp:
+                async with session.get(request_url) as resp:
                     if resp.status == 200:
                         response = await resp.text()
                         # Determine columns and extract latitude/longitude if it's a drift file
@@ -165,11 +161,10 @@ class LocalizedWaveDataFetcher:
         )
         return lat, lon
 
-    async def insert_combined_wave_data_into_db(self, station_id, data):
-        """Insert combined wave data with station coordinates into the database."""
+    async def insert_localized_wave_data_into_db(self, station_id, data, lat, lon):
+        """Insert localized wave data with station coordinates into the database."""
         try:
-            # Check for coordinates from drift data, then fallback to stations table if missing
-            _, lat, lon = await self.get_station_data(station_id)
+            # If lat/lon are still None, fallback to stations table data
             if not lat or not lon:
                 self.cursor.execute(
                     "SELECT latitude, longitude FROM stations WHERE station_id = %s",
@@ -182,7 +177,7 @@ class LocalizedWaveDataFetcher:
             for _, row in data.iterrows():
                 self.cursor.execute(
                     """
-                    INSERT INTO combined_wave_data (station_id, datetime, latitude, longitude, WVHT, DPD, APD, MWD)
+                    INSERT INTO localized_wave_data (station_id, datetime, latitude, longitude, WVHT, DPD, APD, MWD)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                     ON CONFLICT (station_id, datetime) DO NOTHING;
                     """,
@@ -198,27 +193,30 @@ class LocalizedWaveDataFetcher:
                     ),
                 )
             self.conn.commit()
-            print(f"Combined wave data inserted for station {station_id}")
+            print(f"Localized wave data inserted for station {station_id}")
         except Exception as e:
-            print(f"Error inserting combined wave data for station {station_id}: {e}")
+            print(f"Error inserting localized wave data for station {station_id}: {e}")
             self.conn.rollback()
+
+    def close(self):
+        """Close the database connection."""
+        self.cursor.close()
+        self.conn.close()
 
 
 async def main():
-    load_dotenv()  # Load environment variables from .env file
-    create_database("wave_data")
+    load_dotenv()
+    create_database("localized_wave_data")
 
     stations = StationsFetcher()
     station_id_list = stations.fetch_station_ids()
 
     fetcher = LocalizedWaveDataFetcher(station_id_list)
-    fetcher.setup_combined_data_table()  # Set up the combined data table
+    fetcher.setup_localized_data_table()
     try:
-        # Fetch and insert combined wave data for all stations
         await fetcher.fetch_station_wave_data()
     finally:
-        # Close the session and database connectiont
-        await fetcher.close()
+        fetcher.close()
 
 
 if __name__ == "__main__":
