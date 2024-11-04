@@ -1,7 +1,7 @@
+from backend.create_database import create_database
+import os
 import pandas as pd
 from sqlalchemy import create_engine
-import os
-import psycopg2
 
 
 class WaveConsistencyLabeler:
@@ -12,31 +12,9 @@ class WaveConsistencyLabeler:
         self.db_url_existing = (
             f"postgresql://{user}:{password}@{host}/localized_wave_data"
         )
-        self.db_url_new = (
-            f"postgresql://{user}:{password}@{host}/wave_consistency_training"
-        )
+        self.db_url_new = f"postgresql://{user}:{password}@{host}/wave_consistency"
         self.engine_existing = create_engine(self.db_url_existing)
         self.engine_new = create_engine(self.db_url_new)
-
-    def create_new_database(self):
-        """
-        Create the new 'wave_consistency_training' database if it does not exist.
-        """
-        try:
-            conn = psycopg2.connect(
-                dbname="postgres",
-                user=os.getenv("DB_USER"),
-                password=os.getenv("DB_PASSWORD"),
-                host=os.getenv("DB_HOST"),
-            )
-            conn.autocommit = True
-            cursor = conn.cursor()
-            cursor.execute("CREATE DATABASE wave_consistency_training;")
-            cursor.close()
-            conn.close()
-            print("Database 'wave_consistency_training' created successfully.")
-        except Exception as e:
-            print(f"Error creating database or it may already exist: {e}")
 
     def load_data_from_db(self):
         """
@@ -47,78 +25,76 @@ class WaveConsistencyLabeler:
             FROM localized_wave_data;
         """
         df = pd.read_sql(query, self.engine_existing)
-        print(f"Loaded {len(df)} records from 'localized_wave_data'.")
         return df
 
-    def calculate_consistency(self, df):
+    def calculate_std_dev(self, df):
         """
-        Calculate the consistency of each station's metrics over time.
+        Calculate the standard deviation of each metric per station.
         """
-        # Group by station_id and compute standard deviation for each metric
-        grouped = df.groupby("station_id")[["wvht", "dpd", "apd", "mwd"]].std()
+        return df.groupby("station_id")[["wvht", "dpd", "apd", "mwd"]].std()
 
-        # Define consistency categories based on standard deviation thresholds.
-        thresholds = {
-            "wvht": 0.5,
-            "dpd": 1.0,
-            "apd": 1.0,
-            "mwd": 1.0,
-        }
+    def apply_binning(self, std_df):
+        """
+        Apply quantile-based binning to assign consistency labels.
+        """
+        # Use quantiles for each metric to create labels
+        bins = pd.qcut(
+            std_df["wvht"],
+            q=3,
+            labels=["High Consistency", "Medium Consistency", "Low Consistency"],
+        )
+        std_df["WVHT_Consistency"] = bins
 
-        def label_consistency(row):
-            consistency_score = 0
-            for metric in ["wvht", "dpd", "apd", "mwd"]:
-                if row[metric] <= thresholds[metric]:
-                    consistency_score += 1
-            if consistency_score == 4:
-                return "High Consistency"
-            elif 2 <= consistency_score < 4:
-                return "Medium Consistency"
-            else:
-                return "Low Consistency"
+        bins = pd.qcut(
+            std_df["dpd"],
+            q=3,
+            labels=["High Consistency", "Medium Consistency", "Low Consistency"],
+        )
+        std_df["DPD_Consistency"] = bins
 
-        # Apply consistency labeling
-        grouped["Consistency"] = grouped.apply(label_consistency, axis=1)
-        print("Consistency labels generated.")
+        bins = pd.qcut(
+            std_df["apd"],
+            q=3,
+            labels=["High Consistency", "Medium Consistency", "Low Consistency"],
+        )
+        std_df["APD_Consistency"] = bins
 
-        # Reset index to make station_id a column again
-        grouped = grouped.reset_index()
-        return grouped
+        bins = pd.qcut(
+            std_df["mwd"],
+            q=3,
+            labels=["High Consistency", "Medium Consistency", "Low Consistency"],
+        )
+        std_df["MWD_Consistency"] = bins
+
+        return std_df
 
     def save_to_new_database(self, df):
         """
-        Save the labeled data to the 'wave_consistency_training' database.
+        Save the labeled data to the 'wave_consistency' database.
         """
         try:
             df.to_sql(
-                "wave_consistency_labels",
+                "wave_consistency",
                 self.engine_new,
                 if_exists="replace",
                 index=False,
             )
             print(
-                "Labeled data saved to 'wave_consistency_labels' table in 'wave_consistency_training' database."
+                "Labeled data saved to 'wave_consistency' table in 'wave_consistency' database."
             )
         except Exception as e:
             print(f"Error saving to database: {e}")
 
     def run(self):
-        """
-        Run the full workflow.
-        """
-        # Create the new database
-        self.create_new_database()
-
-        # Load data from the existing database
+        create_database("wave_consistency")
+        # Load data and calculate standard deviations
         df = self.load_data_from_db()
+        std_df = self.calculate_std_dev(df)
 
-        # Calculate consistency labels
-        labeled_df = self.calculate_consistency(df)
-
-        # Save the labeled data to the new database
+        # Apply binning
+        labeled_df = self.apply_binning(std_df)
         self.save_to_new_database(labeled_df)
 
 
-if __name__ == "__main__":
-    labeler = WaveConsistencyLabeler()
-    labeler.run()
+labeler = WaveConsistencyLabeler()
+labeler.run()
