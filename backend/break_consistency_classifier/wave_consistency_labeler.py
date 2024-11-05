@@ -23,7 +23,7 @@ class WaveConsistencyLabeler:
         Load wave data from the 'localized_wave_data' table.
         """
         query = """
-            SELECT station_id, datetime, wvht, dpd, apd, mwd
+            SELECT station_id, datetime, latitude, longitude, wvht, dpd, apd, mwd
             FROM localized_wave_data;
         """
         df = pd.read_sql(query, self.engine_existing)
@@ -35,6 +35,11 @@ class WaveConsistencyLabeler:
         """
         std_df = df.groupby("station_id")[["wvht", "dpd", "apd", "mwd"]].std()
         std_df.columns = ["wvht_std", "dpd_std", "apd_std", "mwd_std"]
+
+        lat_lon_df = df.groupby("station_id")[["latitude", "longitude"]].first()
+
+        # Merge latitude and longitude back into the std_df
+        std_df = std_df.merge(lat_lon_df, left_index=True, right_index=True)
         return std_df
 
     def apply_pca_consistency(self, std_df):
@@ -48,30 +53,30 @@ class WaveConsistencyLabeler:
         pca = PCA(n_components=1)
         if not valid_std_df.empty:
             try:
-                valid_std_df.loc[:, "ConsistencyScore"] = pca.fit_transform(
+                valid_std_df.loc[:, "consistency_score"] = pca.fit_transform(
                     valid_std_df
                 )
             except Exception as e:
                 print(f"PCA error: {e}")
-                valid_std_df["ConsistencyScore"] = np.nan
+                valid_std_df["consistency_score"] = np.nan
 
         # Merge PCA results back with the full DataFrame
         std_df = std_df.merge(
-            valid_std_df[["ConsistencyScore"]],
+            valid_std_df[["consistency_score"]],
             left_index=True,
             right_index=True,
             how="left",
         )
 
-        # Label "Unknown, not enough data" for rows with NaN in ConsistencyScore
-        std_df["ConsistencyLabel"] = np.where(
-            std_df["ConsistencyScore"].isna(), "Unknown, not enough data", None
+        # Label "Unknown, not enough data" for rows with NaN in consistency_score
+        std_df["consistency_label"] = np.where(
+            std_df["consistency_score"].isna(), "Unknown, not enough data", None
         )
 
         # Assign quantile-based labels only for stations with valid PCA scores
-        valid_scores = std_df["ConsistencyScore"].dropna()
+        valid_scores = std_df["consistency_score"].dropna()
         if len(valid_scores.unique()) > 1:  # Ensure enough variation for quantiles
-            std_df.loc[valid_scores.index, "ConsistencyLabel"] = pd.qcut(
+            std_df.loc[valid_scores.index, "consistency_label"] = pd.qcut(
                 valid_scores,
                 q=3,
                 labels=["High Consistency", "Medium Consistency", "Low Consistency"],
@@ -83,6 +88,19 @@ class WaveConsistencyLabeler:
         """
         Save the labeled data to the 'wave_consistency' database.
         """
+        columns_order = [
+            "station_id",
+            "latitude",
+            "longitude",
+            "wvht_std",
+            "dpd_std",
+            "apd_std",
+            "mwd_std",
+            "consistency_score",
+            "consistency_label",
+        ]
+        df = df[columns_order]
+
         try:
             df.to_sql(
                 "wave_consistency",
