@@ -1,6 +1,8 @@
 from backend.create_database import create_database
-import os
+import numpy as np
 import pandas as pd
+import os
+from sklearn.decomposition import PCA
 from sqlalchemy import create_engine
 
 
@@ -31,42 +33,51 @@ class WaveConsistencyLabeler:
         """
         Calculate the standard deviation of each metric per station.
         """
-        return df.groupby("station_id")[["wvht", "dpd", "apd", "mwd"]].std()
-
-    def apply_binning(self, std_df):
-        """
-        Apply quantile-based binning to assign consistency labels.
-        """
-        # Use quantiles for each metric to create labels
-        bins = pd.qcut(
-            std_df["wvht"],
-            q=3,
-            labels=["High Consistency", "Medium Consistency", "Low Consistency"],
-        )
-        std_df["WVHT_Consistency"] = bins
-
-        bins = pd.qcut(
-            std_df["dpd"],
-            q=3,
-            labels=["High Consistency", "Medium Consistency", "Low Consistency"],
-        )
-        std_df["DPD_Consistency"] = bins
-
-        bins = pd.qcut(
-            std_df["apd"],
-            q=3,
-            labels=["High Consistency", "Medium Consistency", "Low Consistency"],
-        )
-        std_df["APD_Consistency"] = bins
-
-        bins = pd.qcut(
-            std_df["mwd"],
-            q=3,
-            labels=["High Consistency", "Medium Consistency", "Low Consistency"],
-        )
-        std_df["MWD_Consistency"] = bins
-
+        std_df = df.groupby("station_id")[["wvht", "dpd", "apd", "mwd"]].std()
+        std_df.columns = ["wvht_std", "dpd_std", "apd_std", "mwd_std"]
         return std_df
+
+    def apply_pca_consistency(self, std_df):
+        """
+        Use PCA to calculate a single consistency score, excluding stations with NaNs or zeros in all metrics.
+        """
+        # Filter rows with complete data only (no NaNs)
+        valid_std_df = std_df.dropna()
+
+        # Apply PCA to rows with valid data
+        pca = PCA(n_components=1)
+        if not valid_std_df.empty:
+            try:
+                valid_std_df.loc[:, "ConsistencyScore"] = pca.fit_transform(
+                    valid_std_df
+                )
+            except Exception as e:
+                print(f"PCA error: {e}")
+                valid_std_df["ConsistencyScore"] = np.nan
+
+        # Merge PCA results back with the full DataFrame
+        std_df = std_df.merge(
+            valid_std_df[["ConsistencyScore"]],
+            left_index=True,
+            right_index=True,
+            how="left",
+        )
+
+        # Label "Unknown, not enough data" for rows with NaN in ConsistencyScore
+        std_df["ConsistencyLabel"] = np.where(
+            std_df["ConsistencyScore"].isna(), "Unknown, not enough data", None
+        )
+
+        # Assign quantile-based labels only for stations with valid PCA scores
+        valid_scores = std_df["ConsistencyScore"].dropna()
+        if len(valid_scores.unique()) > 1:  # Ensure enough variation for quantiles
+            std_df.loc[valid_scores.index, "ConsistencyLabel"] = pd.qcut(
+                valid_scores,
+                q=3,
+                labels=["High Consistency", "Medium Consistency", "Low Consistency"],
+            )
+
+        return std_df.reset_index()
 
     def save_to_new_database(self, df):
         """
@@ -79,9 +90,7 @@ class WaveConsistencyLabeler:
                 if_exists="replace",
                 index=False,
             )
-            print(
-                "Labeled data saved to 'wave_consistency' table in 'wave_consistency' database."
-            )
+            print("Labeled data saved to 'wave_consistency' database.")
         except Exception as e:
             print(f"Error saving to database: {e}")
 
@@ -92,7 +101,7 @@ class WaveConsistencyLabeler:
         std_df = self.calculate_std_dev(df)
 
         # Apply binning
-        labeled_df = self.apply_binning(std_df)
+        labeled_df = self.apply_pca_consistency(std_df)
         self.save_to_new_database(labeled_df)
 
 
