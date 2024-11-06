@@ -29,98 +29,100 @@ class WaveConsistencyLabeler:
         df = pd.read_sql(query, self.engine_existing)
         return df
 
-    def calculate_std_dev(self, df):
+    def calculate_monthly_std_dev(self, df):
         """
-        Calculate the standard deviation of each metric per station.
+        Calculate the monthly standard deviation of each metric per station.
         """
-        std_df = df.groupby("station_id")[["wvht", "dpd", "apd", "mwd"]].std()
-        std_df.columns = ["wvht_std", "dpd_std", "apd_std", "mwd_std"]
+        # Convert datetime to monthly periods for grouping
+        df["month"] = df["datetime"].dt.to_period("M").dt.to_timestamp()
 
-        lat_lon_df = df.groupby("station_id")[["latitude", "longitude"]].first()
+        # Calculate the standard deviation per station per month
+        monthly_std_df = df.groupby(["station_id", "month"])[
+            ["wvht", "dpd", "apd", "mwd"]
+        ].std()
+        monthly_std_df.columns = [
+            "wvht_monthly_std",
+            "dpd_monthly_std",
+            "apd_monthly_std",
+            "mwd_monthly_std",
+        ]
+        return monthly_std_df.reset_index()
 
-        # Merge latitude and longitude back into the std_df
-        std_df = std_df.merge(lat_lon_df, left_index=True, right_index=True)
-        return std_df
-
-    def apply_pca_consistency(self, std_df):
+    def apply_pca_consistency(self, monthly_std_df):
         """
-        Use PCA to calculate a single consistency score, excluding stations with NaNs or zeros in all metrics.
+        Use PCA to calculate a single monthly consistency score per station.
         """
         # Filter rows with complete data only (no NaNs)
-        valid_std_df = std_df.dropna()
+        valid_std_df = monthly_std_df.dropna()
 
         # Apply PCA to rows with valid data
         pca = PCA(n_components=1)
         if not valid_std_df.empty:
             try:
-                valid_std_df.loc[:, "consistency_score"] = pca.fit_transform(
-                    valid_std_df
+                valid_std_df["ConsistencyScore"] = pca.fit_transform(
+                    valid_std_df[
+                        [
+                            "wvht_monthly_std",
+                            "dpd_monthly_std",
+                            "apd_monthly_std",
+                            "mwd_monthly_std",
+                        ]
+                    ]
                 )
             except Exception as e:
                 print(f"PCA error: {e}")
-                valid_std_df["consistency_score"] = np.nan
+                valid_std_df["ConsistencyScore"] = np.nan
 
         # Merge PCA results back with the full DataFrame
-        std_df = std_df.merge(
-            valid_std_df[["consistency_score"]],
-            left_index=True,
-            right_index=True,
+        monthly_std_df = monthly_std_df.merge(
+            valid_std_df[["station_id", "month", "ConsistencyScore"]],
+            on=["station_id", "month"],
             how="left",
         )
 
-        # Label "Unknown, not enough data" for rows with NaN in consistency_score
-        std_df["consistency_label"] = np.where(
-            std_df["consistency_score"].isna(), "Unknown, not enough data", None
+        # Label "Unknown, not enough data" for rows with NaN in ConsistencyScore
+        monthly_std_df["ConsistencyLabel"] = np.where(
+            monthly_std_df["ConsistencyScore"].isna(), "Unknown, not enough data", None
         )
 
         # Assign quantile-based labels only for stations with valid PCA scores
-        valid_scores = std_df["consistency_score"].dropna()
+        valid_scores = monthly_std_df["ConsistencyScore"].dropna()
         if len(valid_scores.unique()) > 1:  # Ensure enough variation for quantiles
-            std_df.loc[valid_scores.index, "consistency_label"] = pd.qcut(
+            monthly_std_df.loc[valid_scores.index, "ConsistencyLabel"] = pd.qcut(
                 valid_scores,
                 q=3,
                 labels=["High Consistency", "Medium Consistency", "Low Consistency"],
             )
 
-        return std_df.reset_index()
+        return monthly_std_df
 
-    def save_to_new_database(self, df):
+    def save_to_new_database(self, df, table_name):
         """
-        Save the labeled data to the 'wave_consistency' database.
+        Save the labeled data to the specified table in the 'wave_consistency' database.
         """
-        columns_order = [
-            "station_id",
-            "latitude",
-            "longitude",
-            "wvht_std",
-            "dpd_std",
-            "apd_std",
-            "mwd_std",
-            "consistency_score",
-            "consistency_label",
-        ]
-        df = df[columns_order]
-
         try:
             df.to_sql(
-                "wave_consistency",
+                table_name,
                 self.engine_new,
                 if_exists="replace",
                 index=False,
             )
-            print("Labeled data saved to 'wave_consistency' database.")
+            print(
+                f"Labeled data saved to '{table_name}' table in 'wave_consistency' database."
+            )
         except Exception as e:
             print(f"Error saving to database: {e}")
 
     def run(self):
         create_database("wave_consistency")
-        # Load data and calculate standard deviations
-        df = self.load_data_from_db()
-        std_df = self.calculate_std_dev(df)
 
-        # Apply binning
-        labeled_df = self.apply_pca_consistency(std_df)
-        self.save_to_new_database(labeled_df)
+        # Load data and calculate monthly standard deviations
+        df = self.load_data_from_db()
+        monthly_std_df = self.calculate_monthly_std_dev(df)
+
+        # Apply PCA for monthly consistency label
+        labeled_df = self.apply_pca_consistency(monthly_std_df)
+        self.save_to_new_database(labeled_df, "wave_consistency_trends")
 
 
 labeler = WaveConsistencyLabeler()
