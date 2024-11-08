@@ -1,51 +1,44 @@
 import aiohttp
 import asyncio
+from backend.config.database import localized_wave_engine
 from backend.create_database import create_database
 from backend.stations.stations import StationsFetcher
 from dotenv import load_dotenv
 from io import StringIO
 import pandas as pd
-import os
-import psycopg2
+from sqlalchemy import text
 
 OBSERVATION_BASE_URL = "https://www.ndbc.noaa.gov/data/realtime2/"
 
 
-class LocalizedWaveDataFetcher:
-    def __init__(self, station_ids):
-        """Initialize with a list of station IDs."""
-        self.station_ids = station_ids
-        self.conn = psycopg2.connect(
-            dbname="localized_wave_data",
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            host=os.getenv("DB_HOST"),
-        )
-        self.cursor = self.conn.cursor()
+class LocalizedWaveProcessor:
+    def __init__(self, station_ids=None):
+        self.engine = localized_wave_engine
+        self.station_ids = station_ids or []
 
-    def setup_localized_data_table(self):
-        """Create the localized_wave_data table with latitude and longitude."""
-        try:
-            self.cursor.execute(
-                """
-                CREATE TABLE IF NOT EXISTS localized_wave_data (
-                    station_id VARCHAR NOT NULL,
-                    datetime TIMESTAMP NOT NULL,
-                    latitude FLOAT,
-                    longitude FLOAT,
-                    WVHT FLOAT,
-                    DPD FLOAT,
-                    APD FLOAT,
-                    MWD FLOAT,
-                    PRIMARY KEY (station_id, datetime)
-                );
-                """
-            )
-            self.conn.commit()
-            print("Table 'localized_wave_data' checked/created successfully.")
-        except Exception as e:
-            print(f"Error setting up the localized data table: {e}")
-            self.conn.rollback()
+    def create_wave_table(self):
+        """
+        Create the localized wave data table if it doesn't exist.
+        """
+        create_database("localized_wave_data")
+
+        create_table_query = """
+        CREATE TABLE IF NOT EXISTS localized_wave_data (
+            id SERIAL PRIMARY KEY,
+            station_id VARCHAR(10),
+            datetime TIMESTAMP,
+            latitude FLOAT,
+            longitude FLOAT,
+            wvht FLOAT,
+            dpd FLOAT,
+            apd FLOAT,
+            mwd FLOAT,
+            UNIQUE(station_id, datetime)
+        );
+        """
+        with self.engine.connect() as conn:
+            conn.execute(text(create_table_query))
+            conn.commit()
 
     async def fetch_station_wave_data(self):
         """Fetch wave data for each station and insert localized data."""
@@ -166,42 +159,45 @@ class LocalizedWaveDataFetcher:
         try:
             # If lat/lon are still None, fallback to stations table data
             if not lat or not lon:
-                self.cursor.execute(
-                    "SELECT latitude, longitude FROM stations WHERE station_id = %s",
-                    (station_id,),
-                )
-                result = self.cursor.fetchone()
-                if result:
-                    lat, lon = result
+                with self.engine.connect() as conn:
+                    result = conn.execute(
+                        text(
+                            "SELECT latitude, longitude FROM stations WHERE station_id = :station_id"
+                        ),
+                        {"station_id": station_id},
+                    ).fetchone()
+                    if result:
+                        lat, lon = result
 
-            for _, row in data.iterrows():
-                self.cursor.execute(
-                    """
-                    INSERT INTO localized_wave_data (station_id, datetime, latitude, longitude, WVHT, DPD, APD, MWD)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                    ON CONFLICT (station_id, datetime) DO NOTHING;
-                    """,
-                    (
-                        station_id,
-                        row["DateTime"],
-                        lat,
-                        lon,
-                        row.get("WVHT"),
-                        row.get("DPD"),
-                        row.get("APD"),
-                        row.get("MWD"),
-                    ),
-                )
-            self.conn.commit()
+            with self.engine.connect() as conn:
+                for _, row in data.iterrows():
+                    conn.execute(
+                        text(
+                            """
+                        INSERT INTO localized_wave_data (station_id, datetime, latitude, longitude, WVHT, DPD, APD, MWD)
+                        VALUES (:station_id, :datetime, :lat, :lon, :wvht, :dpd, :apd, :mwd)
+                        ON CONFLICT (station_id, datetime) DO NOTHING;
+                        """
+                        ),
+                        {
+                            "station_id": station_id,
+                            "datetime": row["DateTime"],
+                            "lat": lat,
+                            "lon": lon,
+                            "wvht": row.get("WVHT"),
+                            "dpd": row.get("DPD"),
+                            "apd": row.get("APD"),
+                            "mwd": row.get("MWD"),
+                        },
+                    )
+                conn.commit()
             print(f"Localized wave data inserted for station {station_id}")
         except Exception as e:
             print(f"Error inserting localized wave data for station {station_id}: {e}")
-            self.conn.rollback()
 
     def close(self):
         """Close the database connection."""
-        self.cursor.close()
-        self.conn.close()
+        self.engine.connect().close()
 
 
 async def main():
@@ -211,8 +207,8 @@ async def main():
     stations = StationsFetcher()
     station_id_list = stations.fetch_station_ids()
 
-    fetcher = LocalizedWaveDataFetcher(station_id_list)
-    fetcher.setup_localized_data_table()
+    fetcher = LocalizedWaveProcessor(station_id_list)
+    fetcher.create_wave_table()
     try:
         await fetcher.fetch_station_wave_data()
     finally:

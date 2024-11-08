@@ -1,22 +1,19 @@
-from backend.create_database import create_database
 import numpy as np
 import pandas as pd
-import os
 from sklearn.decomposition import PCA
 from sqlalchemy import create_engine
+
+from backend.config.database import (
+    localized_wave_engine,
+    wave_consistency_engine,
+)
+from backend.create_database import create_database
 
 
 class WaveConsistencyLabeler:
     def __init__(self):
-        user = os.getenv("DB_USER")
-        password = os.getenv("DB_PASSWORD")
-        host = os.getenv("DB_HOST")
-        self.db_url_existing = (
-            f"postgresql://{user}:{password}@{host}/localized_wave_data"
-        )
-        self.db_url_new = f"postgresql://{user}:{password}@{host}/wave_consistency"
-        self.engine_existing = create_engine(self.db_url_existing)
-        self.engine_new = create_engine(self.db_url_new)
+        self.engine_existing = localized_wave_engine
+        self.engine_new = wave_consistency_engine
 
     def load_data_from_db(self):
         """
@@ -34,7 +31,10 @@ class WaveConsistencyLabeler:
         Calculate the monthly standard deviation of each metric per station.
         """
         # Convert datetime to monthly periods for grouping
-        df["month"] = df["datetime"].dt.to_period("M").dt.to_timestamp()
+        df["month"] = pd.to_datetime(df["datetime"]).dt.to_period("M").dt.to_timestamp()
+
+        # First, get the lat/lon for each station (assuming they're constant per station)
+        station_locations = df.groupby("station_id")[["latitude", "longitude"]].first()
 
         # First, get the lat/lon for each station (assuming they're constant per station)
         station_locations = df.groupby("station_id")[["latitude", "longitude"]].first()
@@ -126,16 +126,26 @@ class WaveConsistencyLabeler:
             print(f"Error saving to database: {e}")
 
     def run(self):
+        """
+        Execute the full wave consistency labeling process.
+        """
         create_database("wave_consistency")
 
-        # Load data and calculate monthly standard deviations
+        print("Loading data from database...")
         df = self.load_data_from_db()
+
+        print("Calculating monthly standard deviations...")
         monthly_std_df = self.calculate_monthly_std_dev(df)
 
-        # Apply PCA for monthly consistency label
+        print("Applying PCA for consistency labeling...")
         labeled_df = self.apply_pca_consistency(monthly_std_df)
+
+        print("Saving results to database...")
         self.save_to_new_database(labeled_df, "wave_consistency_trends")
 
+        print("Process completed successfully!")
 
-labeler = WaveConsistencyLabeler()
-labeler.run()
+
+if __name__ == "__main__":
+    labeler = WaveConsistencyLabeler()
+    labeler.run()
