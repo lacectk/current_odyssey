@@ -36,6 +36,9 @@ class WaveConsistencyLabeler:
         # Convert datetime to monthly periods for grouping
         df["month"] = df["datetime"].dt.to_period("M").dt.to_timestamp()
 
+        # First, get the lat/lon for each station (assuming they're constant per station)
+        station_locations = df.groupby("station_id")[["latitude", "longitude"]].first()
+
         # Calculate the standard deviation per station per month
         monthly_std_df = df.groupby(["station_id", "month"])[
             ["wvht", "dpd", "apd", "mwd"]
@@ -46,7 +49,14 @@ class WaveConsistencyLabeler:
             "apd_monthly_std",
             "mwd_monthly_std",
         ]
-        return monthly_std_df.reset_index()
+        monthly_std_df = monthly_std_df.reset_index()
+
+        # Merge the location data back
+        monthly_std_df = monthly_std_df.merge(
+            station_locations.reset_index(), on="station_id", how="left"
+        )
+
+        return monthly_std_df
 
     def apply_pca_consistency(self, monthly_std_df):
         """
@@ -59,7 +69,7 @@ class WaveConsistencyLabeler:
         pca = PCA(n_components=1)
         if not valid_std_df.empty:
             try:
-                valid_std_df["ConsistencyScore"] = pca.fit_transform(
+                valid_std_df["consistency_score"] = pca.fit_transform(
                     valid_std_df[
                         [
                             "wvht_monthly_std",
@@ -71,24 +81,26 @@ class WaveConsistencyLabeler:
                 )
             except Exception as e:
                 print(f"PCA error: {e}")
-                valid_std_df["ConsistencyScore"] = np.nan
+                valid_std_df["consistency_score"] = np.nan
 
         # Merge PCA results back with the full DataFrame
         monthly_std_df = monthly_std_df.merge(
-            valid_std_df[["station_id", "month", "ConsistencyScore"]],
+            valid_std_df[["station_id", "month", "consistency_score"]],
             on=["station_id", "month"],
             how="left",
         )
 
-        # Label "Unknown, not enough data" for rows with NaN in ConsistencyScore
-        monthly_std_df["ConsistencyLabel"] = np.where(
-            monthly_std_df["ConsistencyScore"].isna(), "Unknown, not enough data", None
+        # Label "Unknown, not enough data" for rows with NaN in consistency_score
+        monthly_std_df["consistency_label"] = np.where(
+            monthly_std_df["consistency_score"].isna(),
+            "Unknown, not enough data",
+            None,
         )
 
         # Assign quantile-based labels only for stations with valid PCA scores
-        valid_scores = monthly_std_df["ConsistencyScore"].dropna()
+        valid_scores = monthly_std_df["consistency_score"].dropna()
         if len(valid_scores.unique()) > 1:  # Ensure enough variation for quantiles
-            monthly_std_df.loc[valid_scores.index, "ConsistencyLabel"] = pd.qcut(
+            monthly_std_df.loc[valid_scores.index, "consistency_label"] = pd.qcut(
                 valid_scores,
                 q=3,
                 labels=["High Consistency", "Medium Consistency", "Low Consistency"],
