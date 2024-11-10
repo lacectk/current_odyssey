@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Box, Container } from '@mui/material';
+import Map from './components/Map';
 
 function App() {
+  const [selectedMonth, setSelectedMonth] = useState(null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Container>
+        <Box sx={{ my: 4 }}>
+          <DatePicker
+            views={['year', 'month']}
+            label="Select Month"
+            value={selectedMonth}
+            onChange={(newValue) => setSelectedMonth(newValue)}
+            sx={{ mb: 2 }}
+          />
+        </Box>
+        <Box sx={{ height: '600px' }}>
+          <Map selectedMonth={selectedMonth} />
+        </Box>
+      </Container>
+    </LocalizationProvider>
   );
 }
 
