@@ -1,27 +1,22 @@
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import os
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
 
-# Initialize the app and database connection
-app = FastAPI()
+from config.settings import PROJECT_NAME, CORS_ORIGINS
+from config.database import get_wave_consistency_db
 
-# Set up database connection using SQLAlchemy
-user = os.getenv("DB_USER")
-password = os.getenv("DB_PASSWORD")
-host = os.getenv("DB_HOST")
-db_url = f"postgresql://{user}:{password}@{host}/wave_consistency"
-engine = create_engine(db_url)
+# Initialize the app
+app = FastAPI(title=PROJECT_NAME)
 
 # CORS settings
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins, change to specific domains in production
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -38,6 +33,7 @@ class ConsistencyData(BaseModel):
 async def get_consistency(
     start_month: str = Query(..., description="Start month in YYYY-MM format"),
     end_month: str = Query(..., description="End month in YYYY-MM format"),
+    db: Session = Depends(get_wave_consistency_db),
 ):
     """Retrieve consistency data for the specified month range."""
     # Validate month format and convert to datetime
@@ -61,14 +57,13 @@ async def get_consistency(
         FROM wave_consistency_trends
         WHERE month >= '{start_month_dt.strftime('%Y-%m-01')}'
         AND month <= '{end_month_dt.strftime('%Y-%m-01')}'
-        AND consistency_score IS NOT NULL  -- Filter out NULL values
-        AND consistency_score != 'NaN'     -- Filter out NaN values
-        AND consistency_score != 'Infinity' -- Filter out infinity
-        AND consistency_score != '-Infinity'; -- Filter out negative infinity
+        AND consistency_score IS NOT NULL
+        AND consistency_score != 'NaN'
+        AND consistency_score != 'Infinity'
+        AND consistency_score != '-Infinity'
     """
 
-    with engine.connect() as conn:
-        df = pd.read_sql(query, conn)
+    df = pd.read_sql(query, db.bind)
 
     if df.empty:
         raise HTTPException(

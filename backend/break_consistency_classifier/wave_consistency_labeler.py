@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
-from sqlalchemy import create_engine
 
 from backend.config.database import (
     localized_wave_engine,
