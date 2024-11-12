@@ -7,8 +7,11 @@ from dotenv import load_dotenv
 from io import StringIO
 import pandas as pd
 from sqlalchemy import text
+import logging
 
 OBSERVATION_BASE_URL = "https://www.ndbc.noaa.gov/data/realtime2/"
+
+logger = logging.getLogger(__name__)
 
 
 class LocalizedWaveProcessor:
@@ -198,6 +201,23 @@ class LocalizedWaveProcessor:
     def close(self):
         """Close the database connection."""
         self.engine.connect().close()
+
+    def process_data(self):
+        try:
+            logger.info("Starting wave data processing")
+            stations = StationsFetcher()
+            station_id_list = stations.fetch_station_ids()
+
+            fetcher = LocalizedWaveProcessor(station_id_list)
+            fetcher.create_wave_table()
+            try:
+                fetcher.fetch_station_wave_data()
+            finally:
+                fetcher.close()
+            logger.info("Wave data processing completed successfully")
+        except Exception as e:
+            logger.error(f"Error processing wave data: {str(e)}")
+            raise
 
 
 async def main():

@@ -1,0 +1,6 @@
+[2024-11-11 22:08:15 +0000] [1744072] [INFO] Starting gunicorn 23.0.0
+[2024-11-11 22:08:15 +0000] [1744072] [INFO] Listening at: http://[::]:8793 (1744072)
+[2024-11-11 22:08:15 +0000] [1744072] [INFO] Using worker: sync
+[2024-11-11 22:08:15 +0000] [1744073] [INFO] Booting worker with pid: 1744073
+/usr/local/google/home/lacectk/current_odyssey/.venv/lib/python3.11/site-packages/airflow/configuration.py:859 FutureWarning: section/key [core/sql_alchemy_conn] has been deprecated, you should use[database/sql_alchemy_conn] instead. Please update your `conf.get*` call to use the new name
+[2024-11-11 22:08:15 +0000] [1744077] [INFO] Booting worker with pid: 1744077
