@@ -1,12 +1,23 @@
-# Ignore environment variables
-.env
+# Backend
+backend/__pycache__/
+backend/*.pyc
+backend/.env
+backend/venv/
 
-# Ignore virtual environments
-venv/
+# Frontend
+frontend/node_modules/
+frontend/.env
+frontend/build/
+frontend/.cache/
+frontend/coverage/
 
-# Ignore Python cache files
-__pycache__/
-*.pyc
+# IDE
+.vscode/
+.idea/
+*.swp
 
 # Ignore other directories
 pgadmin4/
+data/
+.env
+venv/
