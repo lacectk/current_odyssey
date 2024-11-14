@@ -1,0 +1,23 @@
+scheduler:
+  module: dagster.core.scheduler
+  class: DagsterDaemonScheduler
+
+run_coordinator:
+  module: dagster.core.run_coordinator
+  class: QueuedRunCoordinator
+
+run_storage:
+  module: dagster.core.storage.runs
+  class: SqliteRunStorage
+  config:
+    base_dir: ~/current_odyssey/backend/dagster_home/history
+
+event_log_storage:
+  module: dagster.core.storage.event_log
+  class: SqliteEventLogStorage
+  config:
+    base_dir: ~/current_odyssey/backend/dagster_home/history
+
+schedule_storage:
+  module: dagster.core.storage.schedules
+  class: SqliteScheduleStorage 

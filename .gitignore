@@ -2,7 +2,6 @@
 backend/__pycache__/
 backend/*.pyc
 backend/.env
-backend/venv/
 
 # Frontend
 frontend/node_modules/
@@ -20,4 +19,4 @@ frontend/coverage/
 pgadmin4/
 data/
 .env
-venv/
+venv_dagster/
