@@ -4,8 +4,8 @@ from pydantic import BaseModel
 import pandas as pd
 from sqlalchemy.orm import Session
 
-from config.settings import PROJECT_NAME, CORS_ORIGINS
-from config.database import get_wave_consistency_db
+from backend.config.settings import PROJECT_NAME, CORS_ORIGINS
+from backend.config.database import get_wave_consistency_db
 
 # Initialize the app
 app = FastAPI(title=PROJECT_NAME)
