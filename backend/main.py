@@ -1,14 +1,18 @@
 from fastapi import FastAPI, HTTPException, Query, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 import pandas as pd
 from sqlalchemy.orm import Session
 
 from backend.config.settings import PROJECT_NAME, CORS_ORIGINS
 from backend.config.database import get_wave_consistency_db
+from backend.models import ConsistencyData
 
 # Initialize the app
-app = FastAPI(title=PROJECT_NAME)
+app = FastAPI(
+    title=PROJECT_NAME,
+    description="API for Wave Consistency Analysis",
+    version="1.0.0",
+)
 
 # CORS settings
 app.add_middleware(
@@ -20,13 +24,19 @@ app.add_middleware(
 )
 
 
-# Response model for consistency data
-class ConsistencyData(BaseModel):
-    station_id: str
-    latitude: float
-    longitude: float
-    consistency_label: str
-    consistency_score: float
+@app.get("/")
+async def root():
+    """Root endpoint that provides API information"""
+    return {
+        "name": PROJECT_NAME,
+        "version": "1.0.0",
+        "description": "Wave Consistency Analysis API",
+        "docs_url": "/docs",
+        "endpoints": {
+            "wave_data": "/wave-data",
+            "consistency": "/consistency",
+        },
+    }
 
 
 @app.get("/consistency", response_model=list[ConsistencyData])
@@ -78,12 +88,10 @@ async def get_consistency(
     return [
         ConsistencyData(
             station_id=row["station_id"],
-            latitude=float(row["latitude"]),  # Ensure proper float conversion
-            longitude=float(row["longitude"]),  # Ensure proper float conversion
-            consistency_label=str(row["consistency_label"]),  # Ensure string conversion
-            consistency_score=float(
-                row["consistency_score"]
-            ),  # Ensure proper float conversion
+            latitude=float(row["latitude"]),
+            longitude=float(row["longitude"]),
+            consistency_label=str(row["consistency_label"]),
+            consistency_score=float(row["consistency_score"]),
         )
         for _, row in df.iterrows()
     ]
