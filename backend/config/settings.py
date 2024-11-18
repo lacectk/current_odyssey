@@ -11,7 +11,6 @@ PROJECT_NAME = "Wave Consistency API"
 CORS_ORIGINS = [
     "http://localhost:3000",  # React default port
     "http://localhost:8000",  # FastAPI default port
-    "*",  # Allow all origins (remove in production)
 ]
 
 
