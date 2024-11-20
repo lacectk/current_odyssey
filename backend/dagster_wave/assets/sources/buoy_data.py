@@ -1,9 +1,9 @@
- from dagster import asset, AssetExecutionContext, MetadataValue, Output
-from datetime import datetime, timedelta
+from dagster import asset, AssetExecutionContext, MetadataValue, Output
+from datetime import datetime
 import pandas as pd
-from typing import Dict
 from backend.buoy_data.localized_wave import LocalizedWaveProcessor
 from backend.stations.stations import StationsFetcher
+
 
 @asset(
     group="sources",
@@ -16,10 +16,10 @@ from backend.stations.stations import StationsFetcher
 )
 def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
     """Fetch and process raw buoy data from NDBC stations."""
-    
+
     try:
         context.log.info("Starting wave data collection")
-        
+
         # Initialize stations
         stations = StationsFetcher()
         station_ids = stations.fetch_station_ids()
@@ -27,16 +27,17 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
 
         # Initialize processor
         processor = LocalizedWaveProcessor(station_ids)
-        
+
         # Create table if needed
         processor.create_wave_table()
-        
+
         # Process the data
         processor.process_data()
-        
+
         # Fetch the processed data for output
         with processor.engine.connect() as conn:
-            df = pd.read_sql("""
+            df = pd.read_sql(
+                """
                 SELECT 
                     station_id,
                     datetime,
@@ -48,27 +49,37 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
                     apd as avg_wave_period
                 FROM localized_wave_data
                 WHERE datetime >= NOW() - INTERVAL '24 hours'
-            """, conn)
+            """,
+                conn,
+            )
 
         # Calculate quality metrics
         quality_metrics = {
             "record_count": len(df),
-            "stations_count": df['station_id'].nunique(),
-            "missing_data_pct": df[['wave_height', 'wave_period', 'wave_direction']].isna().mean().mean() * 100,
-            "time_range": f"{df['datetime'].min()} to {df['datetime'].max()}"
+            "stations_count": df["station_id"].nunique(),
+            "missing_data_pct": df[["wave_height", "wave_period", "wave_direction"]]
+            .isna()
+            .mean()
+            .mean()
+            * 100,
+            "time_range": f"{df['datetime'].min()} to {df['datetime'].max()}",
         }
 
-        context.log.info(f"Processed {quality_metrics['record_count']} records from {quality_metrics['stations_count']} stations")
+        context.log.info(
+            f"Processed {quality_metrics['record_count']} records from {quality_metrics['stations_count']} stations"
+        )
 
         return Output(
             df,
             metadata={
                 "record_count": MetadataValue.int(quality_metrics["record_count"]),
                 "stations_count": MetadataValue.int(quality_metrics["stations_count"]),
-                "missing_data_percentage": MetadataValue.float(quality_metrics["missing_data_pct"]),
+                "missing_data_percentage": MetadataValue.float(
+                    quality_metrics["missing_data_pct"]
+                ),
                 "time_range": MetadataValue.text(quality_metrics["time_range"]),
                 "process_date": MetadataValue.text(str(datetime.now())),
-            }
+            },
         )
 
     except Exception as e:

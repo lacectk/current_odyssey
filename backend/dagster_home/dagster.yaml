@@ -1,0 +1,10 @@
+storage:
+  postgres:
+    postgres_db:
+      hostname: localhost
+      username: 
+        env: DB_USER
+      password:
+        env: DB_PASSWORD
+      db_name: dagster
+      port: 5432
