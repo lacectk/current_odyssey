@@ -178,11 +178,11 @@ class WaveDataFetcher:
 
     def setup_wave_data_table(self):
         """Create the wave_data table if it doesn't exist."""
-        # (Unchanged from your original code)
+        # integrate wave.py
 
     async def insert_wave_data_into_db(self, station_id, data):
         """Insert wave data into the database."""
-        # (Unchanged from your original code)
+        # integrate wave.py
 
     def fetch_data_from_db(self):
         """Fetch wave data from the database for analysis."""

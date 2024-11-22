@@ -4,18 +4,13 @@ backend/*.pyc
 backend/.env
 
 # Frontend
-frontend/node_modules/
 frontend/.env
-frontend/build/
 frontend/.cache/
-frontend/coverage/
 
-# IDE
-.vscode/
-.idea/
-*.swp
+#Data
+data/
 
-# Ignore other directories
+.venv/
 pgadmin4/
 data/
 .env
