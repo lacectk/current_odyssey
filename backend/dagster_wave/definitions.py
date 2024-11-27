@@ -1,6 +1,7 @@
 from dagster import Definitions, ScheduleDefinition, define_asset_job, RetryPolicy
-from .io_managers.postgres import PostgresIOManager
-from .assets.sources.buoy_data import raw_buoy_data
+from dagster_wave.io_managers.postgres import PostgresIOManager
+from dagster_wave.assets.sources.buoy_data import raw_buoy_data
+from dagster_wave.resources.email_notification import EmailNotification
 
 # Define retry policy
 buoy_data_retry_policy = RetryPolicy(
@@ -25,7 +26,8 @@ defs = Definitions(
             host={"env": "DB_HOST"},
             port=5432,
             database={"env": "DB_NAME"},
-        )
+        ),
+        "email_notification": EmailNotification,
     },
     schedules=[buoy_data_schedule],
 )

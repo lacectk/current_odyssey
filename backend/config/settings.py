@@ -29,3 +29,11 @@ DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST")
 DB_PORT = os.getenv("DB_PORT")
+
+EMAIL_NOTIFICATION = {
+    "smtp_server": os.getenv("SMTP_SERVER", "smtp.gmail.com"),
+    "smtp_port": int(os.getenv("SMTP_PORT", 587)),
+    "sender_email": os.getenv("SENDER_EMAIL"),
+    "sender_password": os.getenv("SENDER_PASSWORD"),
+    "recipient_emails": os.getenv("RECIPIENT_EMAILS", "").split(","),
+}

@@ -38,7 +38,7 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
         with processor.engine.connect() as conn:
             df = pd.read_sql(
                 """
-                SELECT 
+                SELECT
                     station_id,
                     datetime,
                     latitude,
@@ -52,6 +52,8 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
             """,
                 conn,
             )
+
+        context.log.info("Wave data fetched successfully")
 
         # Calculate quality metrics
         quality_metrics = {
@@ -84,6 +86,11 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
 
     except Exception as e:
         context.log.error(f"Error processing wave data: {str(e)}")
+        email_client = context.resources.email_notification.get_client()
+        email_client.send_message(
+            subject="Wave Data Processing Failed",
+            message=f"An error occurred: {str(e)}",
+        )
         raise
     finally:
         processor.close()
