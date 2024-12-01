@@ -1,15 +1,13 @@
 from dagster import (
-    IOManager,
     OutputContext,
     InputContext,
     ConfigurableIOManager,
-    InitResourceContext,
     Field,
     StringSource,
     IntSource,
 )
 import pandas as pd
-from sqlalchemy import create_engine, Table, MetaData
+from sqlalchemy import create_engine, MetaData
 from datetime import datetime
 
 

@@ -1,6 +1,6 @@
 from dagster import Definitions, ScheduleDefinition, define_asset_job, RetryPolicy
 from dagster_wave.io_managers.postgres import PostgresIOManager
-from dagster_wave.assets.sources.buoy_data import raw_buoy_data
+from dagster_wave.assets.buoy_data import raw_buoy_data
 from dagster_wave.resources.email_notification import EmailNotification
 
 # Define retry policy
