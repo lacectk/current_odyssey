@@ -6,9 +6,10 @@ from dagster import (
     StringSource,
     IntSource,
 )
-import pandas as pd
-from sqlalchemy import create_engine, MetaData
 from datetime import datetime
+import pandas as pd
+from sqlalchemy import create_engine, inspect, MetaData
+from io_managers.postgres_schemas import ASSET_DTYPES
 
 
 class PostgresIOManager(ConfigurableIOManager):
@@ -54,33 +55,46 @@ class PostgresIOManager(ConfigurableIOManager):
         table_name = self._get_table_name(context)
         partition_key = self._get_partition_key(context)
 
+        asset_key = context.asset_key.path[-1]
+        dtypes = ASSET_DTYPES.get(asset_key, {})
         # Add metadata columns
-        obj["_partition_key"] = partition_key
-        obj["_updated_at"] = datetime.now()
-        obj["_asset_partition"] = (
+        obj_copy = obj.copy()
+        obj_copy["_partition_key"] = partition_key
+        obj_copy["_updated_at"] = datetime.now()
+        obj_copy["_asset_partition"] = (
             context.partition_key if context.has_partition_key else None
         )
 
         # Log operation metadata
-        context.log.info(f"Writing {len(obj)} rows to {table_name}")
+        context.log.info(f"Writing {len(obj_copy)} rows to {table_name}")
 
         try:
             # Write to database
             with self._engine.begin() as conn:
+                # Check if the table exists
+                inspector = inspect(self._engine)
+                if not inspector.has_table(table_name):
+                    context.log.info(f"Table {table_name} does not exist. Creating it.")
+                    obj_copy.head(0).to_sql(
+                        table_name, conn, if_exists="replace", index=False
+                    )
+
                 # If partitioned, delete existing partition data
                 if context.has_partition_key:
                     conn.execute(
-                        f"DELETE FROM {table_name} WHERE _partition_key = '{partition_key}'"
+                        f"DELETE FROM {table_name} WHERE _partition_key = :partition_key",
+                        {"partition_key": partition_key},
                     )
 
                 # Write new data
-                obj.to_sql(
+                obj_copy.to_sql(
                     table_name,
                     conn,
                     if_exists="append",
                     index=False,
                     method="multi",
                     chunksize=10000,
+                    dtype=dtypes,
                 )
 
             # Add metadata to context
@@ -88,8 +102,8 @@ class PostgresIOManager(ConfigurableIOManager):
                 {
                     "table": table_name,
                     "partition": partition_key,
-                    "row_count": len(obj),
-                    "columns": list(obj.columns),
+                    "row_count": len(obj_copy),
+                    "columns": list(obj_copy.columns),
                 }
             )
 
