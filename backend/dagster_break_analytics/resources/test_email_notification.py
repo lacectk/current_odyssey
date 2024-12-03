@@ -1,7 +1,9 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from dagster import build_init_resource_context
-from backend.dagster_wave.resources.email_notification import EmailNotification
+from backend.dagster_break_analytics.resources.email_notification import (
+    EmailNotification,
+)
 import smtplib
 
 

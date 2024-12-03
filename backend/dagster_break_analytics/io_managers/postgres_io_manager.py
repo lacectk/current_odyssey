@@ -9,7 +9,7 @@ from dagster import (
 from datetime import datetime
 import pandas as pd
 from sqlalchemy import create_engine, inspect, MetaData
-from io_managers.postgres_schemas import ASSET_DTYPES
+from backend.dagster_break_analytics.io_managers.postgres_schemas import ASSET_DTYPES
 
 
 class PostgresIOManager(ConfigurableIOManager):

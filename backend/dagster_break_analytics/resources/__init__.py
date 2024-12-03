@@ -1,5 +1,7 @@
 from dagster import resource
-from dagster_wave.resources.email_notification import EmailNotification
+from backend.dagster_break_analytics.resources.email_notification import (
+    EmailNotification,
+)
 
 
 @resource(config_schema=EmailNotification.to_config_schema())
