@@ -23,13 +23,18 @@ class PostgresIOManager(ConfigurableIOManager):
             StringSource, description="PostgreSQL password", is_required=True
         )
         host: str = Field(StringSource, description="PostgreSQL host", is_required=True)
-        port: int = Field(IntSource, description="PostgreSQL port", default=5432)
+        port: int = Field(IntSource, description="PostgreSQL port")
         database: str = Field(
             StringSource, description="PostgreSQL database name", is_required=True
         )
 
     def __init__(
-        self, username: str, password: str, host: str, port: int, database: str
+        self,
+        username: str,
+        password: str,
+        host: str,
+        database: str,
+        port: int = 5432,
     ):
         self._engine = create_engine(
             f"postgresql://{username}:{password}@{host}:{port}/{database}"

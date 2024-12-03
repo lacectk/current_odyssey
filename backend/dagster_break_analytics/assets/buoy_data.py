@@ -6,7 +6,6 @@ from backend.stations.stations import StationsFetcher
 
 
 @asset(
-    group="sources",
     description="Raw NDBC buoy data with wave measurements",
     metadata={
         "source": "NDBC API",
