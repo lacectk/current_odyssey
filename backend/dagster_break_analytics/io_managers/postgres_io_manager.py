@@ -1,43 +1,24 @@
-from dagster import (
-    OutputContext,
-    InputContext,
-    ConfigurableIOManager,
-    Field,
-    StringSource,
-    IntSource,
-)
+from backend.dagster_break_analytics.io_managers.postgres_schemas import ASSET_DTYPES
+from dagster import OutputContext, InputContext, ConfigurableIOManager
 from datetime import datetime
 import pandas as pd
+from pydantic import Field
 from sqlalchemy import create_engine, inspect, MetaData
-from backend.dagster_break_analytics.io_managers.postgres_schemas import ASSET_DTYPES
 
 
 class PostgresIOManager(ConfigurableIOManager):
     """I/O Manager for handling DataFrame persistence to PostgreSQL."""
 
-    class Config:
-        username: str = Field(
-            StringSource, description="PostgreSQL username", is_required=True
-        )
-        password: str = Field(
-            StringSource, description="PostgreSQL password", is_required=True
-        )
-        host: str = Field(StringSource, description="PostgreSQL host", is_required=True)
-        port: int = Field(IntSource, description="PostgreSQL port")
-        database: str = Field(
-            StringSource, description="PostgreSQL database name", is_required=True
-        )
+    username: str = Field(..., description="PostgreSQL username")
+    password: str = Field(..., description="PostgreSQL password")
+    host: str = Field(..., description="PostgreSQL host")
+    port: int = Field(default=5432, description="PostgreSQL port")
+    database: str = Field(..., description="PostgreSQL database name")
 
-    def __init__(
-        self,
-        username: str,
-        password: str,
-        host: str,
-        database: str,
-        port: int = 5432,
-    ):
+    def __post_init__(self):
+        """Custom post-initialization logic."""
         self._engine = create_engine(
-            f"postgresql://{username}:{password}@{host}:{port}/{database}"
+            f"postgresql://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}"
         )
         self._metadata = MetaData()
 

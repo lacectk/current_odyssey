@@ -1,5 +1,6 @@
 from dagster import (
     Definitions,
+    EnvVar,
     ScheduleDefinition,
     define_asset_job,
     RetryPolicy,
@@ -11,7 +12,6 @@ from backend.dagster_break_analytics.assets.buoy_data import raw_buoy_data
 from backend.dagster_break_analytics.resources.email_notification import (
     EmailNotification,
 )
-import os
 
 # Define retry policy
 buoy_data_retry_policy = RetryPolicy(max_retries=3, delay=600)
@@ -32,11 +32,11 @@ defs = Definitions(
     assets=[raw_buoy_data],
     resources={
         "postgres_io": PostgresIOManager(
-            username=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            host=os.getenv("DB_HOST"),
-            port=os.getenv("DB_PORT"),
-            database=os.getenv("DB_NAME"),
+            username=EnvVar("DB_USER"),
+            password=EnvVar("DB_PASSWORD"),
+            host=EnvVar("DB_HOST"),
+            port=EnvVar.int("DB_PORT"),
+            database="wave_data",
         ),
         "email_notification": EmailNotification,
     },
