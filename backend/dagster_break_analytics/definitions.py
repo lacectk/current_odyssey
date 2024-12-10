@@ -8,7 +8,7 @@ from dagster import (
 from backend.dagster_break_analytics.io_managers.postgres_io_manager import (
     PostgresIOManager,
 )
-from backend.dagster_break_analytics.assets.buoy_data import raw_buoy_data
+from backend.dagster_break_analytics.assets.buoy_data_dag import raw_buoy_data
 from backend.dagster_break_analytics.resources.email_notification import (
     EmailNotification,
 )
