@@ -76,10 +76,11 @@ async def test_raw_buoy_data(setup_test_database):
             lat=row["latitude"],
             lon=row["longitude"],
         )
+    processor.close
 
     # Step 3: Execute the asset
     context = build_op_context()
-    output = await raw_buoy_data(context)
+    output = raw_buoy_data(context)
 
     # Step 4: Assertions
     # Validate DataFrame structure
