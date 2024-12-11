@@ -160,6 +160,7 @@ class LocalizedWaveProcessor:
     async def insert_localized_wave_data_into_db(self, station_id, data, lat, lon):
         """Insert localized wave data with station coordinates into the database."""
         try:
+            data = data.rename(columns={"DateTime": "datetime"})
             # If lat/lon are still None, fallback to stations table data
             if not lat or not lon:
                 with self.engine.connect() as conn:
