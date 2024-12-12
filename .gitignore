@@ -2,6 +2,8 @@
 backend/__pycache__/
 backend/*.pyc
 backend/.env
+backend/.pytest_cache/
+backend/dagster_break_analytics/__pycache__/
 
 # Frontend
 frontend/.env
