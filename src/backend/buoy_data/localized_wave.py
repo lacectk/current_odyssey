@@ -6,7 +6,17 @@ from backend.stations.stations import StationsFetcher
 from dotenv import load_dotenv
 from io import StringIO
 import pandas as pd
-from sqlalchemy import text
+from sqlalchemy import (
+    Table,
+    MetaData,
+    Column,
+    Integer,
+    String,
+    Float,
+    DateTime,
+    UniqueConstraint,
+)
+from sqlalchemy.exc import IntegrityError
 import logging
 
 OBSERVATION_BASE_URL = "https://www.ndbc.noaa.gov/data/realtime2/"
@@ -18,30 +28,27 @@ class LocalizedWaveProcessor:
     def __init__(self, station_ids=None):
         self.engine = localized_wave_engine
         self.station_ids = station_ids or []
+        self.metadata = MetaData()
+        self.localized_wave_table = Table(
+            "localized_wave_data",
+            self.metadata,
+            Column("id", Integer, primary_key=True),
+            Column("station_id", String(10), nullable=False),
+            Column("datetime", DateTime, nullabe=False),
+            Column("latitude", Float),
+            Column("longitude", Float),
+            Column("wvht", Float),
+            Column("dpd", Float),
+            Column("apd", Float),
+            Column("mwd", Float),
+            UniqueConstraint("station_id", "datetime", name="unix_station_datetime"),
+        )
 
     def create_wave_table(self):
         """
         Create the localized wave data table if it doesn't exist.
         """
-        create_database("localized_wave_data")
-
-        create_table_query = """
-        CREATE TABLE IF NOT EXISTS localized_wave_data (
-            id SERIAL PRIMARY KEY,
-            station_id VARCHAR(10),
-            datetime TIMESTAMP,
-            latitude FLOAT,
-            longitude FLOAT,
-            wvht FLOAT,
-            dpd FLOAT,
-            apd FLOAT,
-            mwd FLOAT,
-            UNIQUE(station_id, datetime)
-        );
-        """
-        with self.engine.connect() as conn:
-            conn.execute(text(create_table_query))
-            conn.commit()
+        self.metadata.create_all(self.engine)
 
     async def fetch_station_wave_data(self):
         """Fetch wave data for each station and insert localized data."""
@@ -50,7 +57,7 @@ class LocalizedWaveProcessor:
                 print(f"Fetching wave data for station: {station_id}")
                 data, lat, lon = await self.get_station_data(session, station_id)
                 if data is not None and not data.empty:  # Check if data is valid
-                    await self.insert_localized_wave_data_into_db(
+                    await self._insert_localized_wave_data_into_db(
                         station_id, data, lat, lon
                     )
 
@@ -89,7 +96,7 @@ class LocalizedWaveProcessor:
                                 "WVHT",
                                 "DPD",
                             ]
-                            lat, lon = self.extract_coordinates_from_drift(response)
+                            lat, lon = self._extract_coordinates_from_drift(response)
                         else:
                             columns = (
                                 [
@@ -115,7 +122,7 @@ class LocalizedWaveProcessor:
                                 names=columns,
                                 na_values=["MM"],
                             )
-                            df["DateTime"] = pd.to_datetime(
+                            df["datetime"] = pd.to_datetime(
                                 df[["Year", "Month", "Day", "Hour", "Minute"]],
                                 errors="coerce",
                             )
@@ -126,17 +133,17 @@ class LocalizedWaveProcessor:
 
         if all_dfs:
             concatenated_df = pd.concat(all_dfs)
-            wave_columns = ["DateTime", "WVHT", "DPD", "APD", "MWD"]
+            wave_columns = ["datetime", "WVHT", "DPD", "APD", "MWD"]
             aggregated_df = (
-                concatenated_df[wave_columns].groupby("DateTime").first().reset_index()
+                concatenated_df[wave_columns].groupby("datetime").first().reset_index()
             )
-            aggregated_df = aggregated_df.dropna(subset=["DateTime"])
+            aggregated_df = aggregated_df.dropna(subset=["datetime"])
 
             if not aggregated_df.empty:
                 return aggregated_df, lat, lon
         return None, lat, lon
 
-    def extract_coordinates_from_drift(self, response_text):
+    def _extract_coordinates_from_drift(self, response_text):
         """Extract latitude and longitude from the drift file if available."""
         df = pd.read_csv(
             StringIO(response_text),
@@ -157,47 +164,29 @@ class LocalizedWaveProcessor:
         )
         return lat, lon
 
-    async def insert_localized_wave_data_into_db(self, station_id, data, lat, lon):
+    async def _insert_localized_wave_data_into_db(self, station_id, data, lat, lon):
         """Insert localized wave data with station coordinates into the database."""
-        try:
-            data = data.rename(columns={"DateTime": "datetime"})
-            # If lat/lon are still None, fallback to stations table data
-            if not lat or not lon:
-                with self.engine.connect() as conn:
-                    result = conn.execute(
-                        text(
-                            "SELECT latitude, longitude FROM stations WHERE station_id = :station_id"
-                        ),
-                        {"station_id": station_id},
-                    ).fetchone()
-                    if result:
-                        lat, lon = result
+        rows = []
+        for _, row in data.iterrows():
+            rows.append(
+                {
+                    "station_id": station_id,
+                    "datetime": row["datetime"],
+                    "latitude": lat,
+                    "longitude": lon,
+                    "wvht": row.get("WVHT"),
+                    "dpd": row.get("DPD"),
+                    "apd": row.get("APD"),
+                    "mwd": row.get("MWD"),
+                }
+            )
 
-            with self.engine.connect() as conn:
-                for _, row in data.iterrows():
-                    conn.execute(
-                        text(
-                            """
-                        INSERT INTO localized_wave_data (station_id, datetime, latitude, longitude, WVHT, DPD, APD, MWD)
-                        VALUES (:station_id, :datetime, :lat, :lon, :wvht, :dpd, :apd, :mwd)
-                        ON CONFLICT (station_id, datetime) DO NOTHING;
-                        """
-                        ),
-                        {
-                            "station_id": station_id,
-                            "datetime": row["DateTime"],
-                            "lat": lat,
-                            "lon": lon,
-                            "wvht": row.get("WVHT"),
-                            "dpd": row.get("DPD"),
-                            "apd": row.get("APD"),
-                            "mwd": row.get("MWD"),
-                        },
-                    )
-                conn.commit()
-            print(f"Localized wave data inserted for station {station_id}")
-        except Exception as e:
-            print(f"Error inserting localized wave data for station {station_id}: {e}")
+        with self.engine.being() as conn:
+            try:
+                conn.execute(self.localized_wave_table.insert().values(rows))
+                logger.info(f"Data inserted for station {station_id}.")
+            except IntegrityError:
+                logger.warning(f"Duplicate entries for station {station_id} ignored.")
 
     def close(self):
         """Close the database connection."""
