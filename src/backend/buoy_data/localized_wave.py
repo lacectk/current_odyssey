@@ -1,12 +1,12 @@
 import aiohttp
 import asyncio
 from backend.config.database import localized_wave_engine
-from backend.create_database import create_database
 from backend.stations.stations import StationsFetcher
 from dotenv import load_dotenv
 from io import StringIO
 import pandas as pd
 from sqlalchemy import (
+    text,
     Table,
     MetaData,
     Column,
@@ -21,6 +21,7 @@ import logging
 
 OBSERVATION_BASE_URL = "https://www.ndbc.noaa.gov/data/realtime2/"
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -34,7 +35,7 @@ class LocalizedWaveProcessor:
             self.metadata,
             Column("id", Integer, primary_key=True),
             Column("station_id", String(10), nullable=False),
-            Column("datetime", DateTime, nullabe=False),
+            Column("datetime", DateTime, nullable=False),
             Column("latitude", Float),
             Column("longitude", Float),
             Column("wvht", Float),
@@ -54,7 +55,7 @@ class LocalizedWaveProcessor:
         """Fetch wave data for each station and insert localized data."""
         async with aiohttp.ClientSession() as session:
             for station_id in self.station_ids:
-                print(f"Fetching wave data for station: {station_id}")
+                logger.info(f"Fetching wave data for station: {station_id}")
                 data, lat, lon = await self.get_station_data(session, station_id)
                 if data is not None and not data.empty:  # Check if data is valid
                     await self._insert_localized_wave_data_into_db(
@@ -114,19 +115,23 @@ class LocalizedWaveProcessor:
                                 or file_name.endswith(".txt")
                                 else None
                             )
-                        if columns:
-                            df = pd.read_csv(
-                                StringIO(response),
-                                skiprows=2,
-                                sep=r"\s+",
-                                names=columns,
-                                na_values=["MM"],
+                        if columns is None:
+                            logger.warning(
+                                f"No valid columns matched for this file: {file_name}"
                             )
-                            df["datetime"] = pd.to_datetime(
-                                df[["Year", "Month", "Day", "Hour", "Minute"]],
-                                errors="coerce",
-                            )
-                            all_dfs.append(df)
+                            continue
+                        df = pd.read_csv(
+                            StringIO(response),
+                            skiprows=2,
+                            sep=r"\s+",
+                            names=columns,
+                            na_values=["MM"],
+                        )
+                        df["datetime"] = pd.to_datetime(
+                            df[["Year", "Month", "Day", "Hour", "Minute"]],
+                            errors="coerce",
+                        )
+                        all_dfs.append(df)
             except Exception as e:
                 print(f"Failed to fetch data for {file_name}: {e}")
                 continue
@@ -166,6 +171,18 @@ class LocalizedWaveProcessor:
 
     async def _insert_localized_wave_data_into_db(self, station_id, data, lat, lon):
         """Insert localized wave data with station coordinates into the database."""
+
+        if not lat or not lon:
+            with self.engine.connect() as conn:
+                result = conn.execute(
+                    text(
+                        "SELECT latitude, longitude FROM stations WHERE station_id = :station_id"
+                    ),
+                    {"station_id": station_id},
+                ).fetchone
+                if result:
+                    lat, lon = result
+
         rows = []
         for _, row in data.iterrows():
             rows.append(
@@ -181,18 +198,20 @@ class LocalizedWaveProcessor:
                 }
             )
 
-        with self.engine.being() as conn:
+        with self.engine.begin() as conn:
             try:
                 conn.execute(self.localized_wave_table.insert().values(rows))
                 logger.info(f"Data inserted for station {station_id}.")
-            except IntegrityError:
-                logger.warning(f"Duplicate entries for station {station_id} ignored.")
+            except IntegrityError as e:
+                logger.warning(
+                    f"Duplicate entries for station {station_id} ignored: {e}."
+                )
 
     def close(self):
         """Close the database connection."""
         self.engine.connect().close()
 
-    def process_data(self):
+    async def process_data(self):
         try:
             logger.info("Starting wave data processing")
             stations = StationsFetcher()
@@ -201,7 +220,7 @@ class LocalizedWaveProcessor:
             fetcher = LocalizedWaveProcessor(station_id_list)
             fetcher.create_wave_table()
             try:
-                fetcher.fetch_station_wave_data()
+                await fetcher.fetch_station_wave_data()
             finally:
                 fetcher.close()
             logger.info("Wave data processing completed successfully")
@@ -212,7 +231,6 @@ class LocalizedWaveProcessor:
 
 async def main():
     load_dotenv()
-    create_database("localized_wave_data")
 
     stations = StationsFetcher()
     station_id_list = stations.fetch_station_ids()
