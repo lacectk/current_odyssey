@@ -49,20 +49,20 @@ class LocalizedWaveProcessor:
         """
         Create the localized wave data table if it doesn't exist.
         """
-        self.metadata.create_all(self.engine)
+        self.metadata.create_all(self.engine, checkfirst=True)
 
-    async def fetch_station_wave_data(self):
+    async def fetch_stations_data(self):
         """Fetch wave data for each station and insert localized data."""
         async with aiohttp.ClientSession() as session:
             for station_id in self.station_ids:
                 logger.info(f"Fetching wave data for station: {station_id}")
-                data, lat, lon = await self.get_station_data(session, station_id)
+                data, lat, lon = await self._fetch_station_data(session, station_id)
                 if data is not None and not data.empty:  # Check if data is valid
                     await self._insert_localized_wave_data_into_db(
                         station_id, data, lat, lon
                     )
 
-    async def get_station_data(self, session, station_id):
+    async def _fetch_station_data(self, session, station_id):
         """Get wave observation data from NOAA, including potential latitude and longitude."""
         file_variants = [
             f"{station_id}.spec",
@@ -76,8 +76,10 @@ class LocalizedWaveProcessor:
             request_url = f"{OBSERVATION_BASE_URL}{file_name}"
             try:
                 async with session.get(request_url) as resp:
+                    print(f"Trying URL: {request_url} with status {resp.status}")
                     if resp.status == 200:
                         response = await resp.text()
+                        print(f"Response for {file_name}: {response}")
                         # Determine columns and extract latitude/longitude if it's a drift file
                         if file_name.endswith(".drift"):
                             columns = [
@@ -172,17 +174,22 @@ class LocalizedWaveProcessor:
     async def _insert_localized_wave_data_into_db(self, station_id, data, lat, lon):
         """Insert localized wave data with station coordinates into the database."""
 
-        if not lat or not lon:
+        if lat is None or lon is None:
+            print(f"Lat/Lon missing for {station_id}, querying database...")
             with self.engine.connect() as conn:
                 result = conn.execute(
                     text(
                         "SELECT latitude, longitude FROM stations WHERE station_id = :station_id"
                     ),
                     {"station_id": station_id},
-                ).fetchone
+                ).fetchone()
+                print(f"Database fetch result for station {station_id}: {result}")
                 if result:
-                    lat, lon = result
+                    print(f"result: {result}")
+                    lat, lon = result["latitude"], result["longitude"]
+                    print(f"Fetched lat/lon for station {station_id}: {lat}, {lon}")
 
+        print(f"Inserting data for {station_id}: lat={lat}, lon={lon}")
         rows = []
         for _, row in data.iterrows():
             rows.append(
@@ -207,10 +214,6 @@ class LocalizedWaveProcessor:
                     f"Duplicate entries for station {station_id} ignored: {e}."
                 )
 
-    def close(self):
-        """Close the database connection."""
-        self.engine.connect().close()
-
     async def process_data(self):
         try:
             logger.info("Starting wave data processing")
@@ -220,13 +223,17 @@ class LocalizedWaveProcessor:
             fetcher = LocalizedWaveProcessor(station_id_list)
             fetcher.create_wave_table()
             try:
-                await fetcher.fetch_station_wave_data()
+                await fetcher.fetch_stations_data()
             finally:
                 fetcher.close()
             logger.info("Wave data processing completed successfully")
         except Exception as e:
             logger.error(f"Error processing wave data: {str(e)}")
             raise
+
+    def close(self):
+        """Close the database connection."""
+        self.engine.connect().close()
 
 
 async def main():
