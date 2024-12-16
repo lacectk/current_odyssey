@@ -121,6 +121,54 @@ class LocalizedWaveProcessorTest(IsolatedAsyncioTestCase):
 
         self.assertEqual(mock_insert_data.call_count, 2)
 
+    @patch("src.backend.buoy_data.localized_wave.text")
+    async def test_insert_localized_wave_data_when_stationsdb_needed(self, mock_text):
+        """Test inserting data into the database."""
+        data = pd.DataFrame(
+            {
+                "datetime": ["2024-12-15 12:30:00"],
+                "WVHT": [1.5],
+                "DPD": [8],
+                "APD": [10],
+                "MWD": ["NNE"],
+            }
+        )
+        station_id = "123"
+        lat, lon = None, None
+
+        with patch("sqlalchemy.engine.base.Connection.execute") as mock_execute:
+            await self.processor._insert_localized_wave_data_into_db(
+                station_id=station_id, data=data, lat=lat, lon=lon
+            )
+
+        mock_text.assert_called_once_with(
+            "SELECT latitude, longitude FROM stations WHERE station_id = :station_id"
+        )
+        self.assertTrue(mock_execute.called, "Database execute was not called.")
+        mock_execute.assert_any_call(mock_text.return_value, {"station_id": station_id})
+
+    @patch("src.backend.buoy_data.localized_wave.text")
+    async def test_insert_localized_wave_data_when_lat_lon_in_drift(self, mock_text):
+        """Test inserting data into the database."""
+        data = pd.DataFrame(
+            {
+                "datetime": ["2024-12-15 12:30:00"],
+                "WVHT": [1.5],
+                "DPD": [8],
+                "APD": [10],
+                "MWD": ["NNE"],
+            }
+        )
+        station_id = "123"
+        lat, lon = 35.0, -120.5
+
+        with patch("sqlalchemy.engine.base.Connection.execute") as mock_execute:
+            await self.processor._insert_localized_wave_data_into_db(
+                station_id=station_id, data=data, lat=lat, lon=lon
+            )
+
+        self.assertTrue(mock_execute.called, "Database execute was not called.")
+
     def tearDown(self):
         """Clean up resources."""
         self.processor.engine.dispose()
