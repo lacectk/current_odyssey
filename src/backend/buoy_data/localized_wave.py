@@ -245,7 +245,7 @@ async def main():
     fetcher = LocalizedWaveProcessor(station_id_list)
     fetcher.create_wave_table()
     try:
-        await fetcher.fetch_station_wave_data()
+        await fetcher._fetch_station_data()
     finally:
         fetcher.close()
 

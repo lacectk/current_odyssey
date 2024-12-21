@@ -1,0 +1,11 @@
+"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[4950],{84950:function(n,e,t){t.r(e),t.d(e,{SnapshotRoot:function(){return y},default:function(){return g}});var s=t(52322),i=t(7267),r=t(99478),a=t(43212),p=t(74580),h=t(35292),o=t(74188),l=t(73407),c=t(47933),d=t(20958),x=t(36381),u=t(89918),m=t(92199),j=t(10539);let f=(0,d.Ps)`
+  query SnapshotQuery($snapshotId: String!) {
+    pipelineSnapshotOrError(snapshotId: $snapshotId) {
+      ... on PipelineSnapshot {
+        id
+        parentSnapshotId
+      }
+    }
+  }
+`,S=n=>{let{activeTab:e="",explorerPath:t}=n,{pipelineName:i,snapshotId:r=""}=t,S=(0,x.gY)({...t,opNames:[]}),I=(0,m.Nc)(i),b=I?.pipelineSnapshotId,{data:y,loading:g}=(0,d.aM)(f,{variables:{snapshotId:r}}),v=[{text:"Definition",pathComponent:"",href:`/snapshots/${S}`},{text:"Runs",pathComponent:"runs",href:`/snapshots/${S}runs`}];return(0,s.jsx)(p.m,{title:(0,s.jsx)(h.X6,{style:{fontFamily:o.b.monospace,fontSize:"16px"},children:t.snapshotId?.slice(0,8)}),tags:(0,s.jsxs)(s.Fragment,{children:[(0,s.jsxs)(a.V,{icon:"schema",children:["Snapshot of"," ",(0,s.jsx)(c.rU,{to:(0,j.r4)(t.pipelineName),children:t.pipelineName})]}),g?(0,s.jsx)(a.V,{intent:"none",minimal:!0,children:"..."}):b&&(b===r||y?.pipelineSnapshotOrError.__typename!=="PipelineSnapshot"||y?.pipelineSnapshotOrError?.parentSnapshotId===b)?(0,s.jsx)(a.V,{intent:"success",minimal:!0,children:"Current"}):(0,s.jsx)(a.V,{intent:"warning",minimal:!0,children:"Snapshot"})]}),tabs:(0,s.jsx)(l.mQ,{selectedTabId:e,children:v.map(n=>{let{href:e,text:t,pathComponent:i}=n;return(0,s.jsx)(u.f,{id:i,title:t,to:e},t)})})})};var I=t(17872),b=t(29664);let y=()=>{let{pipelinePath:n,tab:e}=(0,i.UO)(),t=(0,x.p3)(n);return(0,s.jsxs)("div",{style:{display:"flex",flexDirection:"column",minWidth:0,width:"100%",height:"100%"},children:[(0,s.jsx)(S,{activeTab:e,explorerPath:t}),(0,s.jsxs)(i.rs,{children:[(0,s.jsx)(I.A,{path:"/snapshots/:pipelinePath/runs",children:(0,s.jsx)(b.G,{})}),(0,s.jsx)(I.A,{path:"/snapshots/(/?.*)",children:(0,s.jsx)(r.CY,{})})]})]})};var g=y}}]);
+//# sourceMappingURL=4950.9b1c6155116b7995.js.map

@@ -1,0 +1,55 @@
+"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[5686],{15686:function(e,s,r){r.d(s,{r:function(){return F},$:function(){return A}});var n=r(52322),t=r(14934),i=r(39013),l=r(49308),o=r(74580),c=r(35292),d=r(43212),a=r(16629),x=r(34147),h=r(89891),j=r(89776),u=r(35002),p=r(1747),m=r(37483),g=r(36853),y=r(53664);r(2784);var f=r(7267),b=r(47933),v=r(73407),U=r(89918),R=r(10539);let w={configuration:"Configuration",uses:"Uses"},$=e=>{let{repoAddress:s,resourceName:r,numUses:i}=e,l=(0,f.$B)(["/locations/:repoPath/resources/:name/:tab?"]),o=l?.params.tab&&w[l?.params.tab]||"Configuration";return(0,n.jsx)(n.Fragment,{children:(0,n.jsxs)(v.mQ,{size:"large",selectedTabId:o,children:[(0,n.jsx)(U.f,{id:"Configuration",title:"Configuration",to:(0,R.$U)(s,`/resources/${r}`)},"configuration"),(0,n.jsx)(U.f,{id:"Uses",title:(0,n.jsxs)(t.x,{flex:{gap:4,alignItems:"center"},children:["Uses",(0,n.jsx)(d.V,{intent:"none",minimal:!0,children:i})]}),to:(0,R.$U)(s,`/resources/${r}/uses`)},"uses")]})})};var O=r(20958),D=r(8068),E=r(78491),S=r(69737),_=r(84842),T=r(20171),V=r(79059),L=r(59923),N=r(72311),I=r(20718);let P=e=>"StringSourceType"===e?"String":"IntSourceType"===e?"Int":"BoolSourceType"===e?"Bool":e,A=e=>e?.split(".").pop()||null,J=e=>e?e.name.startsWith("_nested_")?A(e?.resourceType):e.name:null,k=e=>(0,n.jsx)(t.x,{padding:{left:24,vertical:16},background:i.gJ(),border:"all",children:e.children}),C=e=>e.split("\n").map(e=>e.replace(/^    /,"")).join("\n"),F=e=>{(0,S.Px)();let{repoAddress:s}=e,{resourceName:r}=(0,f.UO)();(0,T.j)(`Resource: ${r}`);let p={...(0,I.$)(s),resourceName:r},m=(0,O.aM)(q,{variables:{resourceSelector:p}}),g=m.data?.topLevelResourceDetailsOrError.__typename==="ResourceDetails"&&J(m.data?.topLevelResourceDetailsOrError)||r,y=m.data?.topLevelResourceDetailsOrError.__typename==="ResourceDetails"?m.data.topLevelResourceDetailsOrError.parentResources.length+m.data.topLevelResourceDetailsOrError.assetKeysUsing.length+m.data.topLevelResourceDetailsOrError.jobsOpsUsing.length+m.data.topLevelResourceDetailsOrError.schedulesUsing.length+m.data.topLevelResourceDetailsOrError.sensorsUsing.length:0,b=f.$B(["/locations/:repoPath/resources/:name/:tab?"])?.params.tab;return(0,n.jsxs)(l.T,{style:{height:"100%",overflow:"hidden"},children:[(0,n.jsx)(o.m,{title:(0,n.jsx)(c.X6,{children:g}),tags:(0,n.jsxs)(d.V,{icon:"resource",children:["Resource in ",(0,n.jsx)(V.b,{repoAddress:s})]}),tabs:(0,n.jsx)($,{repoAddress:s,resourceName:r,numUses:y})}),(0,n.jsx)(L.g,{queryResult:m,allowStaleData:!0,children:e=>{let{topLevelResourceDetailsOrError:r}=e;if("ResourceDetails"!==r.__typename){let e=null;return"PythonError"===r.__typename&&(e=r.message),(0,n.jsx)(a.b,{intent:"warning",title:(0,n.jsxs)(x.Z,{direction:"row",spacing:4,children:[(0,n.jsx)("div",{children:"Could not load resource."}),e&&(0,n.jsx)(h.Z,{color:i.Es(),underline:"always",onClick:()=>{(0,D._K)({title:"Python error",body:e})},children:"View error"})]})})}let l=A(r.resourceType);return(0,n.jsx)("div",{style:{height:"100%",display:"flex"},children:(0,n.jsx)(j.O,{identifier:"resource-explorer",firstInitialPercent:50,firstMinSize:400,first:(0,n.jsx)(t.x,{padding:{bottom:48},style:{overflowY:"auto"},children:"uses"===b?(0,n.jsx)(W,{resourceDetails:r,repoAddress:s,numUses:y}):(0,n.jsx)(K,{resourceDetails:r,repoAddress:s})}),second:(0,n.jsxs)(t.x,{padding:{bottom:48},style:{overflowY:"auto"},children:[(0,n.jsxs)(t.x,{flex:{gap:4,direction:"column"},margin:{left:24,right:12,vertical:16},children:[(0,n.jsx)(c.X6,{children:g}),(0,n.jsx)(u.u,{content:r.resourceType||"",children:(0,n.jsx)(c.fv,{children:l})})]}),(0,n.jsx)(t.x,{border:"top-and-bottom",background:i.gJ(),padding:{vertical:8,horizontal:24},style:{fontSize:"12px",fontWeight:500},children:"Description"}),(0,n.jsx)(t.x,{padding:{horizontal:24,vertical:16},children:r.description?(0,n.jsx)(N.U,{children:C(r.description)}):"None"})]})})})}})]})},K=e=>{let{resourceDetails:s,repoAddress:r}=e,l=Object.fromEntries(s.configuredValues.map(e=>[e.key,{value:e.value,type:e.type}])),o=s.nestedResources;return(0,n.jsxs)(n.Fragment,{children:[o.length>0&&(0,n.jsxs)(t.x,{children:[(0,n.jsx)(k,{children:(0,n.jsx)(c.pm,{children:"Resource dependencies"})}),(0,n.jsxs)(p.i,{children:[(0,n.jsx)("thead",{children:(0,n.jsxs)("tr",{children:[(0,n.jsx)("th",{style:{width:120},children:"Key"}),(0,n.jsx)("th",{style:{width:180},children:"Resource"})]})}),(0,n.jsx)("tbody",{children:o.map(e=>{let s="TOP_LEVEL"===e.type&&e.resource?(0,n.jsx)(z,{url:(0,R.$U)(r,`/resources/${e.name}`),name:J(e.resource)||"",description:e.resource.description||void 0},e.name):(0,n.jsx)(z,{name:e.name},e.name);return(0,n.jsxs)("tr",{children:[(0,n.jsx)("td",{children:(0,n.jsx)("strong",{children:e.name})}),(0,n.jsx)("td",{colSpan:2,children:s})]},e.name)})})]})]}),(0,n.jsxs)(t.x,{children:[(0,n.jsx)(k,{children:(0,n.jsx)(c.pm,{children:"Configuration"})}),(0,n.jsxs)(p.i,{children:[(0,n.jsx)("thead",{children:(0,n.jsxs)("tr",{children:[(0,n.jsx)("th",{style:{width:120},children:"Key"}),(0,n.jsx)("th",{style:{width:90},children:"Type"}),(0,n.jsx)("th",{style:{width:90},children:"Value"})]})}),(0,n.jsx)("tbody",{children:0===s.configFields.length?(0,n.jsx)("tr",{children:(0,n.jsx)("td",{colSpan:3,children:(0,n.jsx)(t.x,{padding:{vertical:8},children:(0,n.jsx)(m.t,{icon:"settings",title:"No configuration",description:"This resource has no configuration fields."})})})}):s.configFields.map(e=>{let s=e.defaultValueAsJson,r=l.hasOwnProperty(e.name)?l[e.name].type:null,o=l.hasOwnProperty(e.name)?l[e.name].value:s,c="VALUE"===r&&s===o;return(0,n.jsxs)("tr",{children:[(0,n.jsx)("td",{children:(0,n.jsxs)(t.x,{flex:{direction:"column",gap:4,alignItems:"flex-start"},children:[(0,n.jsx)("strong",{children:e.name}),(0,n.jsx)("div",{style:{fontSize:12,color:i.$()},children:e.description})]})}),(0,n.jsx)("td",{children:P(e.configTypeKey)}),(0,n.jsx)("td",{children:(0,n.jsxs)(t.x,{flex:{direction:"row",gap:16},children:[(0,n.jsx)(u.u,{content:(0,n.jsxs)(n.Fragment,{children:["Default: ",s]}),canShow:!c&&!!s,children:"ENV_VAR"===r?(0,n.jsx)(d.V,{children:o}):o}),c&&(0,n.jsx)(d.V,{children:"Default"}),"ENV_VAR"===r&&(0,n.jsx)(d.V,{intent:"success",children:"Env var"})]})})]},e.name)})})]})]})]})},W=e=>{let{resourceDetails:s,repoAddress:r,numUses:l}=e;if(0===l)return(0,n.jsx)(t.x,{padding:{vertical:16},children:(0,n.jsx)(m.t,{icon:"list",title:"No uses",description:"This resource is not used by any assets or resources."})});let o=s.parentResources;return(0,n.jsxs)(n.Fragment,{children:[o.length>0&&(0,n.jsxs)(t.x,{children:[(0,n.jsx)(k,{children:(0,n.jsx)(c.pm,{children:"Parent resources"})}),(0,n.jsxs)(p.i,{children:[(0,n.jsx)("thead",{children:(0,n.jsx)("tr",{children:(0,n.jsx)("th",{children:"Resource"})})}),(0,n.jsx)("tbody",{children:o.map(e=>e.resource&&(0,n.jsx)("tr",{children:(0,n.jsx)("td",{children:(0,n.jsx)(z,{url:(0,R.$U)(r,`/resources/${e.resource.name}`),name:J(e.resource)||"",description:e.resource.description||void 0})})},e.resource.name))})]})]}),s.assetKeysUsing.length>0&&(0,n.jsxs)(t.x,{children:[(0,n.jsx)(k,{children:(0,n.jsx)(c.pm,{children:"Assets"})}),(0,n.jsxs)(p.i,{children:[(0,n.jsx)("thead",{children:(0,n.jsx)("tr",{children:(0,n.jsx)("th",{children:"Asset key"})})}),(0,n.jsx)("tbody",{children:s.assetKeysUsing.map(e=>(0,n.jsx)("tr",{children:(0,n.jsx)("td",{children:(0,n.jsx)(_.R,{path:e.path,icon:"asset"},e.path.join("/"))})},e.path.join("/")))})]})]}),s.jobsOpsUsing.length>0&&(0,n.jsxs)(t.x,{children:[(0,n.jsx)(k,{children:(0,n.jsx)(c.pm,{children:"Jobs"})}),(0,n.jsxs)(p.i,{children:[(0,n.jsx)("thead",{children:(0,n.jsxs)("tr",{children:[(0,n.jsx)("th",{children:"Job name"}),(0,n.jsx)("th",{children:"Ops"})]})}),(0,n.jsx)("tbody",{children:s.jobsOpsUsing.map(e=>(0,n.jsxs)("tr",{children:[(0,n.jsx)("td",{children:(0,n.jsxs)(t.x,{flex:{direction:"row",alignItems:"center",display:"inline-flex",gap:8},style:{maxWidth:"100%"},children:[(0,n.jsx)(g.JO,{name:"job",color:i.md()}),(0,n.jsx)(b.rU,{to:(0,R.$U)(r,`/jobs/${e.jobName}`),children:(0,n.jsx)(y.g,{text:e.jobName})})]})}),(0,n.jsx)("td",{children:(0,n.jsx)(t.x,{flex:{direction:"row",alignItems:"center",display:"inline-flex",gap:8},style:{maxWidth:"100%"},children:e.opHandleIDs.map(s=>(0,n.jsxs)(t.x,{flex:{direction:"row",alignItems:"center",display:"inline-flex",gap:8},style:{maxWidth:"100%"},children:[(0,n.jsx)(g.JO,{name:"op",color:i.md()}),(0,n.jsx)(b.rU,{to:(0,R.$U)(r,`/jobs/${e.jobName}/${s.split(".").join("/")}`),children:(0,n.jsx)(y.g,{text:s})})]},s))})})]},e.jobName))})]})]}),[{name:"Schedules",objects:s.schedulesUsing,icon:(0,n.jsx)(g.JO,{name:"schedule",color:i.md()})},{name:"Sensors",objects:s.sensorsUsing,icon:(0,n.jsx)(g.JO,{name:"sensors",color:i.md()})}].filter(e=>{let{objects:s}=e;return s.length>0}).map(e=>{let{name:s,objects:i,icon:l}=e;return(0,n.jsxs)("div",{children:[(0,n.jsx)(k,{children:(0,n.jsx)(c.pm,{children:s})}),(0,n.jsxs)(p.i,{children:[(0,n.jsx)("thead",{children:(0,n.jsx)("tr",{children:(0,n.jsx)("th",{children:"Name"})})}),(0,n.jsx)("tbody",{children:i.map(e=>(0,n.jsx)("tr",{children:(0,n.jsx)("td",{children:(0,n.jsxs)(t.x,{flex:{direction:"row",alignItems:"center",display:"inline-flex",gap:8},style:{maxWidth:"100%"},children:[l,(0,n.jsx)(b.rU,{to:(0,R.$U)(r,`/${s.toLowerCase()}/${e}`),children:(0,n.jsx)(y.g,{text:e})})]})})},s+":"+e))})]})]},s)})]})},z=e=>{let{url:s,name:r,description:l}=e;return(0,n.jsxs)(t.x,{flex:{direction:"column"},children:[(0,n.jsxs)(t.x,{flex:{direction:"row",alignItems:"center",gap:4},style:{maxWidth:"100%"},children:[(0,n.jsx)(g.JO,{name:"resource",color:i.L$()}),(0,n.jsx)("div",{style:{maxWidth:"100%",whiteSpace:"nowrap",fontWeight:500},children:s?(0,n.jsx)(b.rU,{to:s,style:{overflow:"hidden"},children:(0,n.jsx)(y.g,{text:r})}):(0,n.jsx)(y.g,{text:r})})]}),(0,n.jsx)(c.aU,{children:l})]})},B=(0,O.Ps)`
+  fragment ResourceDetailsFragment on ResourceDetails {
+    name
+    description
+    configFields {
+      name
+      description
+      configTypeKey
+      isRequired
+      defaultValueAsJson
+    }
+    configuredValues {
+      key
+      value
+      type
+    }
+    nestedResources {
+      name
+      type
+      resource {
+        name
+        resourceType
+        description
+      }
+    }
+    parentResources {
+      name
+      resource {
+        name
+        resourceType
+        description
+      }
+    }
+    assetKeysUsing {
+      path
+    }
+    schedulesUsing
+    sensorsUsing
+    jobsOpsUsing {
+      jobName
+      opHandleIDs
+    }
+    resourceType
+  }
+`,q=(0,O.Ps)`
+  query ResourceRootQuery($resourceSelector: ResourceSelector!) {
+    topLevelResourceDetailsOrError(resourceSelector: $resourceSelector) {
+      ...ResourceDetailsFragment
+      ...PythonErrorFragment
+    }
+  }
+  ${B}
+  ${E.B}
+`}}]);
+//# sourceMappingURL=5686.94dd483e212ccdb9.js.map

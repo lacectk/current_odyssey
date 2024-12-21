@@ -15,8 +15,9 @@ class PostgresIOManager(ConfigurableIOManager):
     port: int = Field(default=5432, description="PostgreSQL port")
     database: str = Field(..., description="PostgreSQL database name")
 
-    def __post_init__(self):
+    def __init__(self, **data):
         """Custom post-initialization logic."""
+        super().__init__(**data)
         self._engine = create_engine(
             f"postgresql://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}"
         )
@@ -27,19 +28,13 @@ class PostgresIOManager(ConfigurableIOManager):
         """Generate table name from asset key."""
         return f"wave_data_{context.asset_key.path[-1]}"
 
-    def _get_partition_key(self, context: OutputContext) -> str:
-        """Get partition key if asset is partitioned."""
-        if context.has_partition_key:
-            return context.partition_key
-        return datetime.now().strftime("%Y%m")
-
     def handle_output(self, context: OutputContext, obj: pd.DataFrame) -> None:
         """Persist DataFrame to PostgreSQL."""
         if not isinstance(obj, pd.DataFrame):
             raise TypeError("This I/O Manager only handles pandas DataFrames")
 
         table_name = self._get_table_name(context)
-        partition_key = self._get_partition_key(context)
+        partition_key = datetime.now().strftime("%Y%m")
 
         asset_key = context.asset_key.path[-1]
         dtypes = ASSET_DTYPES.get(asset_key, {})

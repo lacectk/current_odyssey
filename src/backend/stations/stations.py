@@ -25,19 +25,22 @@ class StationsFetcher:
         self.cursor = self.conn.cursor()
 
     async def meteorological_stations(self):
-        stations_data = await self.fetcher.fetch_station_data()
-        stations_list = {}
+        try:
+            stations_data = await self.fetcher.fetch_station_data()
+            stations_list = {}
 
-        for station in stations_data["stations"]["station"]:
-            if station.get("@met") == "y":
-                station_id = station["@id"]
-                latitude = float(station["@lat"])
-                longitude = float(station["@lon"])
+            for station in stations_data["stations"]["station"]:
+                if station.get("@met") == "y":
+                    station_id = station["@id"]
+                    latitude = float(station["@lat"])
+                    longitude = float(station["@lon"])
 
-                station_obj = Station(station_id, latitude, longitude)
-                stations_list[station_id] = station_obj
+                    station_obj = Station(station_id, latitude, longitude)
+                    stations_list[station_id] = station_obj
 
-        return stations_list
+            return stations_list
+        finally:
+            await self.fetcher.close()
 
     def setup_database(self):
         try:
@@ -91,21 +94,24 @@ class StationsFetcher:
     async def close(self):
         self.cursor.close()
         self.conn.close()
+        if hasattr(self, "fetcher"):
+            await self.fetcher.close()
 
 
 async def main():
     load_dotenv()
     create_database("stations")
-    # Create an instance of the Stations class and fetch the data
-    stations = StationsFetcher()
-    stations.setup_database()
-    station_list = await stations.meteorological_stations()
+    try:
+        # Create an instance of the Stations class and fetch the data
+        stations = StationsFetcher()
+        stations.setup_database()
+        station_list = await stations.meteorological_stations()
 
-    # Fetch and insert the station data into the PostgreSQL database
-    await stations.insert_into_database(station_list)
-
-    # Close the session
-    await stations.close()
+        # Fetch and insert the station data into the PostgreSQL database
+        await stations.insert_into_database(station_list)
+    finally:
+        # Close the session
+        await stations.close()
 
 
 if __name__ == "__main__":

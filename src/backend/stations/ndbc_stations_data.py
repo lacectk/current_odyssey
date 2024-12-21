@@ -7,9 +7,14 @@ STATION_URL = "https://www.ndbc.noaa.gov/activestations.xml"
 
 class NDBCDataFetcher:
     def __init__(self):
-        self._session = aiohttp.ClientSession()
+        self._session = None
+
+    async def _initialize_session(self):
+        if self._session is None:
+            self._session = aiohttp.ClientSession()
 
     async def fetch_station_data(self):
+        await self._initialize_session()
         async with self._session.get(STATION_URL) as resp:
             response = await resp.text()
 
@@ -23,4 +28,6 @@ class NDBCDataFetcher:
         return stations_data
 
     async def close(self):
-        await self._session.close()
+        if self._session:
+            await self._session.close()
+            self._session = None

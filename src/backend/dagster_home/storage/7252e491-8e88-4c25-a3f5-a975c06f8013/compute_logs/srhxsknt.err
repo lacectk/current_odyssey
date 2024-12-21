@@ -1,0 +1,52 @@
+[32m2024-12-21 04:38:33 +0000[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 7252e491-8e88-4c25-a3f5-a975c06f8013 - 2439462 - LOGS_CAPTURED - Started capturing logs in process (pid: 2439462).
+[32m2024-12-21 04:38:33 +0000[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 7252e491-8e88-4c25-a3f5-a975c06f8013 - 2439462 - raw_buoy_data - STEP_START - Started execution of step "raw_buoy_data".
+[32m2024-12-21 04:38:33 +0000[0m - dagster - [34mINFO[0m - __ASSET_JOB - 7252e491-8e88-4c25-a3f5-a975c06f8013 - raw_buoy_data - Starting wave data collection
+[32m2024-12-21 04:38:33 +0000[0m - dagster - [34mERROR[0m - [31m__ASSET_JOB - 7252e491-8e88-4c25-a3f5-a975c06f8013 - raw_buoy_data - Error processing wave data: no running event loop[0m
+[32m2024-12-21 04:38:33 +0000[0m - dagster - [34mERROR[0m - [31m__ASSET_JOB - 7252e491-8e88-4c25-a3f5-a975c06f8013 - 2439462 - raw_buoy_data - STEP_FAILURE - Execution of step "raw_buoy_data" failed.
+
+dagster._core.errors.DagsterUnknownResourceError: Unknown resource `email_notification`. Specify `email_notification` as a required resource on the compute / config function that accessed it.
+
+Stack Trace:
+  File "/usr/local/google/home/lacectk/current_odyssey/venv/lib/python3.11/site-packages/dagster/_core/execution/plan/execute_plan.py", line 245, in dagster_event_sequence_for_step
+    for step_event in check.generator(step_events):
+  File "/usr/local/google/home/lacectk/current_odyssey/venv/lib/python3.11/site-packages/dagster/_core/execution/plan/execute_step.py", line 500, in core_dagster_event_sequence_for_step
+    for user_event in _step_output_error_checked_user_event_sequence(
+  File "/usr/local/google/home/lacectk/current_odyssey/venv/lib/python3.11/site-packages/dagster/_core/execution/plan/execute_step.py", line 183, in _step_output_error_checked_user_event_sequence
+    for user_event in user_event_sequence:
+  File "/usr/local/google/home/lacectk/current_odyssey/venv/lib/python3.11/site-packages/dagster/_core/execution/plan/execute_step.py", line 87, in _process_asset_results_to_events
+    for user_event in user_event_sequence:
+  File "/usr/local/google/home/lacectk/current_odyssey/venv/lib/python3.11/site-packages/dagster/_core/execution/plan/compute.py", line 193, in execute_core_compute
+    for step_output in _yield_compute_results(step_context, inputs, compute_fn, compute_context):
+  File "/usr/local/google/home/lacectk/current_odyssey/venv/lib/python3.11/site-packages/dagster/_core/execution/plan/compute.py", line 162, in _yield_compute_results
+    for event in iterate_with_context(
+  File "/usr/local/google/home/lacectk/current_odyssey/venv/lib/python3.11/site-packages/dagster/_utils/__init__.py", line 490, in iterate_with_context
+    next_output = next(iterator)
+                  ^^^^^^^^^^^^^^
+  File "/usr/local/google/home/lacectk/current_odyssey/venv/lib/python3.11/site-packages/dagster/_core/execution/plan/compute_generator.py", line 140, in _coerce_op_compute_fn_to_iterator
+    result = invoke_compute_fn(
+             ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/google/home/lacectk/current_odyssey/venv/lib/python3.11/site-packages/dagster/_core/execution/plan/compute_generator.py", line 128, in invoke_compute_fn
+    return fn(context, **args_to_pass) if context_arg_provided else fn(**args_to_pass)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/google/home/lacectk/current_odyssey/src/backend/dagster_break_analytics/assets/buoy_data_dag.py", line 88, in raw_buoy_data
+    email_client = context.resources.email_notification.get_client()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/google/home/lacectk/current_odyssey/venv/lib/python3.11/site-packages/dagster/_core/definitions/scoped_resources_builder.py", line 29, in __getattr__
+    raise DagsterUnknownResourceError(name)
+
+The above exception occurred during handling of the following exception:
+RuntimeError: no running event loop
+
+Stack Trace:
+  File "/usr/local/google/home/lacectk/current_odyssey/src/backend/dagster_break_analytics/assets/buoy_data_dag.py", line 23, in raw_buoy_data
+    stations = StationsFetcher()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/google/home/lacectk/current_odyssey/src/backend/stations/stations.py", line 18, in __init__
+    self.fetcher = NDBCDataFetcher()
+                   ^^^^^^^^^^^^^^^^^
+  File "/usr/local/google/home/lacectk/current_odyssey/src/backend/stations/ndbc_stations_data.py", line 11, in __init__
+    aiohttp.ClientSession()
+  File "/usr/local/google/home/lacectk/current_odyssey/venv/lib/python3.11/site-packages/aiohttp/client.py", line 310, in __init__
+    loop = loop or asyncio.get_running_loop()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0m
