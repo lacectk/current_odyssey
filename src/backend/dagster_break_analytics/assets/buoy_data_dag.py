@@ -92,5 +92,5 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
         )
         raise
     finally:
-        if processor:
+        if "processor" in locals() and processor:
             processor.close()

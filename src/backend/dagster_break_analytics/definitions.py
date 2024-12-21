@@ -1,3 +1,4 @@
+import os
 from dagster import (
     Definitions,
     EnvVar,
@@ -38,7 +39,13 @@ defs = Definitions(
             port=EnvVar.int("DB_PORT"),
             database="wave_data",
         ),
-        "email_notification": EmailNotification,
+        "email_notification": EmailNotification(
+            smtp_server=EnvVar("SMTP_SERVER"),
+            smtp_port=EnvVar.int("SMTP_PORT"),
+            sender_email=EnvVar("SENDER_EMAIL"),
+            sender_password=EnvVar("EMAIL_APP_PASSWORD"),
+            recipient_emails=os.getenv("RECIPIENT_EMAILS").split(","),
+        ),
     },
     schedules=[buoy_data_schedule],
 )
