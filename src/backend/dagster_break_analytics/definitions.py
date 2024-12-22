@@ -1,10 +1,10 @@
 import os
 from dagster import (
     Definitions,
-    EnvVar,
     ScheduleDefinition,
     define_asset_job,
     RetryPolicy,
+    resource,
 )
 from backend.dagster_break_analytics.io_managers.postgres_io_manager import (
     PostgresIOManager,
@@ -29,21 +29,33 @@ buoy_data_schedule = ScheduleDefinition(
     job=buoy_data_job, cron_schedule="0 2 * * *"  # At 02:00 every day
 )
 
+
+@resource
+def postgres_io_manager(init_context):
+    return PostgresIOManager(
+        username=init_context.resource_config["username"],
+        password=init_context.resource_config["password"],
+        host=init_context.resource_config["host"],
+        port=init_context.resource_config["port"],
+        database=init_context.resource_config["database"],
+    )
+
+
 defs = Definitions(
     assets=[raw_buoy_data],
     resources={
         "postgres_io": PostgresIOManager(
-            username=EnvVar("DB_USER"),
-            password=EnvVar("DB_PASSWORD"),
-            host=EnvVar("DB_HOST"),
-            port=EnvVar.int("DB_PORT"),
+            username=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            host=os.getenv("DB_HOST"),
+            port=int(os.getenv("DB_PORT", 5432)),
             database="wave_data",
         ),
         "email_notification": EmailNotification(
-            smtp_server=EnvVar("SMTP_SERVER"),
-            smtp_port=EnvVar.int("SMTP_PORT"),
-            sender_email=EnvVar("SENDER_EMAIL"),
-            sender_password=EnvVar("EMAIL_APP_PASSWORD"),
+            smtp_server=os.getenv("SMTP_SERVER"),
+            smtp_port=int(os.getenv("SMTP_PORT", 587)),
+            sender_email=os.getenv("SENDER_EMAIL"),
+            sender_password=os.getenv("EMAIL_APP_PASSWORD"),
             recipient_emails=os.getenv("RECIPIENT_EMAILS").split(","),
         ),
     },
