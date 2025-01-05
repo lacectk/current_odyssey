@@ -1,5 +1,5 @@
 from dagster import resource
-from backend.dagster_break_analytics.resources.email_notification import (
+from src.backend.dagster_break_analytics.resources.email_notification import (
     EmailNotification,
 )
 

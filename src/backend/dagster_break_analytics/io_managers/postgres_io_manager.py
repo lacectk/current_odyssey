@@ -1,4 +1,6 @@
-from backend.dagster_break_analytics.io_managers.postgres_schemas import ASSET_DTYPES
+from src.backend.dagster_break_analytics.io_managers.postgres_schemas import (
+    ASSET_DTYPES,
+)
 from dagster import OutputContext, InputContext, ConfigurableIOManager
 from datetime import datetime
 import pandas as pd
