@@ -1,0 +1,25 @@
+[32m2024-12-29 17:04:49 +0000[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 582f858c-6f61-4ef2-a39f-89345486ebb2 - 1649546 - LOGS_CAPTURED - Started capturing logs in process (pid: 1649546).
+[32m2024-12-29 17:04:49 +0000[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 582f858c-6f61-4ef2-a39f-89345486ebb2 - 1649546 - raw_buoy_data - STEP_START - Started execution of step "raw_buoy_data".
+[32m2024-12-29 17:04:49 +0000[0m - dagster - [34mINFO[0m - __ASSET_JOB - 582f858c-6f61-4ef2-a39f-89345486ebb2 - raw_buoy_data - Starting wave data collection
+WARNING:  database "stations" has a collation version mismatch
+DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE stations REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+[32m2024-12-29 17:04:49 +0000[0m - dagster - [34mINFO[0m - __ASSET_JOB - 582f858c-6f61-4ef2-a39f-89345486ebb2 - raw_buoy_data - Found 918 stations to process
+/usr/local/google/home/lacectk/current_odyssey/src/backend/dagster_break_analytics/assets/buoy_data_dag.py:34: RuntimeWarning: coroutine 'LocalizedWaveProcessor.process_data' was never awaited
+  processor.process_data()
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+[32m2024-12-29 17:04:49 +0000[0m - dagster - [34mINFO[0m - __ASSET_JOB - 582f858c-6f61-4ef2-a39f-89345486ebb2 - raw_buoy_data - Wave data fetched successfully
+[32m2024-12-29 17:04:49 +0000[0m - dagster - [34mINFO[0m - __ASSET_JOB - 582f858c-6f61-4ef2-a39f-89345486ebb2 - raw_buoy_data - Processed 0 records from 0 stations
+[32m2024-12-29 17:04:49 +0000[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 582f858c-6f61-4ef2-a39f-89345486ebb2 - 1649546 - raw_buoy_data - STEP_OUTPUT - Yielded output "result" of type "DataFrame". (Type check passed).
+[32m2024-12-29 17:04:49 +0000[0m - dagster - [34mINFO[0m - __ASSET_JOB - 582f858c-6f61-4ef2-a39f-89345486ebb2 - raw_buoy_data - Writing 0 rows to wave_data_raw_buoy_data
+WARNING:  database "wave_data" has a collation version mismatch
+DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE wave_data REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+WARNING:  database "wave_data" has a collation version mismatch
+DETAIL:  The database was created using collation version 2.38, but the operating system provides version 2.39.
+HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE wave_data REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+INFO:alembic.runtime.migration:Context impl SQLiteImpl.
+INFO:alembic.runtime.migration:Will assume non-transactional DDL.
+[32m2024-12-29 17:04:49 +0000[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 582f858c-6f61-4ef2-a39f-89345486ebb2 - 1649546 - raw_buoy_data - ASSET_MATERIALIZATION - Materialized value raw_buoy_data.
+[32m2024-12-29 17:04:49 +0000[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 582f858c-6f61-4ef2-a39f-89345486ebb2 - 1649546 - raw_buoy_data - HANDLED_OUTPUT - Handled output "result" using IO manager "postgres_io"
+[32m2024-12-29 17:04:49 +0000[0m - dagster - [34mDEBUG[0m - __ASSET_JOB - 582f858c-6f61-4ef2-a39f-89345486ebb2 - 1649546 - raw_buoy_data - STEP_SUCCESS - Finished execution of step "raw_buoy_data" in 176ms.

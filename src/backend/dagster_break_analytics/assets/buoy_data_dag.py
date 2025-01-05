@@ -1,8 +1,11 @@
 from dagster import asset, AssetExecutionContext, MetadataValue, Output
 from datetime import datetime
+from dotenv import load_dotenv
 import pandas as pd
-from backend.buoy_data.localized_wave import LocalizedWaveProcessor
-from backend.stations.stations import StationsFetcher
+from src.backend.buoy_data.localized_wave import LocalizedWaveProcessor
+from src.backend.stations.stations import StationsFetcher
+
+load_dotenv(override=True)
 
 
 @asset(

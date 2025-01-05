@@ -1,7 +1,7 @@
 import aiohttp
 import asyncio
-from backend.config.database import localized_wave_engine
-from backend.stations.stations import StationsFetcher
+from src.backend.config.database import localized_wave_engine
+from src.backend.stations.stations import StationsFetcher
 from dotenv import load_dotenv
 from io import StringIO
 import pandas as pd

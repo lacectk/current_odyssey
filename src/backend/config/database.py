@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from backend.config.settings import DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
+from src.backend.config.settings import DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 
 # Database URLs
 WAVE_CONSISTENCY_DB_URL = (

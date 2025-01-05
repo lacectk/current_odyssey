@@ -1,6 +1,6 @@
 import asyncio
-from backend.create_database import create_database
-from backend.stations.ndbc_stations_data import NDBCDataFetcher
+from src.backend.create_database import create_database
+from src.backend.stations.ndbc_stations_data import NDBCDataFetcher
 from dotenv import load_dotenv
 import os
 import psycopg2
