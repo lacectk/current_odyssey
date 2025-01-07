@@ -16,7 +16,7 @@ load_dotenv(override=True)
     },
     io_manager_key="postgres_io",
 )
-def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
+async def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
     """Fetch and process raw buoy data from NDBC stations."""
 
     try:
@@ -34,10 +34,10 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
         processor.create_wave_table()
 
         # Process the data
-        processor.process_data()
+        await processor.process_data()
 
         # Fetch the processed data for output
-        with processor.engine.connect() as conn:
+        async with processor.engine.connect() as conn:
             df = pd.read_sql(
                 """
                 SELECT
@@ -54,6 +54,9 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
             """,
                 conn,
             )
+
+        if df.empty:
+            raise ValueError("No data was processed in the last 24 hours")
 
         context.log.info("Wave data fetched successfully")
 
@@ -95,5 +98,5 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
         )
         raise
     finally:
-        if "processor" in locals() and processor:
+        if processor:
             processor.close()
