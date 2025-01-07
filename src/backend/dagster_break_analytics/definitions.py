@@ -60,7 +60,7 @@ defs = Definitions(
             password=os.getenv("DB_PASSWORD"),
             host=os.getenv("DB_HOST"),
             port=int(os.getenv("DB_PORT", "5432")),
-            database="wave_data",
+            database=os.getenv("DB_NAME"),
         ),
         "email_notification": EmailNotification(
             smtp_server=os.getenv("SMTP_SERVER"),
