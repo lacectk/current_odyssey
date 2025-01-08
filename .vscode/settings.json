@@ -8,5 +8,9 @@
     "files.exclude": {
         "**/__pycache__": true,
         "**/*.pyc": true
+    },
+    "python.envFile": "${workspaceFolder}/.env",
+    "terminal.integrated.env.linux": {
+        "PYTHONPATH": "${env:PYTHONPATH}:/usr/local/google/home/lacectk/current_odyssey"
     }
 }

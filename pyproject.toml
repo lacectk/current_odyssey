@@ -1,1 +1,13 @@
- 
+[project]
+name = "current_odyssey"
+version = "0.1.0"
+description = "Break Analytics Project"
+requires-python = ">=3.8"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"] 
