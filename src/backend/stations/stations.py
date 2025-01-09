@@ -4,6 +4,10 @@ from src.backend.stations.ndbc_stations_data import NDBCDataFetcher
 from dotenv import load_dotenv
 import os
 import psycopg2
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class Station:
@@ -17,7 +21,7 @@ class StationsFetcher:
     def __init__(self):
         self.fetcher = NDBCDataFetcher()
         self.conn = psycopg2.connect(
-            dbname="stations",
+            dbname="wave_analytics",
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD"),
             host=os.getenv("DB_HOST"),
@@ -42,23 +46,22 @@ class StationsFetcher:
         finally:
             await self.fetcher.close()
 
-    def setup_database(self):
+    def check_table_exists(self) -> bool:
+        """Check if the stations table exists."""
         try:
             self.cursor.execute(
                 """
-                CREATE TABLE IF NOT EXISTS stations (
-                                station_id VARCHAR PRIMARY KEY,
-                                latitude FLOAT NOT NULL,
-                                longitude FLOAT NOT NULL
-                                );
+                SELECT EXISTS (
+                    SELECT FROM information_schema.tables 
+                    WHERE table_schema = 'raw_data'
+                    AND table_name = 'stations'
+                )
             """
             )
-            self.conn.commit()
-            print("Table 'stations' checked/created successfully.")
-
+            return self.cursor.fetchone()[0]
         except Exception as e:
-            print(f"Error setting up the database: {e}")
-            self.conn.rollback()
+            logger.error("Error checking table existence: %s", e)
+            return False
 
     async def insert_into_database(self, station_list):
         for station_id, station in station_list.items():
@@ -73,10 +76,10 @@ class StationsFetcher:
                 )
 
                 if self.cursor.rowcount > 0:
-                    print(f"Inserted new station {station_id}")
+                    logger.info("Inserted new station %d", station_id)
 
             except Exception as e:
-                print(f"Error inserting data for station {station_id}: {e}")
+                logger.error("Error inserting data for station %d, %s", station_id, e)
                 self.conn.rollback()
 
         self.conn.commit()
@@ -88,7 +91,7 @@ class StationsFetcher:
             station_ids = [row[0] for row in self.cursor.fetchall()]
             return station_ids
         except Exception as e:
-            print(f"Error fetching station IDs: {e}")
+            logger.error("Error fetching station IDs: %s", e)
             return []
 
     async def close(self):

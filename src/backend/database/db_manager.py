@@ -1,7 +1,8 @@
 import os
+import logging
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
-import logging
+from src.backend.database.db_config import get_admin_engine, get_wave_analytics_engine
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -11,11 +12,8 @@ class DatabaseManager:
     def __init__(self):
         load_dotenv()
 
-        self.admin_engine = create_engine(
-            f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-            f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/postgres"
-        )
-
+        self.admin_engine = get_admin_engine()
+        self.db_engine = get_wave_analytics_engine()
         self.protected_dbs = {"postgres", "template0", "template1", "dagster"}
 
     def list_databases(self):
@@ -23,7 +21,7 @@ class DatabaseManager:
         query = text(
             "SELECT datname FROM pg_database WHERE datname NOT IN :protected_dbs"
         )
-        with self.admin_engine.connect() as conn:
+        with self.db_engine.connect() as conn:
             results = conn.execute(
                 query, {"protected_dbs": tuple(sorted(self.protected_dbs))}
             )
@@ -42,7 +40,7 @@ class DatabaseManager:
             AND pid <> pg_backend_pid()
         """
         )
-        with self.admin_engine.connect() as conn:
+        with self.db_engine.connect() as conn:
             conn.execute(query, {"db_name": db_name})
         logger.info("Terminated all connections to %s", db_name)
 
@@ -55,7 +53,7 @@ class DatabaseManager:
         try:
             self.terminate_connections(db_name)
 
-            with self.admin_engine.connect() as conn:
+            with self.db_engine.connect() as conn:
                 conn.execute(text("COMMIT"))
                 conn.execute(text(f"DROP DATABASE IF EXISTS {db_name}"))
                 conn.commit()
