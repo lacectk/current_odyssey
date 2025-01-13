@@ -86,5 +86,26 @@ def main():
     manager.list_databases()
 
 
+def verify_migration():
+    """Verify if migrations were successful."""
+    engine = create_engine(
+        f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
+        f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+    )
+    
+    with engine.connect() as conn:
+        # Check schemas
+        schemas = conn.execute(text(
+            "SELECT schema_name FROM information_schema.schemata"
+        )).fetchall()
+        print("Available schemas:", [s[0] for s in schemas])
+        
+        # Check alembic version
+        version = conn.execute(text(
+            "SELECT version_num FROM alembic_version"
+        )).fetchone()
+        print("Current migration version:", version[0] if version else "No migrations")
+
+
 if __name__ == "__main__":
     main()

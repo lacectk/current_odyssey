@@ -4,14 +4,17 @@ from sqlalchemy import pool
 from alembic import context
 from dotenv import load_dotenv
 import os
+import logging
 
-# Load our models
+
 from src.backend.database.models import Base
 
 # Load environment variables
 load_dotenv()
 
 config = context.config
+
+logging.basicConfig(level=logging.DEBUG)
 
 # Interpret the config file for Python logging
 if config.config_file_name is not None:
@@ -24,6 +27,7 @@ config.set_section_option(section, "DB_PASSWORD", os.getenv("DB_PASSWORD"))
 config.set_section_option(section, "DB_HOST", os.getenv("DB_HOST"))
 config.set_section_option(section, "DB_PORT", os.getenv("DB_PORT", "5432"))
 config.set_section_option(section, "DB_NAME", "wave_analytics")
+
 
 # Model's MetaData object
 target_metadata = Base.metadata
