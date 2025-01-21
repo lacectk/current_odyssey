@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy import MetaData, Table, Column, String, Float, DateTime, text
+from sqlalchemy import MetaData, Table, Column, String, Float, DateTime, text, select
 from src.backend.config.database import wave_analytics_engine
 from src.backend.stations.ndbc_stations_data import NDBCDataFetcher
 
@@ -136,18 +136,14 @@ class StationsFetcher:
         """
         try:
             with self.engine.connect() as conn:
-                result = conn.execute(
-                    self.stations_table.select().with_only_columns(
-                        [self.stations_table.c.station_id]
-                    )
-                )
+                result = conn.execute(select(self.stations_table.c.station_id))
                 station_ids = []
                 for row in result:
                     station_id = row[0]
                     station_ids.append(station_id)
                 return station_ids
         except SQLAlchemyError as e:
-            logger.error("Error fetching station IDs: %s", e)
+            logger.error("Error fetching station IDs: %s", str(e))
             return []
 
     async def close(self):
