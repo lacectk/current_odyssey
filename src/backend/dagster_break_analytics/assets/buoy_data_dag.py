@@ -1,11 +1,8 @@
 from dagster import asset, AssetExecutionContext, MetadataValue, Output
 from datetime import datetime
-from dotenv import load_dotenv
 import pandas as pd
-from src.backend.buoy_data.localized_wave import LocalizedWaveProcessor
-from src.backend.stations.stations import StationsFetcher
-
-load_dotenv(override=True)
+from backend.buoy_data.localized_wave import LocalizedWaveProcessor
+from backend.stations.stations import StationsFetcher
 
 
 @asset(
@@ -16,7 +13,7 @@ load_dotenv(override=True)
     },
     io_manager_key="postgres_io",
 )
-async def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
+def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
     """Fetch and process raw buoy data from NDBC stations."""
 
     try:
@@ -34,10 +31,10 @@ async def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
         processor.create_wave_table()
 
         # Process the data
-        await processor.process_data()
+        processor.process_data()
 
         # Fetch the processed data for output
-        async with processor.engine.connect() as conn:
+        with processor.engine.connect() as conn:
             df = pd.read_sql(
                 """
                 SELECT
@@ -54,9 +51,6 @@ async def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
             """,
                 conn,
             )
-
-        if df.empty:
-            raise ValueError("No data was processed in the last 24 hours")
 
         context.log.info("Wave data fetched successfully")
 
@@ -98,5 +92,5 @@ async def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
         )
         raise
     finally:
-        if processor:
+        if "processor" in locals() and processor:
             processor.close()
