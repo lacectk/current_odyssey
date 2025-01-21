@@ -68,7 +68,7 @@ class StationsFetcher:
             try:
                 self.cursor.execute(
                     """
-                    INSERT INTO stations (station_id, latitude, longitude)
+                    INSERT INTO raw_data.stations (station_id, latitude, longitude)
                     VALUES (%s, %s, %s)
                     ON CONFLICT (station_id) DO NOTHING;
                 """,
@@ -76,7 +76,7 @@ class StationsFetcher:
                 )
 
                 if self.cursor.rowcount > 0:
-                    logger.info("Inserted new station %d", station_id)
+                    logger.info("Inserted new station %s", station_id)
 
             except Exception as e:
                 logger.error("Error inserting data for station %d, %s", station_id, e)
@@ -85,9 +85,9 @@ class StationsFetcher:
         self.conn.commit()
 
     def fetch_station_ids(self):
-        """Fetch station IDs from the 'stations' table."""
+        """Fetch station IDs from the raw_data.stations table."""
         try:
-            self.cursor.execute("SELECT station_id FROM stations")
+            self.cursor.execute("SELECT station_id FROM raw_data.stations")
             station_ids = [row[0] for row in self.cursor.fetchall()]
             return station_ids
         except Exception as e:
@@ -103,11 +103,9 @@ class StationsFetcher:
 
 async def main():
     load_dotenv()
-    create_database("stations")
     try:
         # Create an instance of the Stations class and fetch the data
         stations = StationsFetcher()
-        stations.setup_database()
         station_list = await stations.meteorological_stations()
 
         # Fetch and insert the station data into the PostgreSQL database
