@@ -1,16 +1,24 @@
 import asyncio
-from src.backend.create_database import create_database
-from src.backend.stations.ndbc_stations_data import NDBCDataFetcher
-from dotenv import load_dotenv
-import os
-import psycopg2
 import logging
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import MetaData, Table, Column, String, Float, DateTime, text
+from src.backend.config.database import wave_analytics_engine
+from src.backend.stations.ndbc_stations_data import NDBCDataFetcher
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 class Station:
+    """
+    Represents a meteorological station with its location coordinates.
+
+    Attributes:
+        station_id (str): Unique identifier for the station
+        latitude (float): Station's latitude coordinate
+        longitude (float): Station's longitude coordinate
+    """
+
     def __init__(self, station_id, latitude, longitude):
         self.station_id = station_id
         self.latitude = latitude
@@ -18,17 +26,43 @@ class Station:
 
 
 class StationsFetcher:
+    """
+    Handles fetching and storing meteorological station data.
+
+    This class manages the retrieval of station data from NDBC and its storage
+    in the PostgreSQL database. It handles both the initial fetch and subsequent
+    database operations.
+
+    Attributes:
+        fetcher (NDBCDataFetcher): Instance for fetching NDBC data
+        engine: SQLAlchemy database engine
+        metadata (MetaData): SQLAlchemy metadata for table definitions
+        stations_table (Table): SQLAlchemy table definition for stations
+    """
+
     def __init__(self):
         self.fetcher = NDBCDataFetcher()
-        self.conn = psycopg2.connect(
-            dbname="wave_analytics",
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            host=os.getenv("DB_HOST"),
+        self.engine = wave_analytics_engine
+        self.metadata = MetaData()
+
+        self.stations_table = Table(
+            "stations",
+            self.metadata,
+            Column("station_id", String(10), primary_key=True),
+            Column("latitude", Float, nullable=False),
+            Column("longitude", Float, nullable=False),
+            Column("created_at", DateTime, server_default=text("CURRENT_TIMESTAMP")),
+            Column("updated_at", DateTime, server_default=text("CURRENT_TIMESTAMP")),
         )
-        self.cursor = self.conn.cursor()
 
     async def meteorological_stations(self):
+        """
+        Fetch meteorological station data from NDBC.
+
+        Returns:
+            dict: Dictionary of Station objects keyed by station_id
+                 Only includes stations with meteorological capabilities
+        """
         try:
             stations_data = await self.fetcher.fetch_station_data()
             stations_list = {}
@@ -47,62 +81,87 @@ class StationsFetcher:
             await self.fetcher.close()
 
     def check_table_exists(self) -> bool:
-        """Check if the stations table exists."""
+        """
+        Check if the stations table exists in the raw_data schema.
+
+        Returns:
+            bool: True if table exists, False otherwise
+        """
         try:
-            self.cursor.execute(
-                """
-                SELECT EXISTS (
-                    SELECT FROM information_schema.tables 
-                    WHERE table_schema = 'raw_data'
-                    AND table_name = 'stations'
+            with self.engine.connect() as conn:
+                return self.engine.dialect.has_table(
+                    conn, "stations", schema="raw_data"
                 )
-            """
-            )
-            return self.cursor.fetchone()[0]
-        except Exception as e:
+        except SQLAlchemyError as e:
             logger.error("Error checking table existence: %s", e)
             return False
 
     async def insert_into_database(self, station_list):
-        for station_id, station in station_list.items():
-            try:
-                self.cursor.execute(
-                    """
-                    INSERT INTO raw_data.stations (station_id, latitude, longitude)
-                    VALUES (%s, %s, %s)
-                    ON CONFLICT (station_id) DO NOTHING;
-                """,
-                    (station.station_id, station.latitude, station.longitude),
-                )
+        """
+        Insert or update station data in the database.
 
-                if self.cursor.rowcount > 0:
-                    logger.info("Inserted new station %s", station_id)
+        Args:
+            station_list (dict): Dictionary of Station objects to insert/update
 
-            except Exception as e:
-                logger.error("Error inserting data for station %d, %s", station_id, e)
-                self.conn.rollback()
+        Note:
+            Uses ON CONFLICT DO NOTHING to handle duplicate stations
+        """
+        with self.engine.connect() as conn:
+            for station_id, station in station_list.items():
+                try:
+                    result = conn.execute(
+                        self.stations_table.insert().values(
+                            station_id=station.station_id,
+                            latitude=station.latitude,
+                            longitude=station.longitude,
+                        )
+                    ).prefix_with("ON CONFLICT (station_id) DO NOTHING")
+                    if result.rowcount > 0:
+                        logger.info("Inserted new station %s", station_id)
 
-        self.conn.commit()
+                except SQLAlchemyError as e:
+                    logger.error(
+                        "Error inserting data for station %d, %s", station_id, e
+                    )
+                    continue
+
+            conn.commit()
 
     def fetch_station_ids(self):
-        """Fetch station IDs from the raw_data.stations table."""
+        """
+        Fetch all station IDs from the database.
+
+        Returns:
+            list: List of station IDs stored in the database
+        """
         try:
-            self.cursor.execute("SELECT station_id FROM raw_data.stations")
-            station_ids = [row[0] for row in self.cursor.fetchall()]
-            return station_ids
-        except Exception as e:
+            with self.engine.connect() as conn:
+                result = conn.execute(
+                    self.stations_table.select().with_only_columns(
+                        [self.stations_table.c.station_id]
+                    )
+                )
+                station_ids = []
+                for row in result:
+                    station_id = row[0]
+                    station_ids.append(station_id)
+                return station_ids
+        except SQLAlchemyError as e:
             logger.error("Error fetching station IDs: %s", e)
             return []
 
     async def close(self):
-        self.cursor.close()
-        self.conn.close()
+        """Clean up resources and close connections."""
         if hasattr(self, "fetcher"):
             await self.fetcher.close()
 
 
 async def main():
-    load_dotenv()
+    """
+    Main entry point for station data processing.
+
+    Fetches station data and stores it in the database.
+    """
     try:
         # Create an instance of the Stations class and fetch the data
         stations = StationsFetcher()
