@@ -7,9 +7,8 @@ Create Date: 2025-01-13 06:05:46.807956
 """
 
 from typing import Sequence, Union
-
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 
 
 # revision identifiers, used by Alembic.
@@ -20,6 +19,10 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
+    """Create the stations table in raw_data schema.
+
+    Creates a table to store NOAA station metadata including coordinates and timestamps.
+    """
     # type: ignore
     op.create_table(
         "stations",
@@ -45,6 +48,7 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
+    """Remove the stations table from raw_data schema."""
     # type: ignore
     op.drop_table("stations", schema="raw_data")
     # ### end Alembic commands ###

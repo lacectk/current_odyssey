@@ -6,9 +6,9 @@ Create Date: 2025-01-21 10:45:34.919804
 
 """
 
+from typing import Sequence, Union
 import sqlalchemy as sa
 from alembic import op
-from typing import Sequence, Union
 
 revision: str = "51c6d21e6cd9"
 down_revision: Union[str, None] = "4c421cc0d6f6"
@@ -17,6 +17,11 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
+    """Create the localized_wave_data table in raw_data schema.
+
+    Creates a table to store wave measurements with station coordinates and timestamps.
+    """
+    # type: ignore  # for op.create_table linter error
     op.create_table(
         "localized_wave_data",
         sa.Column("station_id", sa.String(length=10), nullable=False),
@@ -35,5 +40,7 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
+    """Remove the localized_wave_data table from raw_data schema."""
+    # type: ignore  # for op.drop_table linter error
     op.drop_table("localized_wave_data", schema="raw_data")
     # ### end Alembic commands ###
