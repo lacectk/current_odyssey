@@ -1,0 +1,2090 @@
+2024-12-11 08:40:59,366 DEBUG    root            Loaded Command Group: ['gcloud', 'components']
+2024-12-11 08:40:59,367 DEBUG    root            Loaded Command Group: ['gcloud', 'components', 'list']
+2024-12-11 08:40:59,368 DEBUG    root            Running [gcloud.components.list] with arguments: [--format: "json", --quiet: "True", --verbosity: "warning"]
+2024-12-11 08:40:59,377 DEBUG    urllib3.connectionpool Starting new HTTPS connection (1): dl.google.com:443
+2024-12-11 08:40:59,435 DEBUG    urllib3.connectionpool https://dl.google.com:443 "GET /dl/cloudsdk/channels/rapid/components-2.json HTTP/1.1" 200 227817
+2024-12-11 08:40:59,511 INFO     ___FILE_ONLY___ 
+Your current Google Cloud CLI version is: 503.0.0
+
+2024-12-11 08:40:59,511 INFO     ___FILE_ONLY___ The latest available version is: 503.0.0
+
+2024-12-11 08:40:59,511 INFO     ___FILE_ONLY___ 
+
+2024-12-11 08:40:59,511 DEBUG    root            Chosen display Format:table[box,title="Components"](state.name:label=Status,name:label=Name,id:label=ID,size.size(zero="",min=1048576):label=Size:align=right) json
+2024-12-11 08:40:59,512 INFO     root            Display format: "table[box,title="Components"](state.name:label=Status,name:label=Name,id:label=ID,size.size(zero="",min=1048576):label=Size:align=right) json"
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ [
+  {
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+    "id": "app-engine-go",
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.9.76",
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+    "name": "App Engine Go Extensions",
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,517 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "size": 4673886,
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "id": "appctl",
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "0.1.12",
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "name": "Appctl",
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+        "file_name": "x86_64",
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+        "id": "x86_64",
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+        "name": "x86_64"
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "size": 19381598,
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,518 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "id": "package-go-module",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "0.4.0",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "name": "Artifact Registry Go Module Package Helper",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "size": 855211,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "id": "bq",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "2.1.10",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "name": "BigQuery Command Line Tool",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "size": 1827749,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "gdu_only": true,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "id": "cbt",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.22.0",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "name": "Cloud Bigtable Command Line Tool",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,519 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "size": 18821500,
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "gdu_only": true,
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "id": "bigtable",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "name": "Cloud Bigtable Emulator",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "size": 7696648,
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "id": "cloud-datastore-emulator",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "2.3.1",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "name": "Cloud Datastore Emulator",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,520 INFO     ___FILE_ONLY___ 
+    "size": 37925014,
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "id": "cloud-firestore-emulator",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.19.9",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "name": "Cloud Firestore Emulator",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "size": 49222535,
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "id": "pubsub-emulator",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "0.8.17",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "name": "Cloud Pub/Sub Emulator",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "size": 65223749,
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,521 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "id": "cloud-run-proxy",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "0.5.0",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "name": "Cloud Run Proxy",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "size": 11892176,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "id": "cloud-sql-proxy",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "2.10.0",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "name": "Cloud SQL Proxy v2",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "size": 13848476,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "gdu_only": true,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "id": "gsutil",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "5.32",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "name": "Cloud Storage Command Line Tool",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,522 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "size": 12368721,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "id": "gcloud-crc32c",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.0.0",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "name": "Google Cloud CRC32C Hash Tool",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "size": 1295444,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "id": "docker-credential-gcr",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.5.0",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "name": "Google Container Registry's Docker credential helper",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "size": 0,
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,523 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "gdu_only": true,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "id": "kustomize",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "4.4.0",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "name": "Kustomize",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "size": 7742264,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "id": "log-streaming",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "0.3.0",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "name": "Log Streaming",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "size": 12455711,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "id": "managed-flink-client",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "0.5.2",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "name": "Managed Flink Client",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,524 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "size": 401980356,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "id": "nomos",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.20.0-rc.3",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "name": "Nomos CLI",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "file_name": "x86_64",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "id": "x86_64",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "name": "x86_64"
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "size": 32861785,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "id": "local-extract",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.6.0",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "name": "On-Demand Scanning API extraction helper",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "size": 21951313,
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,525 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "id": "terraform-tools",
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "0.11.1",
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "name": "Terraform Tools",
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "size": 66685257,
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "id": "anthos-auth",
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.5.1",
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "name": "anthos-auth",
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,526 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "size": 21872436,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "gdu_only": true,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "id": "config-connector",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.118.1",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "name": "config-connector",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "size": 93030625,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "gdu_only": true,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "id": "enterprise-certificate-proxy",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "0.3.3",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "name": "enterprise-certificate-proxy",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "size": 7538571,
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,527 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "id": "app-engine-java",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "2.0.31",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "name": "gcloud app Java Extensions",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "size": 134364551,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "id": "app-engine-python",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.9.114",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "name": "gcloud app Python Extensions",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "size": 3973536,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "id": "app-engine-python-extras",
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,528 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.9.106",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "name": "gcloud app Python Extensions (Extra Libraries)",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "size": 2122,
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "gdu_only": true,
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "id": "istioctl",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.20.47",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "name": "istioctl",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "size": 26052154,
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "id": "kpt",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.0.0-beta.55",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "name": "kpt",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,529 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "size": 15062248,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "id": "kubectl-oidc",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.5.1",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "name": "kubectl-oidc",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "size": 21872424,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "current_version_string": null,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "gdu_only": true,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "id": "pkg",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "name": "pkg",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "size": 0,
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+      "name": "Not Installed"
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,530 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "current_version_string": "2024.12.06",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "id": "core",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "2024.12.06",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "name": "Google Cloud CLI Core Libraries",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "size": 21458604,
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+      "name": "Installed"
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "current_version_string": "1.34.0",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "id": "minikube",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.34.0",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "name": "Minikube",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "size": 38981244,
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+      "name": "Installed"
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "current_version_string": "2.13.1",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "gdu_only": true,
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "id": "skaffold",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "2.13.1",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "name": "Skaffold",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,531 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "size": 24031362,
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+      "name": "Installed"
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "current_version_string": "2024.12.06",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "id": "alpha",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "2024.12.06",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "name": "gcloud Alpha Commands",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "size": 800,
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+      "name": "Installed"
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "current_version_string": "2024.12.06",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "id": "beta",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "2024.12.06",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "name": "gcloud Beta Commands",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "size": 797,
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+      "name": "Installed"
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,532 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "current_version_string": "0.5.9",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "gdu_only": false,
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "id": "gke-gcloud-auth-plugin",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "0.5.9",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "name": "gke-gcloud-auth-plugin",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "platform_required": false,
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "size": 4148014,
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+      "name": "Installed"
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ ,
+  {
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "current_version_string": "1.30.5",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "gdu_only": true,
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "id": "kubectl",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "is_configuration": false,
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "is_hidden": false,
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "latest_version_string": "1.30.5",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "name": "kubectl",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "platform": {
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+      "architecture": {
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "file_name": "arm",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "id": "arm",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "name": "arm"
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+      },
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+      "operating_system": {
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "clean_version": "24.1.0",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "file_name": "darwin",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "id": "MACOSX",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "name": "Mac OS X",
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+        "version": "24.1.0"
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+      }
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    },
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "platform_required": true,
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "size": 36206,
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    "state": {
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+      "name": "Installed"
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+    }
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+  }
+2024-12-11 08:40:59,533 INFO     ___FILE_ONLY___ 
+]
+
+2024-12-11 08:40:59,538 DEBUG    root            Metrics reporting process started...

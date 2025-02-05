@@ -2,10 +2,13 @@ from fastapi import FastAPI, HTTPException, Query, Depends
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from sqlalchemy.orm import Session
+import os
+from dotenv import load_dotenv
 
-from backend.config.settings import PROJECT_NAME, CORS_ORIGINS
-from backend.config.database import get_wave_consistency_db
-from backend.models import ConsistencyData
+from src.backend.config.settings import PROJECT_NAME, CORS_ORIGINS
+from src.backend.models import ConsistencyData
+
+load_dotenv()
 
 # Initialize the app
 app = FastAPI(
@@ -61,10 +64,10 @@ async def get_consistency(
             status_code=400, detail="Start month must be before end month."
         )
 
-    # Query the wave consistency database for the specified month range
+    db_name = os.getenv("DB_NAME")
     query = f"""
         SELECT station_id, month, latitude, longitude, consistency_label, consistency_score
-        FROM wave_consistency_trends
+        FROM {db_name}.wave_consistency_trends
         WHERE month >= '{start_month_dt.strftime('%Y-%m-01')}'
         AND month <= '{end_month_dt.strftime('%Y-%m-01')}'
         AND consistency_score IS NOT NULL

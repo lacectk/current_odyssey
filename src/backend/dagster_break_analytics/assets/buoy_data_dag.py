@@ -1,8 +1,8 @@
 from dagster import asset, AssetExecutionContext, MetadataValue, Output
 from datetime import datetime
 import pandas as pd
-from backend.buoy_data.localized_wave import LocalizedWaveProcessor
-from backend.stations.stations import StationsFetcher
+from src.backend.buoy_data.localized_wave import LocalizedWaveProcessor
+from src.backend.stations.stations import StationsFetcher
 
 
 @asset(
@@ -26,12 +26,6 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
 
         # Initialize processor
         processor = LocalizedWaveProcessor(station_ids)
-
-        # Create table if needed
-        processor.create_wave_table()
-
-        # Process the data
-        processor.process_data()
 
         # Fetch the processed data for output
         with processor.engine.connect() as conn:

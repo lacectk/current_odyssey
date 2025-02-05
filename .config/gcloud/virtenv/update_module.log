@@ -1,0 +1,214 @@
+2024-05-13T12:35:05,635 Using pip 23.2.1 from /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages/pip (python 3.11)
+2024-05-13T12:35:05,635 Non-user install because user site-packages disabled
+2024-05-13T12:35:05,647 Created temporary directory: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-hr34dl1k
+2024-05-13T12:35:05,647 Initialized build tracking at /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-hr34dl1k
+2024-05-13T12:35:05,647 Created build tracker: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-hr34dl1k
+2024-05-13T12:35:05,647 Entered build tracker: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-hr34dl1k
+2024-05-13T12:35:05,648 Created temporary directory: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-install-potheo0u
+2024-05-13T12:35:05,649 Created temporary directory: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-ephem-wheel-cache-89z5hhzx
+2024-05-13T12:35:05,660 Requirement already satisfied: crcmod in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (1.7)
+2024-05-13T12:35:05,660 Requirement already satisfied: grpcio in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (1.63.0)
+2024-05-13T12:35:05,661 Requirement already satisfied: pyopenssl==23.2.0 in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (23.2.0)
+2024-05-13T12:35:05,661 Requirement already satisfied: google_crc32c in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (1.5.0)
+2024-05-13T12:35:05,661 Requirement already satisfied: certifi in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (2024.2.2)
+2024-05-13T12:35:05,662 Requirement already satisfied: cryptography in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (41.0.7)
+2024-05-13T12:35:05,670 Requirement already satisfied: cffi>=1.12 in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (from cryptography) (1.16.0)
+2024-05-13T12:35:05,671 Requirement already satisfied: pycparser in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (from cffi>=1.12->cryptography) (2.22)
+2024-05-13T12:35:05,672 Created temporary directory: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-unpack-_t6cscus
+2024-05-13T12:35:05,693 Removed build tracker: '/private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-hr34dl1k'
+2024-12-11T08:40:56,659 Using pip 23.2.1 from /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages/pip (python 3.11)
+2024-12-11T08:40:56,660 Non-user install because user site-packages disabled
+2024-12-11T08:40:56,675 Created temporary directory: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-0q2zttrv
+2024-12-11T08:40:56,675 Initialized build tracking at /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-0q2zttrv
+2024-12-11T08:40:56,675 Created build tracker: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-0q2zttrv
+2024-12-11T08:40:56,675 Entered build tracker: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-0q2zttrv
+2024-12-11T08:40:56,675 Created temporary directory: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-install-6t1hxokx
+2024-12-11T08:40:56,676 Created temporary directory: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-ephem-wheel-cache-zu814qtz
+2024-12-11T08:40:56,695 Collecting cryptography==42.0.7
+2024-12-11T08:40:56,695   Created temporary directory: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-unpack-0rwwp9t5
+2024-12-11T08:40:56,723   Looking up "https://github.com/googleapis/enterprise-certificate-proxy/releases/download/v0.3.2/cryptography-42.0.7-cp39-abi3-macosx_10_12_universal2.whl" in the cache
+2024-12-11T08:40:56,724   No cache entry available
+2024-12-11T08:40:56,724   Starting new HTTPS connection (1): github.com:443
+2024-12-11T08:40:57,046   https://github.com:443 "GET /googleapis/enterprise-certificate-proxy/releases/download/v0.3.2/cryptography-42.0.7-cp39-abi3-macosx_10_12_universal2.whl HTTP/1.1" 302 0
+2024-12-11T08:40:57,048   Status code 302 not in (200, 203, 300, 301, 308)
+2024-12-11T08:40:57,067   Looking up "https://objects.githubusercontent.com/github-production-release-asset-2e65be/469915778/9596e948-2982-428b-9fe5-22f080271dc4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20241211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241211T164057Z&X-Amz-Expires=300&X-Amz-Signature=0282d0bc4ee72dd9f9510e89025bde5e15593f2953d8672dabc4266a1334ef96&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3Dcryptography-42.0.7-cp39-abi3-macosx_10_12_universal2.whl&response-content-type=application%2Foctet-stream" in the cache
+2024-12-11T08:40:57,068   No cache entry available
+2024-12-11T08:40:57,069   Starting new HTTPS connection (1): objects.githubusercontent.com:443
+2024-12-11T08:40:57,472   https://objects.githubusercontent.com:443 "GET /github-production-release-asset-2e65be/469915778/9596e948-2982-428b-9fe5-22f080271dc4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20241211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241211T164057Z&X-Amz-Expires=300&X-Amz-Signature=0282d0bc4ee72dd9f9510e89025bde5e15593f2953d8672dabc4266a1334ef96&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3Dcryptography-42.0.7-cp39-abi3-macosx_10_12_universal2.whl&response-content-type=application%2Foctet-stream HTTP/1.1" 200 5512260
+2024-12-11T08:40:57,473   Downloading https://github.com/googleapis/enterprise-certificate-proxy/releases/download/v0.3.2/cryptography-42.0.7-cp39-abi3-macosx_10_12_universal2.whl (5.5 MB)
+2024-12-11T08:40:57,871   Updating cache with response from "https://objects.githubusercontent.com/github-production-release-asset-2e65be/469915778/9596e948-2982-428b-9fe5-22f080271dc4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20241211%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241211T164057Z&X-Amz-Expires=300&X-Amz-Signature=0282d0bc4ee72dd9f9510e89025bde5e15593f2953d8672dabc4266a1334ef96&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3Dcryptography-42.0.7-cp39-abi3-macosx_10_12_universal2.whl&response-content-type=application%2Foctet-stream"
+2024-12-11T08:40:57,872   etag object cached for 1209600 seconds
+2024-12-11T08:40:57,872   Caching due to etag
+2024-12-11T08:40:57,890   Added cryptography==42.0.7 from https://github.com/googleapis/enterprise-certificate-proxy/releases/download/v0.3.2/cryptography-42.0.7-cp39-abi3-macosx_10_12_universal2.whl to build tracker '/private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-0q2zttrv'
+2024-12-11T08:40:57,890   Removed cryptography==42.0.7 from https://github.com/googleapis/enterprise-certificate-proxy/releases/download/v0.3.2/cryptography-42.0.7-cp39-abi3-macosx_10_12_universal2.whl from build tracker '/private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-0q2zttrv'
+2024-12-11T08:40:57,895 Requirement already satisfied: crcmod in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (1.7)
+2024-12-11T08:40:57,895 Requirement already satisfied: grpcio in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (1.63.0)
+2024-12-11T08:40:57,896 1 location(s) to search for versions of pyopenssl:
+2024-12-11T08:40:57,896 * https://pypi.org/simple/pyopenssl/
+2024-12-11T08:40:57,896 Fetching project page and analyzing links: https://pypi.org/simple/pyopenssl/
+2024-12-11T08:40:57,897 Getting page https://pypi.org/simple/pyopenssl/
+2024-12-11T08:40:57,897 Found index url https://pypi.org/simple/
+2024-12-11T08:40:57,915 Looking up "https://pypi.org/simple/pyopenssl/" in the cache
+2024-12-11T08:40:57,915 Request header has "max_age" as 0, cache bypassed
+2024-12-11T08:40:57,916 Starting new HTTPS connection (1): pypi.org:443
+2024-12-11T08:40:57,963 https://pypi.org:443 "GET /simple/pyopenssl/ HTTP/1.1" 200 13099
+2024-12-11T08:40:57,968 Updating cache with response from "https://pypi.org/simple/pyopenssl/"
+2024-12-11T08:40:57,968 etag object cached for 1209600 seconds
+2024-12-11T08:40:57,968 Caching due to etag
+2024-12-11T08:40:57,970 Fetched page https://pypi.org/simple/pyopenssl/ as application/vnd.pypi.simple.v1+json
+2024-12-11T08:40:57,973   Found link https://files.pythonhosted.org/packages/2d/db/367a0acaf673ae866e845201136404f050c93d959130523bcb4f73d9417a/pyOpenSSL-0.6.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 0.6
+2024-12-11T08:40:57,973   Found link https://files.pythonhosted.org/packages/d2/3d/0a364317a29e68f2d22c82478f19e446fee8e6c50c37208fbd05020e827c/pyOpenSSL-0.7.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 0.7
+2024-12-11T08:40:57,973   Found link https://files.pythonhosted.org/packages/c4/fd/b43e581f822de59682e3ba451eb3a381a3100d4a1a701dea21634b50fd10/pyOpenSSL-0.8.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 0.8
+2024-12-11T08:40:57,973   Found link https://files.pythonhosted.org/packages/15/2f/538fa04b0442c7a0c98c356fa545ac0419e2159c029a460de37dea109af9/pyOpenSSL-0.9.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 0.9
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/36/39/80c6b641c40436ad4aa93b46f5f11dd6f418a2b78621198eba51a086a41c/pyOpenSSL-0.9.win32-py2.6.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/38/a9/6b55bb7713267dbaf9afbea037d0c1d16bb2930a3a7431bf4d5069e2e9ef/pyOpenSSL-0.10-py2.4-win32.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/d6/a5/168f2b0a673140407fdc5d0431046868e50d3123ef6a22011e243e5e9357/pyOpenSSL-0.10-py2.5-win32.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/81/ac/c48491e54217c4f2116eca8c3387f7cb410c842f9c2ffd0dad24a1fdac6b/pyOpenSSL-0.10-py2.6-win32.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Found link https://files.pythonhosted.org/packages/55/01/165abb703068d8c673af8c56b9827b24e922185a5abfd7659d2bd67d5f30/pyOpenSSL-0.10.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 0.10
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/28/04/69f5afeb3c5c5d38ac53c3065e2285cb9e5f3a86e9d4a278c2f08ebb3480/pyOpenSSL-0.10.winxp32-py2.4.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/f5/fc/a72737c5ecdfe05c80b059beeb8b580dcf82d0bd6b701a514e83c3c5f250/pyOpenSSL-0.10.winxp32-py2.5.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .msi: https://files.pythonhosted.org/packages/d9/d8/4e8a4995519e3a93700f6d9211e4c5823b2f625c15b85809f603be2e07cd/pyOpenSSL-0.10.winxp32-py2.5.msi (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/99/b9/cd55e4761fd2090cb1a93cb77c6f3dbb88039585d61cf675d8f66d7fe2a9/pyOpenSSL-0.10.winxp32-py2.6.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .msi: https://files.pythonhosted.org/packages/6a/eb/07e2ae39b78ad33991d82ab8a59eff701775ba6641db2908543d66aa49d9/pyOpenSSL-0.10.winxp32-py2.6.msi (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/33/70/69f75a6e6e1e7860d83d706e575937829b84fa6eb2094ba61475eeb6e854/pyOpenSSL-0.12-py2.4-win32.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/c7/e2/f336e7a4229529973d71a4b21fc2f5dfe4e58db6a4a81fff01b56375b1bd/pyOpenSSL-0.12-py2.5-win32.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/06/64/50195580ce85c12567700317b466ba18d52a305841c969face30b78d6f49/pyOpenSSL-0.12-py2.6-win-amd64.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/01/8d/66212fc9fb6ceb07069a40d2cd975ff3c9c3c9d124aa6e218d75e037163e/pyOpenSSL-0.12-py2.6-win32.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/f6/6b/997e84b91a909dc459e0e84768ba519aa5227db0e4c30ef01a0371206501/pyOpenSSL-0.12-py2.7-win32.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/bb/69/21ee1b83fe70e362623f1d9fcb1c4ab1898c08ba089fed3c7e1c852960dc/pyOpenSSL-0.12-py3.2-win32.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Found link https://files.pythonhosted.org/packages/a3/67/0fdda7b89b71ae59332d5df685d405c8029b0be7ba85704de8d43682748f/pyOpenSSL-0.12.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 0.12
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .msi: https://files.pythonhosted.org/packages/ad/31/7ee444fd42ed9bf7170f38f25d5f24db539069826cf5f34af2be8ac95ff5/pyOpenSSL-0.12.winxp32-py2.5.msi (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .msi: https://files.pythonhosted.org/packages/7a/a6/7fef62c62aeb801f650f663efa87f941495ddc7a2f530a69a5f6ea16ccf0/pyOpenSSL-0.12.winxp32-py2.6.msi (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .msi: https://files.pythonhosted.org/packages/c9/29/fe2281325fd8c72759eed5a6310c31c48b777d2ac2301a96e7523b9f4a99/pyOpenSSL-0.12.winxp32-py2.7.msi (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .msi: https://files.pythonhosted.org/packages/71/94/729eb4d72d810651dbf9ca74537878522964a844635fdc8a5d21dac014e8/pyOpenSSL-0.12.winxp32-py3.2.msi (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/a2/7b/7640160a63f5d141d26bfa2c26111f8df495f802b685e5607f4f52bf0a8f/pyOpenSSL-0.13-py2.4-win32.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/8c/ee/f07d0511809c9a8442295c5c0d48cd0c30406629f47770dba257d566afa4/pyOpenSSL-0.13-py2.5-win32.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/30/fc/56d6bf06e5773831e8ed314d58af73285a367cef0e48d9d595ef394a3f78/pyOpenSSL-0.13-py2.6-win32.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,973   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/42/c6/620c224c4082810e5cc5e3223491a97c2866b7458224836c75e81c9c21b3/pyOpenSSL-0.13-py2.7-win32.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .egg: https://files.pythonhosted.org/packages/3a/86/58142141c8980bb53407fa55cd25f8c32b1b0dcefc30e0e4f4caece2ebc1/pyOpenSSL-0.13-py3.2-win32.egg (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/8b/20/8f4230b281a2a9d0ee9e24fd89aeded0b25d40c84b3d61100a96438e1626/pyOpenSSL-0.13.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 0.13
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/bf/5c/4d6061a5b168e663110245c0a6508faa740459c45424a204cc2513dfd82f/pyOpenSSL-0.13.winxp32-py2.4.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/62/65/933a47f91459fc528d228807b64b2b75191c57f4985e32ce2c2646d95f91/pyOpenSSL-0.13.winxp32-py2.5.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .msi: https://files.pythonhosted.org/packages/4a/17/65402dd7eb032ba4e4460fb818bba361f16b3a864233cca24178866e5ba2/pyOpenSSL-0.13.winxp32-py2.5.msi (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/d0/77/6998a7f0069d3546fbfdccf736e88317d7ce3ebbff28abc0970a98463774/pyOpenSSL-0.13.winxp32-py2.6.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .msi: https://files.pythonhosted.org/packages/39/c2/8b97afd229ff94fb49fa036e6f277823ff41b0bff4ab4310f8ea404d1e41/pyOpenSSL-0.13.winxp32-py2.6.msi (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/e6/c8/ba7ac0653075bbcfa4c4417a4f1ab0328bfab8f6e98512d2284478104825/pyOpenSSL-0.13.winxp32-py2.7.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .msi: https://files.pythonhosted.org/packages/f8/65/4f4ad8e803c97335bf789ad19cc48a4e4b5069d779a50340b3229f24cbff/pyOpenSSL-0.13.winxp32-py2.7.msi (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/b1/8b/ae7af2ff2ce7ed7ea9969357db7404d47a3cc9f06cf05316258b69e0fbbf/pyOpenSSL-0.13.winxp32-py3.2.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .msi: https://files.pythonhosted.org/packages/72/30/aaf5816a60ad783ebdb3b73812043332d5fe895e452fe7d61947e6983429/pyOpenSSL-0.13.winxp32-py3.2.msi (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/78/a2/51d260c5659b5db40af767ac3d518ba9f7c02c6d7c42cbff9c663f9c3556/pyOpenSSL-0.13.1.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 0.13.1
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/b1/95/6b0709f9ed89fb4c1bfc8cbac0a5f2b5593086d12cc1f8f570459aa71fdf/pyOpenSSL-0.13.1.win-amd64-py2.6.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/a9/3f/65276ba1b19cbd678a3f3876cd7fa739fd9fd23e2f87f08668e701b9cb60/pyOpenSSL-0.13.1.win-amd64-py2.7.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/96/91/391cb5eb4697fff3309e7dd493f68e5de0f56e7483d4c3cc0f3a737fd2d3/pyOpenSSL-0.13.1.win-amd64-py3.2.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/1c/20/fe9f0d5fe5c30f5b4247a853c5fa7c96d5dd93a4d8490f9238d0605e28a0/pyOpenSSL-0.13.1.win32-py2.6.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/27/df/3a90829ce19d0e00a99516196e79208cf49d3de62d0f66f77a0289d04b34/pyOpenSSL-0.13.1.win32-py2.7.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Skipping link: unsupported archive format: .exe: https://files.pythonhosted.org/packages/77/07/751c5ecc784102adf2023ab7cda4ead0c8afd01efcd77665e8d4e8442e2d/pyOpenSSL-0.13.1.win32-py3.2.exe (from https://pypi.org/simple/pyopenssl/)
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/db/5c/fb48e163b66532166d43a6ed5734d84f2cd2b6b87b41a3251e86695f7e79/pyOpenSSL-0.14.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 0.14
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/b9/ad/a1d5bf62059d02e70cb35299429b884986a2ed177e2e1fb8a1abb2c83509/pyOpenSSL-0.15-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 0.15
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/3a/c1/6582bca6b910848d36556e47e00408c28c53df2c846d76f04cb033718f37/pyOpenSSL-0.15.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 0.15
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/37/2f/840f2656e4bcf257cb814825bb751a9197ca6f39f1fa036ab111920ac7ef/pyOpenSSL-0.15.1-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 0.15.1
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/d4/09/002de9a836046ae1f1842e20eb7561c5b983862dd1567103e15702928a5f/pyOpenSSL-0.15.1.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 0.15.1
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/b1/4e/54c8995d2de887919272c2b711cd430277ec33e0f7bb88cb564244c102b6/pyOpenSSL-16.0.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 16.0.0
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/77/f2/bccec75ca4280a9fa762a90a1b8b152a22eac5d9c726d7da1fcbfe0a20e6/pyOpenSSL-16.0.0.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 16.0.0
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/51/ae/930a017b1809e3c1c9da0e4d05ef018535249a125682e4e5d718f0d2e1cd/pyOpenSSL-16.1.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 16.1.0
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/15/1e/79c75db50e57350a7cefb70b110255757e9abd380a50ebdc0cfd853b7450/pyOpenSSL-16.1.0.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 16.1.0
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/ac/93/b4cd538d31adacd07f83013860db6b88d78755af1f3fefe68ec22d397e7b/pyOpenSSL-16.2.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 16.2.0
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/0c/d6/b1fe519846a21614fa4f8233361574eddb223e0bc36b182140d916acfb3b/pyOpenSSL-16.2.0.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 16.2.0
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/8c/b7/0048adbf09ad93f571e70fb3100e696d4711cdcbfe38161690d716a5ed35/pyOpenSSL-17.0.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 17.0.0
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/9f/32/80fe4fddeb731b7766cd09fe0b2032a91b43dae655e216792af2a6ae3190/pyOpenSSL-17.0.0.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 17.0.0
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/d0/39/7730559b75b565fd6983d857776fcb4982afb0e8faddb06170e59b62b41c/pyOpenSSL-17.1.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 17.1.0
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/4b/13/5521fdbfe26e0aa4aa04b9133c0dd5450a50e4aee5be44461d448e57560e/pyOpenSSL-17.1.0.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 17.1.0
+2024-12-11T08:40:57,974   Found link https://files.pythonhosted.org/packages/41/bd/751560b317222ba6b6d2e7663a990ac36465aaa026621c6057db130e2faf/pyOpenSSL-17.2.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 17.2.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/b0/9e/7088f6165c40c46416aff434eb806c1d64ad6ec6dbc201f5ad4d0484704e/pyOpenSSL-17.2.0.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 17.2.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/24/37/89bf12e53f1d27e8b2c8e5f8f9c7a958a3905f6916a9294a57a9d83fa165/pyOpenSSL-17.3.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 17.3.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/ee/6a/cd78737dd990297205943cc4dcad3d3c502807fd2c5b18c5f33dc90ca214/pyOpenSSL-17.3.0.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 17.3.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/b7/45/0b83f445994da6ff803d7c3a5fa016afda3c965d0c48dafa8e0264a554e7/pyOpenSSL-17.4.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 17.4.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/41/63/8759b18f0a240e91a24029e7da7c4a95ab75bca9028b02635ae0a9723c23/pyOpenSSL-17.4.0.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 17.4.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/79/db/7c0cfe4aa8341a5fab4638952520d8db6ab85ff84505e12c00ea311c3516/pyOpenSSL-17.5.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 17.5.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/3b/15/a5d90ab1a41075e8f0fae334f13452549528f82142b3b9d0c9d86ab7178c/pyOpenSSL-17.5.0.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 17.5.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/96/af/9d29e6bd40823061aea2e0574ccb2fcf72bfd6130ce53d32773ec375458c/pyOpenSSL-18.0.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 18.0.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/9b/7c/ee600b2a9304d260d96044ab5c5e57aa489755b92bbeb4c0803f9504f480/pyOpenSSL-18.0.0.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 18.0.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/01/c8/ceb170d81bd3941cbeb9940fc6cc2ef2ca4288d0ca8929ea4db5905d904d/pyOpenSSL-19.0.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 19.0.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/40/d0/8efd61531f338a89b4efa48fcf1972d870d2b67a7aea9dcf70783c8464dc/pyOpenSSL-19.0.0.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 19.0.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/9e/de/f8342b68fa9e981d348039954657bdf681b2ab93de27443be51865ffa310/pyOpenSSL-19.1.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/), version: 19.1.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/0d/1d/6cc4bd4e79f78be6640fab268555a11af48474fac9df187c3361a1d1d2f0/pyOpenSSL-19.1.0.tar.gz (from https://pypi.org/simple/pyopenssl/), version: 19.1.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/c9/86/e21398551956735fef8f7883908771445878ccb16cd17c0896176419cd75/pyOpenSSL-20.0.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*), version: 20.0.0
+2024-12-11T08:40:57,975   Found link https://files.pythonhosted.org/packages/09/67/38a1080fabbb908515c47694238e00b6a73a82d9dbc76372263a231abfcb/pyOpenSSL-20.0.0.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*), version: 20.0.0
+2024-12-11T08:40:57,976   Found link https://files.pythonhosted.org/packages/b2/5e/06351ede29fd4899782ad335c2e02f1f862a887c20a3541f17c3fa1a3525/pyOpenSSL-20.0.1-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*), version: 20.0.1
+2024-12-11T08:40:57,976   Found link https://files.pythonhosted.org/packages/98/cd/cbc9c152daba9b5de6094a185c66f1c6eb91c507f378bb7cad83d623ea88/pyOpenSSL-20.0.1.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*), version: 20.0.1
+2024-12-11T08:40:57,976   Found link https://files.pythonhosted.org/packages/85/3a/fe3c98435856a1ed798977981f3da82d2685cf9df97e4d9546340d2b83db/pyOpenSSL-21.0.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*), version: 21.0.0
+2024-12-11T08:40:57,976   Found link https://files.pythonhosted.org/packages/54/9a/2a43c5dbf4507f86f7c43cba4195d5e25a81c988fd7b0ea779dfc9c6973f/pyOpenSSL-21.0.0.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*), version: 21.0.0
+2024-12-11T08:40:57,976   Found link https://files.pythonhosted.org/packages/d5/9f/9c0e3288b85f907a008f9d31318b0e4de31b2f67724a8745e633741f609c/pyOpenSSL-22.0.0-py2.py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.6), version: 22.0.0
+2024-12-11T08:40:57,976   Found link https://files.pythonhosted.org/packages/35/d3/d6a9610f19d943e198df502ae660c6b5acf84cc3bc421a2aa3c0fb6b21d1/pyOpenSSL-22.0.0.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.6), version: 22.0.0
+2024-12-11T08:40:57,976   Found link https://files.pythonhosted.org/packages/00/3f/ea5cfb789dddb327e6d2cf9377c36d9d8607af85530af0e7001165587ae7/pyOpenSSL-22.1.0-py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.6), version: 22.1.0
+2024-12-11T08:40:57,976   Found link https://files.pythonhosted.org/packages/e7/2f/c6d89edac75482f11e231b644e365d31d5479b7b727734e6a8f3d00decd5/pyOpenSSL-22.1.0.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.6), version: 22.1.0
+2024-12-11T08:40:57,976   Found link https://files.pythonhosted.org/packages/73/00/b78f9fae05bb1633f7209aa394fa0c3563ef760ab7f47ac37768bf4e4d78/pyOpenSSL-23.0.0-py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.6), version: 23.0.0
+2024-12-11T08:40:57,976   Found link https://files.pythonhosted.org/packages/af/6e/0706d5e0eac08fcff586366f5198c9bf0a8b46f0f45b1858324e0d94c295/pyOpenSSL-23.0.0.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.6), version: 23.0.0
+2024-12-11T08:40:57,976   Found link https://files.pythonhosted.org/packages/63/91/e5c22dd80e012e960d68c626746d9e3c525d33a056533f9ff2296d00cc35/pyOpenSSL-23.1.0-py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.6), version: 23.1.0
+2024-12-11T08:40:57,976   Found link https://files.pythonhosted.org/packages/d8/d0/35a1997b0b2180403f64a168e9043523999afdb1fc676a0a4e78581bde5b/pyOpenSSL-23.1.0.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.6), version: 23.1.0
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/b7/6d/d7377332703ffd8821878794aca4fb54637da654bf3e467ffb32109c2147/pyOpenSSL-23.1.1-py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.6), version: 23.1.1
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/8f/72/f1d9e92f5d3a58aba3b71ad512de19eb9f82e7b98795662bf7b796be71e5/pyOpenSSL-23.1.1.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.6), version: 23.1.1
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/f0/e2/f8b4f1c67933a4907e52228241f4bd52169f3196b70af04403b29c63238a/pyOpenSSL-23.2.0-py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.6), version: 23.2.0
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/be/df/75a6525d8988a89aed2393347e9db27a56cb38a3e864314fac223e905aef/pyOpenSSL-23.2.0.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.6), version: 23.2.0
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/db/de/007b832ad7a95e6a73745609bbe123c407aa2c46bb0b8f765c8718294e7f/pyOpenSSL-23.3.0-py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.7), version: 23.3.0
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/bf/a0/e667c3c43b65a188cc3041fa00c50655315b93be45182b2c94d185a2610e/pyOpenSSL-23.3.0.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.7), version: 23.3.0
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/3f/0e/c6656e62d9424d9c9f14b27be27220602f4af1e64b77f2c86340b671d439/pyOpenSSL-24.0.0-py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.7), version: 24.0.0
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/eb/81/022190e5d21344f6110064f6f52bf0c3b9da86e9e5a64fc4a884856a577d/pyOpenSSL-24.0.0.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.7), version: 24.0.0
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/54/a7/2104f674a5a6845b04c8ff01659becc6b8978ca410b82b94287e0b1e018b/pyOpenSSL-24.1.0-py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.7), version: 24.1.0
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/91/a8/cbeec652549e30103b9e6147ad433405fdd18807ac2d54e6dbb73184d8a1/pyOpenSSL-24.1.0.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.7), version: 24.1.0
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/d9/dd/e0aa7ebef5168c75b772eda64978c597a9129b46be17779054652a7999e4/pyOpenSSL-24.2.1-py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.7), version: 24.2.1
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/5d/70/ff56a63248562e77c0c8ee4aefc3224258f1856977e0c1472672b62dadb8/pyopenssl-24.2.1.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.7), version: 24.2.1
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/42/22/40f9162e943f86f0fc927ebc648078be87def360d9d8db346619fb97df2b/pyOpenSSL-24.3.0-py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.7), version: 24.3.0
+2024-12-11T08:40:57,977   Found link https://files.pythonhosted.org/packages/c1/d4/1067b82c4fc674d6f6e9e8d26b3dff978da46d351ca3bac171544693e085/pyopenssl-24.3.0.tar.gz (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.7), version: 24.3.0
+2024-12-11T08:40:57,977 Skipping link: not a file: https://pypi.org/simple/pyopenssl/
+2024-12-11T08:40:57,978 Given no hashes to check 2 links for project 'pyopenssl': discarding no candidates
+2024-12-11T08:40:57,979 Collecting pyopenssl==24.2.1
+2024-12-11T08:40:57,979   Obtaining dependency information for pyopenssl==24.2.1 from https://files.pythonhosted.org/packages/d9/dd/e0aa7ebef5168c75b772eda64978c597a9129b46be17779054652a7999e4/pyOpenSSL-24.2.1-py3-none-any.whl.metadata
+2024-12-11T08:40:57,979   Created temporary directory: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-unpack-3vq007in
+2024-12-11T08:40:57,997   Looking up "https://files.pythonhosted.org/packages/d9/dd/e0aa7ebef5168c75b772eda64978c597a9129b46be17779054652a7999e4/pyOpenSSL-24.2.1-py3-none-any.whl.metadata" in the cache
+2024-12-11T08:40:57,998   No cache entry available
+2024-12-11T08:40:57,998   Starting new HTTPS connection (1): files.pythonhosted.org:443
+2024-12-11T08:40:58,050   https://files.pythonhosted.org:443 "GET /packages/d9/dd/e0aa7ebef5168c75b772eda64978c597a9129b46be17779054652a7999e4/pyOpenSSL-24.2.1-py3-none-any.whl.metadata HTTP/1.1" 200 13704
+2024-12-11T08:40:58,051   Downloading pyOpenSSL-24.2.1-py3-none-any.whl.metadata (13 kB)
+2024-12-11T08:40:58,053   Ignoring unknown cache-control directive: immutable
+2024-12-11T08:40:58,053   Updating cache with response from "https://files.pythonhosted.org/packages/d9/dd/e0aa7ebef5168c75b772eda64978c597a9129b46be17779054652a7999e4/pyOpenSSL-24.2.1-py3-none-any.whl.metadata"
+2024-12-11T08:40:58,053   etag object cached for 1209600 seconds
+2024-12-11T08:40:58,053   Caching due to etag
+2024-12-11T08:40:58,056   Created temporary directory: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-metadata-c41xj_gt
+2024-12-11T08:40:58,057 Requirement already satisfied: google_crc32c in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (1.5.0)
+2024-12-11T08:40:58,057 Requirement already satisfied: certifi in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (2024.2.2)
+2024-12-11T08:40:58,070 Requirement already satisfied: cffi>=1.12 in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (from cryptography==42.0.7) (1.16.0)
+2024-12-11T08:40:58,071 Requirement already satisfied: pycparser in /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages (from cffi>=1.12->cryptography==42.0.7) (2.22)
+2024-12-11T08:40:58,072 Created temporary directory: /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-unpack-p47pjtx0
+2024-12-11T08:40:58,074 Looking up "https://files.pythonhosted.org/packages/d9/dd/e0aa7ebef5168c75b772eda64978c597a9129b46be17779054652a7999e4/pyOpenSSL-24.2.1-py3-none-any.whl" in the cache
+2024-12-11T08:40:58,074 No cache entry available
+2024-12-11T08:40:58,079 https://files.pythonhosted.org:443 "GET /packages/d9/dd/e0aa7ebef5168c75b772eda64978c597a9129b46be17779054652a7999e4/pyOpenSSL-24.2.1-py3-none-any.whl HTTP/1.1" 200 58390
+2024-12-11T08:40:58,080 Downloading pyOpenSSL-24.2.1-py3-none-any.whl (58 kB)
+2024-12-11T08:40:58,093 Ignoring unknown cache-control directive: immutable
+2024-12-11T08:40:58,093 Updating cache with response from "https://files.pythonhosted.org/packages/d9/dd/e0aa7ebef5168c75b772eda64978c597a9129b46be17779054652a7999e4/pyOpenSSL-24.2.1-py3-none-any.whl"
+2024-12-11T08:40:58,093 etag object cached for 1209600 seconds
+2024-12-11T08:40:58,093 Caching due to etag
+2024-12-11T08:40:58,095 Downloading link https://files.pythonhosted.org/packages/d9/dd/e0aa7ebef5168c75b772eda64978c597a9129b46be17779054652a7999e4/pyOpenSSL-24.2.1-py3-none-any.whl (from https://pypi.org/simple/pyopenssl/) (requires-python:>=3.7) to /private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-unpack-p47pjtx0/pyOpenSSL-24.2.1-py3-none-any.whl
+2024-12-11T08:40:58,098 Added pyopenssl==24.2.1 from https://files.pythonhosted.org/packages/d9/dd/e0aa7ebef5168c75b772eda64978c597a9129b46be17779054652a7999e4/pyOpenSSL-24.2.1-py3-none-any.whl to build tracker '/private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-0q2zttrv'
+2024-12-11T08:40:58,098 Removed pyopenssl==24.2.1 from https://files.pythonhosted.org/packages/d9/dd/e0aa7ebef5168c75b772eda64978c597a9129b46be17779054652a7999e4/pyOpenSSL-24.2.1-py3-none-any.whl from build tracker '/private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-0q2zttrv'
+2024-12-11T08:40:58,137 Installing collected packages: cryptography, pyopenssl
+2024-12-11T08:40:58,137   Attempting uninstall: cryptography
+2024-12-11T08:40:58,138     Found existing installation: cryptography 41.0.7
+2024-12-11T08:40:58,144     Uninstalling cryptography-41.0.7:
+2024-12-11T08:40:58,145       Created temporary directory: /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages/~ryptography-41.0.7.dist-info
+2024-12-11T08:40:58,146       Removing file or directory /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages/cryptography-41.0.7.dist-info/
+2024-12-11T08:40:58,146       Created temporary directory: /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages/~ryptography
+2024-12-11T08:40:58,146       Removing file or directory /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages/cryptography/
+2024-12-11T08:40:58,146       Successfully uninstalled cryptography-41.0.7
+
+2024-12-11T08:40:58,258   Attempting uninstall: pyopenssl
+2024-12-11T08:40:58,260     Found existing installation: pyOpenSSL 23.2.0
+2024-12-11T08:40:58,262     Uninstalling pyOpenSSL-23.2.0:
+2024-12-11T08:40:58,262       Created temporary directory: /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages/~penSSL
+2024-12-11T08:40:58,262       Removing file or directory /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages/OpenSSL/
+2024-12-11T08:40:58,262       Created temporary directory: /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages/~yOpenSSL-23.2.0.dist-info
+2024-12-11T08:40:58,263       Removing file or directory /Users/lacectk/.config/gcloud/virtenv/lib/python3.11/site-packages/pyOpenSSL-23.2.0.dist-info/
+2024-12-11T08:40:58,263       Successfully uninstalled pyOpenSSL-23.2.0
+
+2024-12-11T08:40:58,286 Successfully installed cryptography-42.0.7 pyopenssl-24.2.1
+2024-12-11T08:40:58,286 Removed build tracker: '/private/var/folders/y3/6qb238xd6rx5xq_pm8x739ph00p2b1/T/pip-build-tracker-0q2zttrv'
