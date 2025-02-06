@@ -1,6 +1,7 @@
-from dagster import asset, AssetExecutionContext, MetadataValue, Output
 from datetime import datetime
+from dagster import asset, AssetExecutionContext, MetadataValue, Output
 import pandas as pd
+from sqlalchemy import select, Table, MetaData, text
 from src.backend.buoy_data.localized_wave import LocalizedWaveProcessor
 from src.backend.stations.stations import StationsFetcher
 
@@ -27,24 +28,26 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
         # Initialize processor
         processor = LocalizedWaveProcessor(station_ids)
 
+        # Define table
+        metadata = MetaData(schema="raw_data")
+        wave_table = Table(
+            "localized_wave_data", metadata, autoload_with=processor.engine
+        )
+
         # Fetch the processed data for output
         with processor.engine.connect() as conn:
-            df = pd.read_sql(
-                """
-                SELECT
-                    station_id,
-                    datetime,
-                    latitude,
-                    longitude,
-                    "wave_height(wvht)" as wave_height,
-                    "dominant_period(dpd)" as wave_period,
-                    "mean_wave_direction(mwd)" as wave_direction,
-                    "average_period(apd)" as avg_wave_period
-                FROM raw_data.localized_wave_data
-                WHERE datetime >= NOW() - INTERVAL '24 hours'
-            """,
-                conn,
-            )
+            query = select(
+                wave_table.c.station_id,
+                wave_table.c.datetime,
+                wave_table.c.latitude,
+                wave_table.c.longitude,
+                wave_table.c["wave_height(wvht)"],
+                wave_table.c["dominant_period(dpd)"],
+                wave_table.c["mean_wave_direction(mwd)"],
+                wave_table.c["average_period(apd)"],
+            ).where(wave_table.c.datetime >= text("NOW() - INTERVAL '24 hours'"))
+
+            df = pd.read_sql(query, conn)
 
         context.log.info("Wave data fetched successfully")
 
@@ -52,7 +55,13 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
         quality_metrics = {
             "record_count": len(df),
             "stations_count": df["station_id"].nunique(),
-            "missing_data_pct": df[["wave_height", "wave_period", "wave_direction"]]
+            "missing_data_pct": df[
+                [
+                    "wave_height(wvht)",
+                    "dominant_period(dpd)",
+                    "mean_wave_direction(mwd)",
+                ]
+            ]
             .isna()
             .mean()
             .mean()

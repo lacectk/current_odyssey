@@ -1,0 +1,20 @@
+[32m2025-02-06 04:25:54 +0000[0m - dagster - [34mDEBUG[0m - buoy_data_job - 9fc9ca8a-03aa-488f-9b6d-0acfd2760863 - 3749336 - LOGS_CAPTURED - Started capturing logs in process (pid: 3749336).
+[32m2025-02-06 04:25:54 +0000[0m - dagster - [34mDEBUG[0m - buoy_data_job - 9fc9ca8a-03aa-488f-9b6d-0acfd2760863 - 3749336 - raw_buoy_data - STEP_START - Started execution of step "raw_buoy_data".
+[32m2025-02-06 04:25:54 +0000[0m - dagster - [34mINFO[0m - buoy_data_job - 9fc9ca8a-03aa-488f-9b6d-0acfd2760863 - raw_buoy_data - Starting wave data collection
+ERROR:src.backend.stations.stations:Error fetching station IDs: (psycopg2.errors.UndefinedTable) relation "stations" does not exist
+LINE 2: FROM stations
+             ^
+
+[SQL: SELECT stations.station_id 
+FROM stations]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+[32m2025-02-06 04:25:54 +0000[0m - dagster - [34mINFO[0m - buoy_data_job - 9fc9ca8a-03aa-488f-9b6d-0acfd2760863 - raw_buoy_data - Found 0 stations to process
+[32m2025-02-06 04:25:54 +0000[0m - dagster - [34mINFO[0m - buoy_data_job - 9fc9ca8a-03aa-488f-9b6d-0acfd2760863 - raw_buoy_data - Wave data fetched successfully
+[32m2025-02-06 04:25:54 +0000[0m - dagster - [34mINFO[0m - buoy_data_job - 9fc9ca8a-03aa-488f-9b6d-0acfd2760863 - raw_buoy_data - Processed 0 records from 0 stations
+[32m2025-02-06 04:25:54 +0000[0m - dagster - [34mDEBUG[0m - buoy_data_job - 9fc9ca8a-03aa-488f-9b6d-0acfd2760863 - 3749336 - raw_buoy_data - STEP_OUTPUT - Yielded output "result" of type "DataFrame". (Type check passed).
+[32m2025-02-06 04:25:54 +0000[0m - dagster - [34mINFO[0m - buoy_data_job - 9fc9ca8a-03aa-488f-9b6d-0acfd2760863 - raw_buoy_data - Writing 0 rows to wave_data_raw_buoy_data
+INFO:alembic.runtime.migration:Context impl SQLiteImpl.
+INFO:alembic.runtime.migration:Will assume non-transactional DDL.
+[32m2025-02-06 04:25:54 +0000[0m - dagster - [34mDEBUG[0m - buoy_data_job - 9fc9ca8a-03aa-488f-9b6d-0acfd2760863 - 3749336 - raw_buoy_data - ASSET_MATERIALIZATION - Materialized value raw_buoy_data.
+[32m2025-02-06 04:25:54 +0000[0m - dagster - [34mDEBUG[0m - buoy_data_job - 9fc9ca8a-03aa-488f-9b6d-0acfd2760863 - 3749336 - raw_buoy_data - HANDLED_OUTPUT - Handled output "result" using IO manager "postgres_io"
+[32m2025-02-06 04:25:54 +0000[0m - dagster - [34mDEBUG[0m - buoy_data_job - 9fc9ca8a-03aa-488f-9b6d-0acfd2760863 - 3749336 - raw_buoy_data - STEP_SUCCESS - Finished execution of step "raw_buoy_data" in 143ms.
