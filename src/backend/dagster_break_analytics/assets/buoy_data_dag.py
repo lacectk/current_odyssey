@@ -36,11 +36,11 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
                     datetime,
                     latitude,
                     longitude,
-                    wvht as wave_height,
-                    dpd as wave_period,
-                    mwd as wave_direction,
-                    apd as avg_wave_period
-                FROM localized_wave_data
+                    "wave_height(wvht)" as wave_height,
+                    "dominant_period(dpd)" as wave_period,
+                    "mean_wave_direction(mwd)" as wave_direction,
+                    "average_period(apd)" as avg_wave_period
+                FROM raw_data.localized_wave_data
                 WHERE datetime >= NOW() - INTERVAL '24 hours'
             """,
                 conn,
