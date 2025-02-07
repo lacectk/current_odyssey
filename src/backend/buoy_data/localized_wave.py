@@ -122,7 +122,6 @@ class LocalizedWaveProcessor:
                     print(f"Trying URL: {request_url} with status {resp.status}")
                     if resp.status == 200:
                         response = await resp.text()
-                        print(f"Response for {file_name}: {response}")
                         # Determine columns and extract latitude/longitude if it's a drift file
                         if file_name.endswith(".drift"):
                             columns = [
@@ -151,7 +150,6 @@ class LocalizedWaveProcessor:
                                 na_values=["MM"],
                                 names=columns,
                             )
-                            # Convert HHMM to hour and minute
                             df["hour"] = (
                                 df["HourMinute"].astype(str).str.slice(0, 2).astype(int)
                             )
@@ -159,35 +157,65 @@ class LocalizedWaveProcessor:
                                 df["HourMinute"].astype(str).str.slice(2, 4).astype(int)
                             )
 
-                            df["datetime"] = pd.to_datetime(
-                                df[["year", "month", "day", "hour", "minute"]]
-                            )
-                        else:
-                            columns = (
-                                [
-                                    "Year",
-                                    "Month",
-                                    "Day",
-                                    "Hour",
-                                    "Minute",
-                                    "WVHT",
-                                    "DPD",
-                                    "APD",
-                                    "MWD",
-                                ]
-                                if file_name.endswith(".spec")
-                                or file_name.endswith(".txt")
-                                else None
-                            )
+                        elif file_name.endswith(".txt"):
+                            columns = [
+                                "Year",
+                                "Month",
+                                "Day",
+                                "Hour",
+                                "Minute",
+                                "WDIR",
+                                "WSPD",
+                                "GST",
+                                "WVHT",
+                                "DPD",
+                                "APD",
+                                "MWD",
+                                "PRES",
+                                "ATMP",
+                                "WTMP",
+                                "DEWP",
+                                "VIS",
+                                "PTDY",
+                                "TIDE",
+                            ]
                             df = pd.read_csv(
                                 StringIO(response),
-                                skiprows=2,
+                                skiprows=2,  # Skip header and units rows
                                 sep=r"\s+",
                                 comment="#",
                                 na_values=["MM"],
                                 names=columns,
                             )
 
+                        elif file_name.endswith(".spec"):
+                            columns = [
+                                "Year",
+                                "Month",
+                                "Day",
+                                "Hour",
+                                "Minute",
+                                "WVHT",
+                                "SwH",
+                                "SwP",
+                                "WWH",
+                                "WWP",
+                                "SwD",
+                                "WWD",
+                                "STEEPNESS",
+                                "APD",
+                                "MWD",
+                            ]
+                            df = pd.read_csv(
+                                StringIO(response),
+                                skiprows=2,  # Skip header and units rows
+                                sep=r"\s+",
+                                comment="#",
+                                na_values=["MM"],
+                                names=columns,
+                            )
+
+                        if columns is not None:
                             df["datetime"] = pd.to_datetime(
                                 df[["year", "month", "day", "hour", "minute"]]
                             )
@@ -198,7 +226,7 @@ class LocalizedWaveProcessor:
                             continue
                         all_dfs.append(df)
             except (aiohttp.ClientError, pd.errors.EmptyDataError, ValueError) as e:
-                logger.warning(f"Failed to fetch data for {file_name}: {e}")
+                logger.warning("Failed to fetch data for %s, error: %s", file_name, e)
                 continue
 
         if all_dfs:
@@ -289,7 +317,6 @@ class LocalizedWaveProcessor:
 
                 print(f"Database fetch result for station {station_id}: {result}")
                 if result:
-                    # print(f"result: {result}")
                     lat, lon = result["latitude"], result["longitude"]
                     print(f"Fetched lat/lon for station {station_id}: {lat}, {lon}")
 
