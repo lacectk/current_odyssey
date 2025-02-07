@@ -43,16 +43,9 @@ class StationsFetcher:
     def __init__(self):
         self.fetcher = NDBCDataFetcher()
         self.engine = wave_analytics_engine
-        self.metadata = MetaData()
-
+        self.metadata = MetaData(schema="raw_data")
         self.stations_table = Table(
-            "stations",
-            self.metadata,
-            Column("station_id", String(10), primary_key=True),
-            Column("latitude", Float, nullable=False),
-            Column("longitude", Float, nullable=False),
-            Column("created_at", DateTime, server_default=text("CURRENT_TIMESTAMP")),
-            Column("updated_at", DateTime, server_default=text("CURRENT_TIMESTAMP")),
+            "stations", self.metadata, autoload_with=self.engine
         )
 
     async def meteorological_stations(self):
@@ -128,22 +121,15 @@ class StationsFetcher:
             conn.commit()
 
     def fetch_station_ids(self):
-        """
-        Fetch all station IDs from the database.
-
-        Returns:
-            list: List of station IDs stored in the database
-        """
+        """Fetch all station IDs from the database."""
         try:
             with self.engine.connect() as conn:
-                result = conn.execute(select(self.stations_table.c.station_id))
-                station_ids = []
-                for row in result:
-                    station_id = row[0]
-                    station_ids.append(station_id)
-                return station_ids
-        except SQLAlchemyError as e:
-            logger.error("Error fetching station IDs: %s", str(e))
+                result = conn.execute(
+                    select(self.stations_table.c.station_id)
+                ).fetchall()
+                return [row[0] for row in result]
+        except Exception as e:
+            logger.error(f"Error fetching station IDs: {e}")
             return []
 
     async def close(self):

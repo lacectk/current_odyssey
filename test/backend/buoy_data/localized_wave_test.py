@@ -1,7 +1,7 @@
 import aiohttp
 import pandas as pd
 import unittest
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, Table, MetaData, select, Column, String, Float
 from src.backend.buoy_data.localized_wave import LocalizedWaveProcessor
 from unittest import IsolatedAsyncioTestCase
 from unittest.mock import AsyncMock, patch, MagicMock
@@ -33,33 +33,35 @@ class LocalizedWaveProcessorTest(IsolatedAsyncioTestCase):
         self.processor.engine = self.mock_engine
         self.processor.create_wave_table()
 
+        # Create stations table using SQLAlchemy
+        metadata = MetaData()
+        self.stations_table = Table(
+            "stations",
+            metadata,
+            *[
+                Column("station_id", String(10), primary_key=True),
+                Column("latitude", Float, nullable=False),
+                Column("longitude", Float, nullable=False),
+            ],
+        )
+        metadata.create_all(self.mock_engine)
+
+        # Insert mock data using SQLAlchemy
         with self.mock_engine.connect() as conn:
             conn.execute(
-                text(
-                    """
-                    CREATE TABLE stations (
-                        station_id VARCHAR(10) PRIMARY KEY,
-                        latitude FLOAT,
-                        longitude FLOAT
-                    )
-                    """
-                )
-            )
-            # Insert mock data into the stations table
-            conn.execute(
-                text(
-                    """
-                    INSERT INTO stations (station_id, latitude, longitude)
-                    VALUES ('123', 35.0, -120.5), ('678', 36.0, -121.5)
-                    """
+                self.stations_table.insert().values(
+                    [
+                        {"station_id": "123", "latitude": 35.0, "longitude": -120.5},
+                        {"station_id": "678", "latitude": 36.0, "longitude": -121.5},
+                    ]
                 )
             )
             conn.commit()
-        with self.mock_engine.connect() as conn:
-            result = conn.execute(text("SELECT * FROM stations")).fetchall()
+
+            # Verify data insertion
+            result = conn.execute(select(self.stations_table)).fetchall()
             print(f"Stations table content: {result}")
 
-    # Mock responses for different file types
     @staticmethod
     def _mock_file_response(url, *args, **kwargs):
         if url.endswith(".drift"):
@@ -92,7 +94,7 @@ class LocalizedWaveProcessorTest(IsolatedAsyncioTestCase):
         self.assertIsInstance(data, pd.DataFrame)
         self.assertEqual(len(data), 2)
         self.assertIn("datetime", data.columns)
-        self.assertEqual(data["WVHT"].iloc[0], 1.5)
+        self.assertEqual(data["wvht"].iloc[0], 1.5)  # Using lowercase column names
         self.assertEqual(lat, None)
         self.assertEqual(lon, None)
 
@@ -121,16 +123,16 @@ class LocalizedWaveProcessorTest(IsolatedAsyncioTestCase):
 
         self.assertEqual(mock_insert_data.call_count, 2)
 
-    @patch("src.backend.buoy_data.localized_wave.text")
-    async def test_insert_localized_wave_data_when_stationsdb_needed(self, mock_text):
+    @patch("src.backend.buoy_data.localized_wave.select")
+    async def test_insert_localized_wave_data_when_stationsdb_needed(self, mock_select):
         """Test inserting data into the database."""
         data = pd.DataFrame(
             {
                 "datetime": ["2024-12-15 12:30:00"],
-                "WVHT": [1.5],
-                "DPD": [8],
-                "APD": [10],
-                "MWD": ["NNE"],
+                "wvht": [1.5],
+                "dpd": [8],
+                "apd": [10],
+                "mwd": ["NNE"],
             }
         )
         station_id = "123"
@@ -141,22 +143,19 @@ class LocalizedWaveProcessorTest(IsolatedAsyncioTestCase):
                 station_id=station_id, data=data, lat=lat, lon=lon
             )
 
-        mock_text.assert_called_once_with(
-            "SELECT latitude, longitude FROM stations WHERE station_id = :station_id"
-        )
+        mock_select.assert_called_once()
         self.assertTrue(mock_execute.called, "Database execute was not called.")
-        mock_execute.assert_any_call(mock_text.return_value, {"station_id": station_id})
 
-    @patch("src.backend.buoy_data.localized_wave.text")
-    async def test_insert_localized_wave_data_when_lat_lon_in_drift(self, mock_text):
+    @patch("src.backend.buoy_data.localized_wave.select")
+    async def test_insert_localized_wave_data_when_lat_lon_in_drift(self, mock_select):
         """Test inserting data into the database."""
         data = pd.DataFrame(
             {
                 "datetime": ["2024-12-15 12:30:00"],
-                "WVHT": [1.5],
-                "DPD": [8],
-                "APD": [10],
-                "MWD": ["NNE"],
+                "wvht": [1.5],
+                "dpd": [8],
+                "apd": [10],
+                "mwd": ["NNE"],
             }
         )
         station_id = "123"

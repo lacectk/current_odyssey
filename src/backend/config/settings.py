@@ -1,7 +1,9 @@
-from dotenv import load_dotenv
-import os
+"""Configuration settings for the Wave Consistency API."""
 
-load_dotenv(override=True)
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # API Settings
 API_V1_STR = "/api/v1"
@@ -9,8 +11,8 @@ PROJECT_NAME = "Wave Consistency API"
 
 # CORS Settings
 CORS_ORIGINS = [
-    "http://localhost:3000",  # React default port
-    "http://localhost:8000",  # FastAPI default port
+    "http://localhost:3000",  # React dev server
+    "http://localhost:8000",  # FastAPI dev server
 ]
 
 

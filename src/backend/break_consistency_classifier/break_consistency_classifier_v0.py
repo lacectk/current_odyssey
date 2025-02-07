@@ -15,8 +15,9 @@ class WaveConsistencyClustering:
         user = os.getenv("DB_USER")
         password = os.getenv("DB_PASSWORD")
         host = os.getenv("DB_HOST")
-        dbname = "localized_wave_data"
-        self.db_url = f"postgresql://{user}:{password}@{host}/{dbname}"
+        port = os.getenv("DB_PORT", "5432")
+        dbname = os.getenv("DB_NAME", "wave_analytics")
+        self.db_url = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
         self.engine = None
         self.scaler = StandardScaler()
         self.imputer = SimpleImputer(strategy="mean")
@@ -32,25 +33,27 @@ class WaveConsistencyClustering:
             print(f"Failed to connect to the database: {e}")
 
     def load_data_from_db(self):
-        """
-        Load wave data from the 'localized_wave_data' table in the database.
-        """
+        """Load wave data from the 'localized_wave_data' table in the raw_data schema."""
         if not self.engine:
             print("No active database connection.")
             return None
 
         try:
             query = """
-                SELECT station_id, latitude, longitude, datetime, wvht, dpd, apd, mwd
-                FROM localized_wave_data;
+                SELECT station_id, latitude, longitude, datetime, 
+                       "wave_height(wvht)" as wvht, 
+                       "dominant_period(dpd)" as dpd, 
+                       "average_period(apd)" as apd, 
+                       "mean_wave_direction(mwd)" as mwd
+                FROM raw_data.localized_wave_data;
             """
             df = pd.read_sql(query, self.engine)
 
             if df.empty:
-                print("No data found in the 'localized_wave_data' table.")
+                print("No data found in the 'raw_data.localized_wave_data' table.")
                 return None
 
-            print(f"Loaded {len(df)} records from the 'localized_wave_data' table.")
+            print(f"Loaded {len(df)} records from the localized_wave_data table.")
             return df
 
         except Exception as e:

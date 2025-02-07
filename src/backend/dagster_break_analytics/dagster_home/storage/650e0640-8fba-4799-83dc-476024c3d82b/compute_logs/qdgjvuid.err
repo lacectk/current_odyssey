@@ -1,0 +1,13 @@
+[32m2025-02-07 05:30:21 +0000[0m - dagster - [34mDEBUG[0m - buoy_data_job - 650e0640-8fba-4799-83dc-476024c3d82b - 475261 - LOGS_CAPTURED - Started capturing logs in process (pid: 475261).
+[32m2025-02-07 05:30:21 +0000[0m - dagster - [34mDEBUG[0m - buoy_data_job - 650e0640-8fba-4799-83dc-476024c3d82b - 475261 - raw_buoy_data - STEP_START - Started execution of step "raw_buoy_data".
+[32m2025-02-07 05:30:21 +0000[0m - dagster - [34mINFO[0m - buoy_data_job - 650e0640-8fba-4799-83dc-476024c3d82b - raw_buoy_data - Starting wave data collection
+[32m2025-02-07 05:30:21 +0000[0m - dagster - [34mINFO[0m - buoy_data_job - 650e0640-8fba-4799-83dc-476024c3d82b - raw_buoy_data - Found 772 stations to process
+[32m2025-02-07 05:30:21 +0000[0m - dagster - [34mINFO[0m - buoy_data_job - 650e0640-8fba-4799-83dc-476024c3d82b - raw_buoy_data - Wave data fetched successfully
+[32m2025-02-07 05:30:21 +0000[0m - dagster - [34mINFO[0m - buoy_data_job - 650e0640-8fba-4799-83dc-476024c3d82b - raw_buoy_data - Processed 0 records from 0 stations
+[32m2025-02-07 05:30:21 +0000[0m - dagster - [34mDEBUG[0m - buoy_data_job - 650e0640-8fba-4799-83dc-476024c3d82b - 475261 - raw_buoy_data - STEP_OUTPUT - Yielded output "result" of type "DataFrame". (Type check passed).
+[32m2025-02-07 05:30:21 +0000[0m - dagster - [34mINFO[0m - buoy_data_job - 650e0640-8fba-4799-83dc-476024c3d82b - raw_buoy_data - Writing 0 rows to wave_data_raw_buoy_data
+INFO:alembic.runtime.migration:Context impl SQLiteImpl.
+INFO:alembic.runtime.migration:Will assume non-transactional DDL.
+[32m2025-02-07 05:30:21 +0000[0m - dagster - [34mDEBUG[0m - buoy_data_job - 650e0640-8fba-4799-83dc-476024c3d82b - 475261 - raw_buoy_data - ASSET_MATERIALIZATION - Materialized value raw_buoy_data.
+[32m2025-02-07 05:30:21 +0000[0m - dagster - [34mDEBUG[0m - buoy_data_job - 650e0640-8fba-4799-83dc-476024c3d82b - 475261 - raw_buoy_data - HANDLED_OUTPUT - Handled output "result" using IO manager "postgres_io"
+[32m2025-02-07 05:30:21 +0000[0m - dagster - [34mDEBUG[0m - buoy_data_job - 650e0640-8fba-4799-83dc-476024c3d82b - 475261 - raw_buoy_data - STEP_SUCCESS - Finished execution of step "raw_buoy_data" in 180ms.

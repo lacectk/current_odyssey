@@ -13,7 +13,7 @@ import aiohttp
 import pandas as pd
 from dotenv import load_dotenv
 from sqlalchemy import (
-    text,
+    select,
     Table,
     MetaData,
     Column,
@@ -65,11 +65,12 @@ class LocalizedWaveProcessor:
             Column("datetime", DateTime, nullable=False),
             Column("latitude", Float, nullable=False),
             Column("longitude", Float, nullable=False),
-            Column("wvht", Float),
-            Column("dpd", Float),
-            Column("apd", Float),
-            Column("mwd", Float),
+            Column("wave_height(wvht)", Float),
+            Column("dominant_period(dpd)", Float),
+            Column("average_period(apd)", Float),
+            Column("mean_wave_direction(mwd)", Float),
             UniqueConstraint("station_id", "datetime", name="unix_station_datetime"),
+            schema="raw_data",
         )
 
     async def fetch_stations_data(self):
@@ -142,6 +143,25 @@ class LocalizedWaveProcessor:
                                 "DPD",
                             ]
                             lat, lon = self._extract_coordinates_from_drift(response)
+                            df = pd.read_csv(
+                                StringIO(response),
+                                skiprows=2,
+                                sep=r"\s+",
+                                comment="#",
+                                na_values=["MM"],
+                                names=columns,
+                            )
+                            # Convert HHMM to hour and minute
+                            df["hour"] = (
+                                df["HourMinute"].astype(str).str.slice(0, 2).astype(int)
+                            )
+                            df["minute"] = (
+                                df["HourMinute"].astype(str).str.slice(2, 4).astype(int)
+                            )
+
+                            df["datetime"] = pd.to_datetime(
+                                df[["year", "month", "day", "hour", "minute"]]
+                            )
                         else:
                             columns = (
                                 [
@@ -159,25 +179,26 @@ class LocalizedWaveProcessor:
                                 or file_name.endswith(".txt")
                                 else None
                             )
+                            df = pd.read_csv(
+                                StringIO(response),
+                                skiprows=2,
+                                sep=r"\s+",
+                                comment="#",
+                                na_values=["MM"],
+                                names=columns,
+                            )
+
+                            df["datetime"] = pd.to_datetime(
+                                df[["year", "month", "day", "hour", "minute"]]
+                            )
                         if columns is None:
                             logger.warning(
                                 "No valid columns matched for this file: %s", file_name
                             )
                             continue
-                        df = pd.read_csv(
-                            StringIO(response),
-                            skiprows=2,
-                            sep=r"\s+",
-                            names=columns,
-                            na_values=["MM"],
-                        )
-                        df["datetime"] = pd.to_datetime(
-                            df[["Year", "Month", "Day", "Hour", "Minute"]],
-                            errors="coerce",
-                        )
                         all_dfs.append(df)
             except (aiohttp.ClientError, pd.errors.EmptyDataError, ValueError) as e:
-                print(f"Failed to fetch data for {file_name}: {e}")
+                logger.warning(f"Failed to fetch data for {file_name}: {e}")
                 continue
 
         if all_dfs:
@@ -206,8 +227,26 @@ class LocalizedWaveProcessor:
             StringIO(response_text),
             skiprows=2,
             sep=r"\s+",
-            usecols=["LAT", "LON"],
+            comment="#",
             na_values=["MM"],
+            names=[
+                "year",
+                "month",
+                "day",
+                "hrmn",
+                "lat",
+                "lon",
+                "wdir",
+                "wspd",
+                "gst",
+                "pres",
+                "ptdy",
+                "atmp",
+                "wtmp",
+                "dewp",
+                "wvht",
+                "dpd",
+            ],
         )
         lat = (
             df["LAT"].iloc[0]
@@ -242,14 +281,15 @@ class LocalizedWaveProcessor:
             print(f"Lat/Lon missing for {station_id}, querying database...")
             with self.engine.connect() as conn:
                 result = conn.execute(
-                    text(
-                        "SELECT latitude, longitude FROM stations WHERE station_id = :station_id"
-                    ),
-                    {"station_id": station_id},
+                    select(
+                        self.localized_wave_table.c.latitude,
+                        self.localized_wave_table.c.longitude,
+                    ).where(self.localized_wave_table.c.station_id == station_id)
                 ).fetchone()
+
                 print(f"Database fetch result for station {station_id}: {result}")
                 if result:
-                    print(f"result: {result}")
+                    # print(f"result: {result}")
                     lat, lon = result["latitude"], result["longitude"]
                     print(f"Fetched lat/lon for station {station_id}: {lat}, {lon}")
 
@@ -262,10 +302,10 @@ class LocalizedWaveProcessor:
                     "datetime": row["datetime"],
                     "latitude": lat,
                     "longitude": lon,
-                    "wvht": row.get("wvht"),
-                    "dpd": row.get("dpd"),
-                    "apd": row.get("apd"),
-                    "mwd": row.get("mwd"),
+                    "wave_height(wvht)": row.get("wvht"),
+                    "dominant_period(dpd)": row.get("dpd"),
+                    "average_period(apd)": row.get("apd"),
+                    "mean_wave_direction(mwd)": row.get("mwd"),
                 }
             )
 

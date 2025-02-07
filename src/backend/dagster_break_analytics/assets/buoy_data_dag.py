@@ -1,9 +1,10 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from dagster import asset, AssetExecutionContext, MetadataValue, Output
-import pandas as pd
 from sqlalchemy import select, Table, MetaData, text
 from src.backend.buoy_data.localized_wave import LocalizedWaveProcessor
 from src.backend.stations.stations import StationsFetcher
+import pandas as pd
+import pytz
 
 
 @asset(
@@ -34,6 +35,8 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
             "localized_wave_data", metadata, autoload_with=processor.engine
         )
 
+        utc_now = datetime.now(pytz.utc)
+        start_time = utc_now - timedelta(days=1)
         # Fetch the processed data for output
         with processor.engine.connect() as conn:
             query = select(
@@ -45,7 +48,7 @@ def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
                 wave_table.c["dominant_period(dpd)"],
                 wave_table.c["mean_wave_direction(mwd)"],
                 wave_table.c["average_period(apd)"],
-            ).where(wave_table.c.datetime >= text("NOW() - INTERVAL '24 hours'"))
+            ).where(wave_table.c.datetime >= start_time)
 
             df = pd.read_sql(query, conn)
 

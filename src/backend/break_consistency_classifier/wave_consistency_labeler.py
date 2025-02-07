@@ -1,12 +1,13 @@
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
+from sqlalchemy import create_engine, text
+from src.backend.database.db_manager import DatabaseManager
 
-from backend.config.database import (
+from src.backend.config.database import (
     localized_wave_engine,
     wave_consistency_engine,
 )
-from backend.create_database import create_database
 
 
 class WaveConsistencyLabeler:
@@ -15,12 +16,18 @@ class WaveConsistencyLabeler:
         self.engine_new = wave_consistency_engine
 
     def load_data_from_db(self):
-        """
-        Load wave data from the 'localized_wave_data' table.
-        """
+        """Load wave data from the raw_data.localized_wave_data table."""
         query = """
-            SELECT station_id, datetime, latitude, longitude, wvht, dpd, apd, mwd
-            FROM localized_wave_data;
+            SELECT 
+                station_id, 
+                datetime, 
+                latitude, 
+                longitude, 
+                "wave_height(wvht)" as wvht,
+                "dominant_period(dpd)" as dpd,
+                "average_period(apd)" as apd,
+                "mean_wave_direction(mwd)" as mwd
+            FROM raw_data.localized_wave_data;
         """
         df = pd.read_sql(query, self.engine_existing)
         return df
@@ -125,10 +132,9 @@ class WaveConsistencyLabeler:
             print(f"Error saving to database: {e}")
 
     def run(self):
-        """
-        Execute the full wave consistency labeling process.
-        """
-        create_database("wave_consistency")
+        """Execute the full wave consistency labeling process."""
+        # Initialize database manager
+        db_manager = DatabaseManager()
 
         print("Loading data from database...")
         df = self.load_data_from_db()

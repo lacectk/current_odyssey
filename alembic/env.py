@@ -13,6 +13,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from dotenv import load_dotenv
 from alembic import context
+from src.backend.database.models import Base
 
 # Load environment variables
 load_dotenv()
@@ -64,7 +65,7 @@ def run_migrations_online() -> None:
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            include_schemas=True,  # Add this for schema support
+            include_schemas=True,
         )
 
         with context.begin_transaction():
