@@ -119,7 +119,9 @@ class LocalizedWaveProcessor:
             request_url = f"{OBSERVATION_BASE_URL}{file_name}"
             try:
                 async with session.get(request_url) as resp:
-                    print(f"Trying URL: {request_url} with status {resp.status}")
+                    logger.info(
+                        "Trying URL: %s with status %s", request_url, resp.status
+                    )
                     if resp.status == 200:
                         response = await resp.text()
                         # Determine columns and extract latitude/longitude if it's a drift file
@@ -306,7 +308,7 @@ class LocalizedWaveProcessor:
         """
 
         if lat is None or lon is None:
-            print(f"Lat/Lon missing for {station_id}, querying database...")
+            logger.warn("Lat/Lon missing for %s, querying database...", station_id)
             with self.engine.connect() as conn:
                 result = conn.execute(
                     select(
@@ -315,12 +317,18 @@ class LocalizedWaveProcessor:
                     ).where(self.localized_wave_table.c.station_id == station_id)
                 ).fetchone()
 
-                print(f"Database fetch result for station {station_id}: {result}")
+                logger.info(
+                    "Database fetch result for station %s: %s", station_id, result
+                )
                 if result:
                     lat, lon = result["latitude"], result["longitude"]
-                    print(f"Fetched lat/lon for station {station_id}: {lat}, {lon}")
+                    logger.info(
+                        "Fetched lat/lon for station %s: %s, %s", station_id, lat, lon
+                    )
 
-        print(f"Inserting data for {station_id}: lat={lat}, lon={lon}")
+        logger.info(
+            "Inserting data for station %s: lat=%s, lon=%s", station_id, lat, lon
+        )
         rows = []
         for _, row in data.iterrows():
             rows.append(
