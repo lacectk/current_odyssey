@@ -1,9 +1,15 @@
 import asyncio
 import logging
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy import MetaData, Table, Column, String, Float, DateTime, text, select
+from sqlalchemy import (
+    MetaData,
+    Table,
+    select,
+    insert,
+)
 from src.backend.config.database import wave_analytics_engine
 from src.backend.stations.ndbc_stations_data import NDBCDataFetcher
+from sqlalchemy.orm import Session, sessionmaker
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -38,6 +44,7 @@ class StationsFetcher:
         engine: SQLAlchemy database engine
         metadata (MetaData): SQLAlchemy metadata for table definitions
         stations_table (Table): SQLAlchemy table definition for stations
+        SessionLocal (sessionmaker): SQLAlchemy sessionmaker for database operations
     """
 
     def __init__(self):
@@ -47,6 +54,8 @@ class StationsFetcher:
         self.stations_table = Table(
             "stations", self.metadata, autoload_with=self.engine
         )
+        # Create sessionmaker
+        self.SessionLocal = sessionmaker(bind=self.engine)
 
     async def meteorological_stations(self):
         """
@@ -89,48 +98,55 @@ class StationsFetcher:
             logger.error("Error checking table existence: %s", e)
             return False
 
-    async def insert_into_database(self, station_list):
+    def fetch_station_ids(self):
         """
-        Insert or update station data in the database.
+        Fetch all station IDs from the database using Session query.
+
+        Returns:
+            list: List of station IDs
+        """
+        try:
+            with Session(self.engine) as session:
+                result = (
+                    session.query(self.stations_table.c.station_id).distinct().all()
+                )
+                return [r[0] for r in result]
+        except SQLAlchemyError as e:
+            logger.error("Error fetching station IDs: %s", str(e))
+            return []
+
+    def insert_into_database(self, station_list):
+        """
+        Insert or update station data in the database using Session.
 
         Args:
             station_list (dict): Dictionary of Station objects to insert/update
-
-        Note:
-            Uses ON CONFLICT DO NOTHING to handle duplicate stations
         """
-        with self.engine.connect() as conn:
+        with Session(self.engine) as session:
             for station_id, station in station_list.items():
                 try:
-                    result = conn.execute(
-                        self.stations_table.insert().values(
+                    stmt = (
+                        insert(self.stations_table)
+                        .values(
                             station_id=station.station_id,
                             latitude=station.latitude,
                             longitude=station.longitude,
                         )
-                    ).prefix_with("ON CONFLICT (station_id) DO NOTHING")
+                        .on_conflict_do_nothing(index_elements=["station_id"])
+                    )
+
+                    result = session.execute(stmt)
+
                     if result.rowcount > 0:
                         logger.info("Inserted new station %s", station_id)
 
                 except SQLAlchemyError as e:
                     logger.error(
-                        "Error inserting data for station %d, %s", station_id, e
+                        "Error inserting data for station %s: %s", station_id, e
                     )
                     continue
 
-            conn.commit()
-
-    def fetch_station_ids(self):
-        """Fetch all station IDs from the database."""
-        try:
-            with self.engine.connect() as conn:
-                result = conn.execute(
-                    select(self.stations_table.c.station_id)
-                ).fetchall()
-                return [row[0] for row in result]
-        except Exception as e:
-            logger.error(f"Error fetching station IDs: {e}")
-            return []
+            session.commit()
 
     async def close(self):
         """Clean up resources and close connections."""
@@ -150,7 +166,7 @@ async def main():
         station_list = await stations.meteorological_stations()
 
         # Fetch and insert the station data into the PostgreSQL database
-        await stations.insert_into_database(station_list)
+        stations.insert_into_database(station_list)
     finally:
         # Close the session
         await stations.close()
