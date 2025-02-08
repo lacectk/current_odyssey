@@ -25,6 +25,8 @@ from sqlalchemy import (
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from src.backend.config.database import wave_analytics_engine
 from src.backend.stations.stations import StationsFetcher
+from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy import insert
 
 OBSERVATION_BASE_URL = "https://www.ndbc.noaa.gov/data/realtime2/"
 
@@ -56,22 +58,15 @@ class LocalizedWaveProcessor:
         """
         self.engine = wave_analytics_engine
         self.station_ids = station_ids or []
-        self.metadata = MetaData()
+        self.metadata = MetaData(schema="raw_data")
 
+        # Define tables
         self.localized_wave_table = Table(
-            "localized_wave_data",
-            self.metadata,
-            Column("station_id", String(10), primary_key=True),
-            Column("datetime", DateTime, nullable=False),
-            Column("latitude", Float, nullable=False),
-            Column("longitude", Float, nullable=False),
-            Column("wave_height(wvht)", Float),
-            Column("dominant_period(dpd)", Float),
-            Column("average_period(apd)", Float),
-            Column("mean_wave_direction(mwd)", Float),
-            UniqueConstraint("station_id", "datetime", name="unix_station_datetime"),
-            schema="raw_data",
+            "localized_wave_data", self.metadata, autoload_with=self.engine
         )
+
+        # Create sessionmaker
+        self.SessionLocal = sessionmaker(bind=self.engine)
 
     async def fetch_stations_data(self):
         """
@@ -291,37 +286,21 @@ class LocalizedWaveProcessor:
         return lat, lon
 
     async def _insert_localized_wave_data_into_db(self, station_id, data, lat, lon):
-        """
-        Insert processed wave data into the database.
-
-        If coordinates are not provided, attempts to fetch them from the stations table.
-        Handles duplicate entries gracefully.
-
-        Args:
-            station_id (str): NOAA station identifier
-            data (DataFrame): Processed wave data
-            lat (float): Station latitude
-            lon (float): Station longitude
-
-        Returns:
-            None
-        """
-
+        """Insert processed wave data into the database."""
         if lat is None or lon is None:
-            logger.warn("Lat/Lon missing for %s, querying database...", station_id)
-            with self.engine.connect() as conn:
-                result = conn.execute(
-                    select(
+            logger.warning("Lat/Lon missing for %s, querying database...", station_id)
+            with Session(self.engine) as session:
+                result = (
+                    session.query(
                         self.localized_wave_table.c.latitude,
                         self.localized_wave_table.c.longitude,
-                    ).where(self.localized_wave_table.c.station_id == station_id)
-                ).fetchone()
-
-                logger.info(
-                    "Database fetch result for station %s: %s", station_id, result
+                    )
+                    .filter(self.localized_wave_table.c.station_id == station_id)
+                    .first()
                 )
+
                 if result:
-                    lat, lon = result["latitude"], result["longitude"]
+                    lat, lon = result.latitude, result.longitude
                     logger.info(
                         "Fetched lat/lon for station %s: %s, %s", station_id, lat, lon
                     )
@@ -329,6 +308,7 @@ class LocalizedWaveProcessor:
         logger.info(
             "Inserting data for station %s: lat=%s, lon=%s", station_id, lat, lon
         )
+
         rows = []
         for _, row in data.iterrows():
             rows.append(
@@ -344,14 +324,20 @@ class LocalizedWaveProcessor:
                 }
             )
 
-        with self.engine.begin() as conn:
+        with Session(self.engine) as session:
             try:
-                conn.execute(self.localized_wave_table.insert().values(rows))
+                stmt = insert(self.localized_wave_table).values(rows)
+                session.execute(stmt)
+                session.commit()
                 logger.info("Data inserted for station %s", station_id)
             except IntegrityError as e:
+                session.rollback()
                 logger.warning(
                     "Duplicate entries for station %s ignored: %s", station_id, e
                 )
+            except SQLAlchemyError as e:
+                session.rollback()
+                logger.error("Error inserting data for station %s: %s", station_id, e)
 
     async def process_data(self):
         """
@@ -383,13 +369,8 @@ class LocalizedWaveProcessor:
             raise
 
     def close(self):
-        """
-        Close the database connection.
-
-        Should be called when done with the processor to clean up resources.
-        """
-        if hasattr(self, "_connection"):
-            self._connection.close()
+        """Close the database connection."""
+        self.engine.dispose()
 
 
 async def main():
