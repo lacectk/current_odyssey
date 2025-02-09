@@ -1,12 +1,19 @@
+"""
+Module for processing and storing NOAA buoy wave data.
+
+This module provides functionality to fetch, process, and store wave measurement data
+from NOAA buoy stations. It handles multiple data formats and includes support for
+localized wave measurements with geographical coordinates.
+"""
+
+from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 from dagster import asset, AssetExecutionContext, MetadataValue, Output
 from sqlalchemy import select, Table, MetaData
+from sqlalchemy.exc import SQLAlchemyError
 import pandas as pd
 import pytz
 import aiohttp
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.engine import Engine
-from contextlib import asynccontextmanager
 from src.backend.buoy_data.localized_wave import LocalizedWaveProcessor
 from src.backend.stations.stations import StationsFetcher
 
@@ -42,7 +49,7 @@ async def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
 
         # Initialize stations
         stations = StationsFetcher()
-        station_ids = stations.fetch_station_ids()
+        station_ids = stations.fetch_station_ids()[:10]
         context.log.info("Found %d stations to process", len(station_ids))
 
         # Use context manager for processor

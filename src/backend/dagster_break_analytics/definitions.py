@@ -14,6 +14,7 @@ from src.backend.dagster_break_analytics.assets.buoy_data_dag import raw_buoy_da
 from src.backend.dagster_break_analytics.resources.email_notification import (
     EmailNotification,
 )
+import logging
 
 load_dotenv(override=True)
 
@@ -31,6 +32,12 @@ buoy_data_job = define_asset_job(
 buoy_data_schedule = ScheduleDefinition(
     job=buoy_data_job, cron_schedule="0 2 * * *"  # At 02:00 every day
 )
+
+# Configure logging levels for specific loggers
+logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
+logging.getLogger("alembic").setLevel(logging.WARNING)
+logging.getLogger("aiohttp").setLevel(logging.WARNING)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 
 @resource

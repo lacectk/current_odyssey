@@ -1,0 +1,40 @@
+telemetry:
+  enabled: false
+
+python_logs:
+  dagster_handler_config:
+    handlers:
+      console:
+        class: logging.StreamHandler
+        level: INFO
+        formatter: colored
+    formatters:
+      colored:
+        class: colorlog.ColoredFormatter
+        format: '%(log_color)s%(levelname)s: %(message)s'
+
+run_storage:
+  module: dagster.core.storage.runs
+  class: SqliteRunStorage
+  config:
+    base_dir: ${DAGSTER_HOME}/history
+
+event_log_storage:
+  module: dagster.core.storage.event_log
+  class: SqliteEventLogStorage
+  config:
+    base_dir: ${DAGSTER_HOME}/history
+
+schedule_storage:
+  module: dagster.core.storage.schedules
+  class: SqliteScheduleStorage
+  config:
+    base_dir: ${DAGSTER_HOME}/history
+
+run_coordinator:
+  module: dagster.core.run_coordinator
+  class: QueuedRunCoordinator
+
+run_launcher:
+  module: dagster.core.launcher
+  class: DefaultRunLauncher
