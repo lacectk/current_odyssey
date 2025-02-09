@@ -1,15 +1,22 @@
+"""
+NOAA Station Management Module.
+
+This module handles the fetching, processing, and storage of NOAA meteorological station data.
+It provides functionality to retrieve station information from NDBC (National Data Buoy Center)
+and maintain a local database of station coordinates and metadata.
+"""
+
 import asyncio
 import logging
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import (
     MetaData,
     Table,
-    select,
     insert,
 )
+from sqlalchemy.orm import Session, sessionmaker
 from src.backend.config.database import wave_analytics_engine
 from src.backend.stations.ndbc_stations_data import NDBCDataFetcher
-from sqlalchemy.orm import Session, sessionmaker
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

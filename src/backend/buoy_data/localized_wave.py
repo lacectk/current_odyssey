@@ -13,14 +13,8 @@ import aiohttp
 import pandas as pd
 from dotenv import load_dotenv
 from sqlalchemy import (
-    select,
     Table,
     MetaData,
-    Column,
-    String,
-    Float,
-    DateTime,
-    UniqueConstraint,
 )
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from src.backend.config.database import wave_analytics_engine
@@ -32,6 +26,9 @@ OBSERVATION_BASE_URL = "https://www.ndbc.noaa.gov/data/realtime2/"
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Define valid file types as a set for O(1) lookup
+VALID_FILE_TYPES = {".drift", ".txt", ".spec"}
 
 
 class LocalizedWaveProcessor:
@@ -66,7 +63,7 @@ class LocalizedWaveProcessor:
         )
 
         # Create sessionmaker
-        self.SessionLocal = sessionmaker(bind=self.engine)
+        self.session_local = sessionmaker(bind=self.engine)
 
     async def fetch_stations_data(self):
         """
@@ -89,24 +86,10 @@ class LocalizedWaveProcessor:
 
     async def _fetch_station_data(self, session, station_id):
         """
-        Fetch wave observation data for a specific station from NOAA.
-
-        Attempts to fetch data from multiple file formats (.spec, .txt, .drift)
-        and combines the results. Also extracts station coordinates when available.
-
-        Args:
-            session (aiohttp.ClientSession): Active HTTP session for making requests
-            station_id (str): NOAA station identifier
-
-        Returns:
-            tuple: (DataFrame of wave data, latitude, longitude)
-                  Returns (None, None, None) if no data is available
+        Fetch wave observation data for a specific station.
+        Only processes .drift, .txt, and .spec files.
         """
-        file_variants = [
-            f"{station_id}.spec",
-            f"{station_id}.txt",
-            f"{station_id}.drift",
-        ]
+        file_variants = [f"{station_id}{ext}" for ext in VALID_FILE_TYPES]
         all_dfs = []
         lat, lon = None, None
 
@@ -119,171 +102,158 @@ class LocalizedWaveProcessor:
                     )
                     if resp.status == 200:
                         response = await resp.text()
-                        # Determine columns and extract latitude/longitude if it's a drift file
-                        if file_name.endswith(".drift"):
-                            columns = [
-                                "Year",
-                                "Month",
-                                "Day",
-                                "HourMinute",
-                                "LAT",
-                                "LON",
-                                "WDIR",
-                                "WSPD",
-                                "GST",
-                                "PRES",
-                                "ATMP",
-                                "WTMP",
-                                "DEWP",
-                                "WVHT",
-                                "DPD",
-                            ]
-                            lat, lon = self._extract_coordinates_from_drift(response)
-                            df = pd.read_csv(
-                                StringIO(response),
-                                skiprows=2,
-                                sep=r"\s+",
-                                comment="#",
-                                na_values=["MM"],
-                                names=columns,
-                            )
-                            df["hour"] = (
-                                df["HourMinute"].astype(str).str.slice(0, 2).astype(int)
-                            )
-                            df["minute"] = (
-                                df["HourMinute"].astype(str).str.slice(2, 4).astype(int)
-                            )
 
-                        elif file_name.endswith(".txt"):
-                            columns = [
-                                "Year",
-                                "Month",
-                                "Day",
-                                "Hour",
-                                "Minute",
-                                "WDIR",
-                                "WSPD",
-                                "GST",
-                                "WVHT",
-                                "DPD",
-                                "APD",
-                                "MWD",
-                                "PRES",
-                                "ATMP",
-                                "WTMP",
-                                "DEWP",
-                                "VIS",
-                                "PTDY",
-                                "TIDE",
-                            ]
+                        if file_name.endswith(".drift"):
                             df = pd.read_csv(
                                 StringIO(response),
                                 skiprows=2,  # Skip header and units rows
                                 sep=r"\s+",
                                 comment="#",
                                 na_values=["MM"],
-                                names=columns,
+                                names=[
+                                    "YY",
+                                    "MM",
+                                    "DD",
+                                    "hhmm",
+                                    "LAT",
+                                    "LON",
+                                    "WDIR",
+                                    "WSPD",
+                                    "GST",
+                                    "PRES",
+                                    "PTDY",
+                                    "ATMP",
+                                    "WTMP",
+                                    "DEWP",
+                                    "WVHT",
+                                    "DPD",
+                                ],
+                            )
+
+                            # Rename columns to match expected format
+                            df = df.rename(
+                                columns={
+                                    "YY": "year",
+                                    "MM": "month",
+                                    "DD": "day",
+                                }
+                            )
+
+                            # Extract hour and minute from hhmm
+                            df["hour"] = df["hhmm"].astype(str).str[:2].astype(int)
+                            df["minute"] = df["hhmm"].astype(str).str[2:].astype(int)
+
+                            lat = (
+                                df["LAT"].iloc[0]
+                                if not df["LAT"].isnull().all()
+                                else None
+                            )
+                            lon = (
+                                df["LON"].iloc[0]
+                                if not df["LON"].isnull().all()
+                                else None
                             )
 
                         elif file_name.endswith(".spec"):
-                            columns = [
-                                "Year",
-                                "Month",
-                                "Day",
-                                "Hour",
-                                "Minute",
-                                "WVHT",
-                                "SwH",
-                                "SwP",
-                                "WWH",
-                                "WWP",
-                                "SwD",
-                                "WWD",
-                                "STEEPNESS",
-                                "APD",
-                                "MWD",
-                            ]
+                            # Handle spec files
                             df = pd.read_csv(
                                 StringIO(response),
                                 skiprows=2,  # Skip header and units rows
                                 sep=r"\s+",
                                 comment="#",
                                 na_values=["MM"],
-                                names=columns,
+                                names=[
+                                    "YY",
+                                    "MM",
+                                    "DD",
+                                    "hh",
+                                    "mm",
+                                    "WVHT",
+                                    "SwH",
+                                    "SwP",
+                                    "WWH",
+                                    "WWP",
+                                    "SwD",
+                                    "WWD",
+                                    "STEEPNESS",
+                                    "APD",
+                                    "MWD",
+                                ],
+                            )
+                            df = df.rename(
+                                columns={
+                                    "YY": "year",
+                                    "MM": "month",
+                                    "DD": "day",
+                                    "hh": "hour",
+                                    "mm": "minute",
+                                }
                             )
 
-                        if columns is not None:
-                            df["datetime"] = pd.to_datetime(
-                                df[["year", "month", "day", "hour", "minute"]]
+                        elif file_name.endswith(".txt"):
+                            df = pd.read_csv(
+                                StringIO(response),
+                                skiprows=2,  # Skip header and units rows
+                                sep=r"\s+",
+                                comment="#",
+                                na_values=["MM"],
+                                names=[
+                                    "YY",
+                                    "MM",
+                                    "DD",
+                                    "hh",
+                                    "mm",
+                                    "WDIR",
+                                    "WSPD",
+                                    "GST",
+                                    "WVHT",
+                                    "DPD",
+                                    "APD",
+                                    "MWD",
+                                    "PRES",
+                                    "ATMP",
+                                    "WTMP",
+                                    "DEWP",
+                                    "VIS",
+                                    "PTDY",
+                                    "TIDE",
+                                ],
                             )
-                        if columns is None:
-                            logger.warning(
-                                "No valid columns matched for this file: %s", file_name
+                            df = df.rename(
+                                columns={
+                                    "YY": "year",
+                                    "MM": "month",
+                                    "DD": "day",
+                                    "hh": "hour",
+                                    "mm": "minute",
+                                }
                             )
-                            continue
+
+                        # Create datetime column
+                        df["datetime"] = pd.to_datetime(
+                            df[["year", "month", "day", "hour", "minute"]]
+                        )
+
                         all_dfs.append(df)
-            except (aiohttp.ClientError, pd.errors.EmptyDataError, ValueError) as e:
+
+            except (
+                aiohttp.ClientError,
+                pd.errors.EmptyDataError,
+                ValueError,
+                UnicodeDecodeError,
+            ) as e:
                 logger.warning("Failed to fetch data for %s, error: %s", file_name, e)
                 continue
 
         if all_dfs:
             concatenated_df = pd.concat(all_dfs)
-            wave_columns = ["datetime", "wvht", "dpt", "apd", "mwd"]
+            wave_columns = ["datetime", "WVHT", "DPD", "APD", "MWD"]
             aggregated_df = (
                 concatenated_df[wave_columns].groupby("datetime").first().reset_index()
             )
-            aggregated_df = aggregated_df.dropna(subset=["datetime"])
+            return aggregated_df, lat, lon
 
-            if not aggregated_df.empty:
-                return aggregated_df, lat, lon
         return None, lat, lon
-
-    def _extract_coordinates_from_drift(self, response_text):
-        """
-        Extract latitude and longitude coordinates from a drift file response.
-
-        Args:
-            response_text (str): Raw text content of the drift file
-
-        Returns:
-            tuple: (latitude, longitude) as floats, or (None, None) if not found
-        """
-        df = pd.read_csv(
-            StringIO(response_text),
-            skiprows=2,
-            sep=r"\s+",
-            comment="#",
-            na_values=["MM"],
-            names=[
-                "year",
-                "month",
-                "day",
-                "hrmn",
-                "lat",
-                "lon",
-                "wdir",
-                "wspd",
-                "gst",
-                "pres",
-                "ptdy",
-                "atmp",
-                "wtmp",
-                "dewp",
-                "wvht",
-                "dpd",
-            ],
-        )
-        lat = (
-            df["LAT"].iloc[0]
-            if "LAT" in df.columns and not df["LAT"].isnull().all()
-            else None
-        )
-        lon = (
-            df["LON"].iloc[0]
-            if "LON" in df.columns and not df["LON"].isnull().all()
-            else None
-        )
-        return lat, lon
 
     async def _insert_localized_wave_data_into_db(self, station_id, data, lat, lon):
         """Insert processed wave data into the database."""
@@ -309,27 +279,45 @@ class LocalizedWaveProcessor:
             "Inserting data for station %s: lat=%s, lon=%s", station_id, lat, lon
         )
 
-        rows = []
-        for _, row in data.iterrows():
-            rows.append(
-                {
-                    "station_id": station_id,
-                    "datetime": row["datetime"],
-                    "latitude": lat,
-                    "longitude": lon,
-                    "wave_height(wvht)": row.get("wvht"),
-                    "dominant_period(dpd)": row.get("dpd"),
-                    "average_period(apd)": row.get("apd"),
-                    "mean_wave_direction(mwd)": row.get("mwd"),
-                }
-            )
+        # Process data in batches
+        BATCH_SIZE = 1000
+        total_rows = len(data)
+        processed_rows = 0
 
         with Session(self.engine) as session:
             try:
-                stmt = insert(self.localized_wave_table).values(rows)
-                session.execute(stmt)
-                session.commit()
-                logger.info("Data inserted for station %s", station_id)
+                for start_idx in range(0, total_rows, BATCH_SIZE):
+                    end_idx = min(start_idx + BATCH_SIZE, total_rows)
+                    batch = data.iloc[start_idx:end_idx]
+
+                    rows = [
+                        {
+                            "station_id": station_id,
+                            "datetime": row["datetime"],
+                            "latitude": lat,
+                            "longitude": lon,
+                            "wave_height(wvht)": row.get("WVHT"),
+                            "dominant_period(dpd)": row.get("DPD"),
+                            "average_period(apd)": row.get("APD"),
+                            "mean_wave_direction(mwd)": row.get("MWD"),
+                        }
+                        for _, row in batch.iterrows()
+                    ]
+
+                    stmt = insert(self.localized_wave_table).values(rows)
+                    session.execute(stmt)
+                    session.commit()
+
+                    processed_rows += len(batch)
+                    logger.info(
+                        "Processed %d/%d rows for station %s",
+                        processed_rows,
+                        total_rows,
+                        station_id,
+                    )
+
+                logger.info("Data insertion completed for station %s", station_id)
+
             except IntegrityError as e:
                 session.rollback()
                 logger.warning(

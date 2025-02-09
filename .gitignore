@@ -1,6 +1,7 @@
 # Backend
 backend/__pycache__/
-backend/*.pyc
+*.pyc
+*.err
 backend/.env
 backend/.pytest_cache/
 backend/dagster_break_analytics/__pycache__/
@@ -17,3 +18,10 @@ pgadmin4/
 data/
 .env
 venv_dagster/
+venv/
+
+# Dagster storage
+**/dagster_home/storage/*/compute_logs/
+**/dagster_home/storage/*/*.err
+**/dagster_home/history/
+**/dagster_home/logs/
