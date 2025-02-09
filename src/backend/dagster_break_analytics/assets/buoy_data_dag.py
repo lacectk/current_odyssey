@@ -62,16 +62,14 @@ async def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
             # Use connection context manager
             with processor.engine.connect() as conn:
                 query = select(
-                    [
-                        wave_table.c.station_id,
-                        wave_table.c.datetime,
-                        wave_table.c.latitude,
-                        wave_table.c.longitude,
-                        wave_table.c["wave_height(wvht)"],
-                        wave_table.c["dominant_period(dpd)"],
-                        wave_table.c["mean_wave_direction(mwd)"],
-                        wave_table.c["average_period(apd)"],
-                    ]
+                    wave_table.c.station_id,
+                    wave_table.c.datetime,
+                    wave_table.c.latitude,
+                    wave_table.c.longitude,
+                    wave_table.c["wave_height(wvht)"],
+                    wave_table.c["dominant_period(dpd)"],
+                    wave_table.c["mean_wave_direction(mwd)"],
+                    wave_table.c["average_period(apd)"],
                 ).where(wave_table.c.datetime >= start_time)
 
                 df = pd.read_sql(query, conn)
