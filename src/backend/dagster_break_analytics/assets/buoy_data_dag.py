@@ -47,7 +47,7 @@ async def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
 
         # Initialize stations
         stations = StationsFetcher()
-        station_ids = stations.fetch_station_ids()[:100]
+        station_ids = stations.fetch_station_ids()
         context.log.info("Found %d stations to process", len(station_ids))
 
         # Use context manager for processor
@@ -78,6 +78,17 @@ async def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
                 ).where(wave_table.c.datetime >= start_time)
 
                 df = pd.read_sql(query, conn)
+
+                # Limit to 10 records if more exist. For testing purposes only.
+                # if len(df) > 10:
+                #     context.log.info(
+                #         "Limiting output to 10 records from %d total", len(df)
+                #     )
+                #     df = df.head(10)
+                # else:
+                #     context.log.info(
+                #         "Found %d records (less than limit of 10)", len(df)
+                #     )
 
             context.log.info("Wave data fetched successfully")
 
