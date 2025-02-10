@@ -10,7 +10,9 @@ from dotenv import load_dotenv
 from src.backend.dagster_break_analytics.io_managers.postgres_io_manager import (
     PostgresIOManager,
 )
-from src.backend.dagster_break_analytics.assets.buoy_data_dag import raw_buoy_data
+from src.backend.dagster_break_analytics.assets.buoy_data_dag import (
+    raw_buoy_data,
+)  # Direct import
 from src.backend.dagster_break_analytics.resources.email_notification import (
     EmailNotification,
 )
@@ -18,13 +20,19 @@ import logging
 
 load_dotenv(override=True)
 
+# Configure logging at startup
+logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
+logging.getLogger("alembic").setLevel(logging.WARNING)
+logging.getLogger("aiohttp").setLevel(logging.WARNING)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
+
 # Define retry policy
 buoy_data_retry_policy = RetryPolicy(max_retries=3, delay=600)
 
 # Define the job
 buoy_data_job = define_asset_job(
     name="buoy_data_job",
-    selection=["raw_buoy_data"],
+    selection=[raw_buoy_data],
     op_retry_policy=buoy_data_retry_policy,
 )
 
@@ -32,12 +40,6 @@ buoy_data_job = define_asset_job(
 buoy_data_schedule = ScheduleDefinition(
     job=buoy_data_job, cron_schedule="0 2 * * *"  # At 02:00 every day
 )
-
-# Configure logging levels for specific loggers
-logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
-logging.getLogger("alembic").setLevel(logging.WARNING)
-logging.getLogger("aiohttp").setLevel(logging.WARNING)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 
 @resource
@@ -60,7 +62,8 @@ def postgres_io_manager(init_context):
 
 
 defs = Definitions(
-    assets=[raw_buoy_data],
+    assets=[raw_buoy_data],  # Direct reference to the asset
+    jobs=[buoy_data_job],
     resources={
         "postgres_io": PostgresIOManager(
             username=os.getenv("DB_USER"),

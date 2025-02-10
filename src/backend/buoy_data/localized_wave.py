@@ -16,11 +16,13 @@ from sqlalchemy import (
     Table,
     MetaData,
 )
+from dataclasses import dataclass
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-from src.backend.config.database import wave_analytics_engine
-from src.backend.stations.stations import StationsFetcher
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy import insert
+from src.backend.config.database import wave_analytics_engine
+from src.backend.stations.stations import StationsFetcher
+import numpy as np
 
 OBSERVATION_BASE_URL = "https://www.ndbc.noaa.gov/data/realtime2/"
 
@@ -29,6 +31,33 @@ logger = logging.getLogger(__name__)
 
 # Define valid file types as a set for O(1) lookup
 VALID_FILE_TYPES = {".drift", ".txt", ".spec"}
+
+
+@dataclass
+class WaveProcessorConfig:
+    """Configuration settings for wave data processing.
+
+    Attributes:
+        batch_size (int): Number of records to process in each batch
+        pool_size (int): Maximum database connections in the pool
+        timeout (int): Request timeout in seconds
+        retry_attempts (int): Number of retry attempts for failed operations
+        base_url (str): Base URL for NDBC data
+    """
+
+    batch_size: int = 1000
+    pool_size: int = 5
+    timeout: int = 30
+    retry_attempts: int = 3
+    base_url: str = "https://www.ndbc.noaa.gov/data/realtime2/"
+
+
+def process_single_df(df):
+    """Process a single dataframe of wave data."""
+    wave_columns = ["datetime", "WVHT", "DPD", "APD", "MWD"]
+    processed_df = df[wave_columns].copy()
+    processed_df = processed_df.groupby("datetime").first().reset_index()
+    return processed_df
 
 
 class LocalizedWaveProcessor:
@@ -46,43 +75,84 @@ class LocalizedWaveProcessor:
         localized_wave_table (Table): SQLAlchemy table definition for wave data
     """
 
-    def __init__(self, station_ids=None):
+    def __init__(self, station_ids=None, pool_size=5):
         """
-        Initialize the LocalizedWaveProcessor.
+        Initialize the LocalizedWaveProcessor with connection pooling configuration.
 
         Args:
             station_ids (list, optional): List of station IDs to process. Defaults to empty list.
+            pool_size (int, optional): Maximum number of connections in the pool. Defaults to 5.
         """
-        self.engine = wave_analytics_engine
         self.station_ids = station_ids or []
         self.metadata = MetaData(schema="raw_data")
+
+        # Configure connection pooling
+        self.engine = wave_analytics_engine.execution_options(
+            pool_size=pool_size,
+            max_overflow=10,
+            pool_timeout=30,
+            pool_recycle=1800,
+        )
 
         # Define tables
         self.localized_wave_table = Table(
             "localized_wave_data", self.metadata, autoload_with=self.engine
         )
+        self.stations_table = Table(
+            "stations", self.metadata, autoload_with=self.engine
+        )
 
-        # Create sessionmaker
         self.session_local = sessionmaker(bind=self.engine)
+        self._http_session = None
+
+    async def __aenter__(self):
+        """Async context manager entry."""
+        self._http_session = aiohttp.ClientSession()
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Async context manager exit with cleanup."""
+        if self._http_session:
+            await self._http_session.close()
+        if self.engine:
+            self.engine.dispose()
 
     async def fetch_stations_data(self):
-        """
-        Fetch and process wave data for all configured stations.
-
-        Iterates through each station ID, fetches its wave data, and inserts it into
-        the database. Handles each station independently and logs the process.
-
-        Returns:
-            None
-        """
+        """Fetch and process wave data for all configured stations."""
         async with aiohttp.ClientSession() as session:
-            for station_id in self.station_ids:
-                logger.info("Fetching wave data for station: %s", station_id)
-                data, lat, lon = await self._fetch_station_data(session, station_id)
-                if data is not None and not data.empty:  # Check if data is valid
-                    await self._insert_localized_wave_data_into_db(
-                        station_id, data, lat, lon
-                    )
+            tasks = [
+                self._fetch_station_data(session, station_id)
+                for station_id in self.station_ids
+            ]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+
+            processed_count = 0
+            for station_id, result in zip(self.station_ids, results):
+                if isinstance(result, Exception):
+                    logger.error("Error processing station %s: %s", station_id, result)
+                    continue
+
+                data, lat, lon = result
+                if (
+                    data is not None and not data.empty
+                ):  # Check if DataFrame is not empty
+                    logger.info(f"Got data for station {station_id}: {len(data)} rows")
+                    processed_count += 1
+                    try:
+                        await self._insert_localized_wave_data_into_db(
+                            station_id, data, lat, lon
+                        )
+                        logger.info(
+                            f"Successfully inserted data for station {station_id}"
+                        )
+                    except Exception as e:
+                        logger.error(
+                            f"Failed to insert data for station {station_id}: {e}"
+                        )
+                else:
+                    logger.warning(f"No valid data for station {station_id}")
+
+            logger.info(f"Processed {processed_count} stations successfully")
 
     async def _fetch_station_data(self, session, station_id):
         """
@@ -93,15 +163,17 @@ class LocalizedWaveProcessor:
         all_dfs = []
         lat, lon = None, None
 
+        # Add debug logging
+        logger.info(f"Fetching data for station {station_id}, files: {file_variants}")
+
         for file_name in file_variants:
             request_url = f"{OBSERVATION_BASE_URL}{file_name}"
             try:
                 async with session.get(request_url) as resp:
-                    logger.info(
-                        "Trying URL: %s with status %s", request_url, resp.status
-                    )
                     if resp.status == 200:
                         response = await resp.text()
+                        # Add debug logging
+                        logger.info(f"Got response for {file_name}")
 
                         if file_name.endswith(".drift"):
                             df = pd.read_csv(
@@ -142,17 +214,6 @@ class LocalizedWaveProcessor:
                             # Extract hour and minute from hhmm
                             df["hour"] = df["hhmm"].astype(str).str[:2].astype(int)
                             df["minute"] = df["hhmm"].astype(str).str[2:].astype(int)
-
-                            lat = (
-                                df["LAT"].iloc[0]
-                                if not df["LAT"].isnull().all()
-                                else None
-                            )
-                            lon = (
-                                df["LON"].iloc[0]
-                                if not df["LON"].isnull().all()
-                                else None
-                            )
 
                         elif file_name.endswith(".spec"):
                             # Handle spec files
@@ -236,13 +297,10 @@ class LocalizedWaveProcessor:
 
                         all_dfs.append(df)
 
-            except (
-                aiohttp.ClientError,
-                pd.errors.EmptyDataError,
-                ValueError,
-                UnicodeDecodeError,
-            ) as e:
-                logger.warning("Failed to fetch data for %s, error: %s", file_name, e)
+            except Exception as e:
+                logger.warning(
+                    "Failed to fetch data for %s, error: %s", file_name, str(e)
+                )
                 continue
 
         if all_dfs:
@@ -253,79 +311,115 @@ class LocalizedWaveProcessor:
             )
             return aggregated_df, lat, lon
 
+        # Add debug logging
+        logger.warning(f"No data found for station {station_id}")
         return None, lat, lon
 
     async def _insert_localized_wave_data_into_db(self, station_id, data, lat, lon):
         """Insert processed wave data into the database."""
+        # Clean data first
+        data = data.copy()
+
+        # Replace NaN values with None for SQL compatibility
+        data = data.replace({np.nan: None, pd.NaT: None})
+
+        # Convert datetime and handle NaT
+        data["datetime"] = pd.to_datetime(data["datetime"], errors="coerce")
+        data = data.dropna(subset=["datetime"])  # Drop rows with invalid timestamps
+
+        # Handle missing lat/lon by querying stations table
         if lat is None or lon is None:
-            logger.warning("Lat/Lon missing for %s, querying database...", station_id)
-            with Session(self.engine) as session:
-                result = (
-                    session.query(
-                        self.localized_wave_table.c.latitude,
-                        self.localized_wave_table.c.longitude,
-                    )
-                    .filter(self.localized_wave_table.c.station_id == station_id)
-                    .first()
-                )
-
-                if result:
-                    lat, lon = result.latitude, result.longitude
-                    logger.info(
-                        "Fetched lat/lon for station %s: %s, %s", station_id, lat, lon
-                    )
-
-        logger.info(
-            "Inserting data for station %s: lat=%s, lon=%s", station_id, lat, lon
-        )
-
-        # Process data in batches
-        BATCH_SIZE = 1000
-        total_rows = len(data)
-        processed_rows = 0
-
-        with Session(self.engine) as session:
+            logger.warning(
+                "Lat/Lon missing for %s, querying stations table...", station_id
+            )
             try:
-                for start_idx in range(0, total_rows, BATCH_SIZE):
-                    end_idx = min(start_idx + BATCH_SIZE, total_rows)
-                    batch = data.iloc[start_idx:end_idx]
+                with Session(self.engine) as session:
+                    result = (
+                        session.query(
+                            self.stations_table.c.latitude,
+                            self.stations_table.c.longitude,
+                        )
+                        .filter(self.stations_table.c.station_id == station_id)
+                        .first()
+                    )
+                    if result:
+                        lat, lon = result
+                        logger.info(
+                            "Found lat/lon in stations table for %s: %s, %s",
+                            station_id,
+                            lat,
+                            lon,
+                        )
+                    else:
+                        logger.error(
+                            "No lat/lon found in stations table for %s", station_id
+                        )
+                        return  # Skip if we can't get coordinates
+            except Exception as e:
+                logger.error("Error querying stations table for %s: %s", station_id, e)
+                return
 
-                    rows = [
-                        {
-                            "station_id": station_id,
-                            "datetime": row["datetime"],
-                            "latitude": lat,
-                            "longitude": lon,
-                            "wave_height(wvht)": row.get("WVHT"),
-                            "dominant_period(dpd)": row.get("DPD"),
-                            "average_period(apd)": row.get("APD"),
-                            "mean_wave_direction(mwd)": row.get("MWD"),
-                        }
-                        for _, row in batch.iterrows()
-                    ]
+        if data.empty:
+            logger.warning(
+                "No valid data left after cleaning for station %s", station_id
+            )
+            return
 
-                    stmt = insert(self.localized_wave_table).values(rows)
-                    session.execute(stmt)
+        try:
+            records = []
+            for _, row in data.iterrows():
+                # Skip any row with NaT values
+                if pd.isna(row["datetime"]):
+                    continue
+
+                # Skip rows where required fields are missing
+                if pd.isna(row.get("APD")):
+                    logger.debug(
+                        f"Skipping row for station {station_id} due to missing APD"
+                    )
+                    continue
+
+                record = {
+                    "station_id": station_id,
+                    "datetime": row["datetime"],
+                    "latitude": lat,
+                    "longitude": lon,
+                    "wave_height(wvht)": (
+                        0.0 if pd.isna(row.get("WVHT")) else float(row.get("WVHT"))
+                    ),
+                    "dominant_period(dpd)": (
+                        0.0 if pd.isna(row.get("DPD")) else float(row.get("DPD"))
+                    ),
+                    "average_period(apd)": (
+                        0.0 if pd.isna(row.get("APD")) else float(row.get("APD"))
+                    ),
+                    "mean_wave_direction(mwd)": (
+                        0.0 if pd.isna(row.get("MWD")) else float(row.get("MWD"))
+                    ),
+                }
+                records.append(record)
+
+            if not records:
+                logger.warning("No valid records to insert for station %s", station_id)
+                return
+
+            # Insert in chunks
+            chunk_size = 1000
+            with Session(self.engine) as session:
+                for i in range(0, len(records), chunk_size):
+                    chunk = records[i : i + chunk_size]
+                    session.execute(insert(self.localized_wave_table), chunk)
                     session.commit()
-
-                    processed_rows += len(batch)
                     logger.info(
-                        "Processed %d/%d rows for station %s",
-                        processed_rows,
-                        total_rows,
+                        "Inserted chunk %d-%d for station %s",
+                        i,
+                        min(i + chunk_size, len(records)),
                         station_id,
                     )
 
-                logger.info("Data insertion completed for station %s", station_id)
-
-            except IntegrityError as e:
-                session.rollback()
-                logger.warning(
-                    "Duplicate entries for station %s ignored: %s", station_id, e
-                )
-            except SQLAlchemyError as e:
-                session.rollback()
-                logger.error("Error inserting data for station %s: %s", station_id, e)
+        except Exception as e:
+            logger.error("Error inserting data for station %s: %s", station_id, e)
+            raise
 
     async def process_data(self):
         """
@@ -346,19 +440,20 @@ class LocalizedWaveProcessor:
             stations = StationsFetcher()
             station_id_list = stations.fetch_station_ids()
 
-            fetcher = LocalizedWaveProcessor(station_id_list)
-            try:
-                await fetcher.fetch_stations_data()
-            finally:
-                fetcher.close()
+            async with LocalizedWaveProcessor(station_id_list) as processor:
+                await processor.fetch_stations_data()
+
             logger.info("Wave data processing completed successfully")
         except (aiohttp.ClientError, SQLAlchemyError, ValueError) as e:
             logger.error("Error processing wave data: %s", str(e))
             raise
 
-    def close(self):
-        """Close the database connection."""
-        self.engine.dispose()
+    async def close(self):
+        """Close all connections."""
+        if self._http_session and not self._http_session.closed:
+            await self._http_session.close()
+        if self.engine:
+            self.engine.dispose()
 
 
 async def main():
@@ -367,11 +462,8 @@ async def main():
     stations = StationsFetcher()
     station_id_list = stations.fetch_station_ids()
 
-    fetcher = LocalizedWaveProcessor(station_id_list)
-    try:
-        await fetcher.fetch_stations_data()
-    finally:
-        fetcher.close()
+    async with LocalizedWaveProcessor(station_id_list) as processor:
+        await processor.fetch_stations_data()
 
 
 if __name__ == "__main__":

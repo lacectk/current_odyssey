@@ -25,3 +25,9 @@ venv/
 **/dagster_home/storage/*/*.err
 **/dagster_home/history/
 **/dagster_home/logs/
+
+# Dagster storage
+**/${DAGSTER_HOME}/storage/*/compute_logs/
+**/${DAGSTER_HOME}/storage/*/*.err
+**/${DAGSTER_HOME}/history/
+**/${DAGSTER_HOME}/logs/

@@ -1,5 +1,5 @@
 [project]
-name = "current_odyssey"
+name = "dagster_break_analytics"
 version = "0.1.0"
 description = "Break Analytics Project"
 requires-python = ">=3.8"
@@ -10,4 +10,4 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["src*"] 
+include = ["src*"]

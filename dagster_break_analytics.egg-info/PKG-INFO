@@ -1,0 +1,5 @@
+Metadata-Version: 2.2
+Name: dagster_break_analytics
+Version: 0.1.0
+Summary: Break Analytics Project
+Requires-Python: >=3.8

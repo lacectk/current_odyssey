@@ -30,6 +30,11 @@ src/backend/dagster_break_analytics/io_managers/postgres_io_manager.py
 src/backend/dagster_break_analytics/io_managers/postgres_schemas.py
 src/backend/dagster_break_analytics/resources/__init__.py
 src/backend/dagster_break_analytics/resources/email_notification.py
+src/backend/database/__init__.py
+src/backend/database/db_config.py
+src/backend/database/db_manager.py
+src/backend/database/models.py
+src/backend/database/setup.py
 src/backend/stations/__init__.py
 src/backend/stations/coverage_analysis.py
 src/backend/stations/ndbc_stations_data.py

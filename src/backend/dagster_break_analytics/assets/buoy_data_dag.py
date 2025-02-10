@@ -8,7 +8,7 @@ localized wave measurements with geographical coordinates.
 
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
-from dagster import asset, AssetExecutionContext, MetadataValue, Output
+from dagster import asset, AssetExecutionContext, MetadataValue, Output, AssetKey
 from sqlalchemy import select, Table, MetaData
 from sqlalchemy.exc import SQLAlchemyError
 import pandas as pd
@@ -31,6 +31,7 @@ async def get_processor_session(station_ids, pool_size=5):
 
 
 @asset(
+    key=AssetKey("raw_buoy_data"),
     description="Raw NDBC buoy data with wave measurements",
     metadata={
         "source": "NDBC API",
@@ -41,15 +42,12 @@ async def get_processor_session(station_ids, pool_size=5):
 )
 async def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
     """Fetch and process raw buoy data from NDBC stations."""
-    processor = None
-    conn = None
-
     try:
         context.log.info("Starting wave data collection")
 
         # Initialize stations
         stations = StationsFetcher()
-        station_ids = stations.fetch_station_ids()[:10]
+        station_ids = stations.fetch_station_ids()[:100]
         context.log.info("Found %d stations to process", len(station_ids))
 
         # Use context manager for processor
@@ -85,19 +83,21 @@ async def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
 
             # Calculate quality metrics
             quality_metrics = {
-                "record_count": len(df),
-                "stations_count": df["station_id"].nunique(),
-                "missing_data_pct": df[
-                    [
-                        "wave_height(wvht)",
-                        "dominant_period(dpd)",
-                        "mean_wave_direction(mwd)",
+                "record_count": int(len(df)),
+                "stations_count": int(df["station_id"].nunique()),
+                "missing_data_pct": float(
+                    df[
+                        [
+                            "wave_height(wvht)",
+                            "dominant_period(dpd)",
+                            "mean_wave_direction(mwd)",
+                        ]
                     ]
-                ]
-                .isna()
-                .mean()
-                .mean()
-                * 100,
+                    .isna()
+                    .mean()
+                    .mean()
+                    * 100
+                ),
                 "time_range": f"{df['datetime'].min()} to {df['datetime'].max()}",
             }
 

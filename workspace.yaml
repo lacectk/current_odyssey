@@ -1,0 +1,6 @@
+load_from:
+  - python_module:
+      name: src.backend.dagster_break_analytics.definitions
+      working_directory: .
+      attribute: defs
+      location_name: dagster_break_analytics
