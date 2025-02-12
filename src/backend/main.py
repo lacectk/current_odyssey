@@ -1,12 +1,13 @@
+from datetime import datetime
 from fastapi import FastAPI, HTTPException, Query, Depends
 from fastapi.middleware.cors import CORSMiddleware
-import pandas as pd
+from sqlalchemy import select
 from sqlalchemy.orm import Session
-import os
 from dotenv import load_dotenv
 
+from src.backend.config.database import get_wave_analytics_db
 from src.backend.config.settings import PROJECT_NAME, CORS_ORIGINS
-from src.backend.models import ConsistencyData
+from src.backend.models import WaveDataModel, StationModel, WaveData, StationData
 
 load_dotenv()
 
@@ -42,59 +43,50 @@ async def root():
     }
 
 
-@app.get("/consistency", response_model=list[ConsistencyData])
-async def get_consistency(
-    start_month: str = Query(..., description="Start month in YYYY-MM format"),
-    end_month: str = Query(..., description="End month in YYYY-MM format"),
-    db: Session = Depends(get_wave_consistency_db),
+@app.get("/api/v1/wave-data", response_model=list[WaveData])
+async def get_wave_data(
+    start_date: str = Query(..., description="Start date in YYYY-MM-DD format"),
+    end_date: str = Query(..., description="End date in YYYY-MM-DD format"),
+    db: Session = Depends(get_wave_analytics_db),
 ):
-    """Retrieve consistency data for the specified month range."""
-    # Validate month format and convert to datetime
+    """Retrieve wave measurements from the localized_wave_data table."""
     try:
-        start_month_dt = pd.to_datetime(start_month, format="%Y-%m")
-        end_month_dt = pd.to_datetime(end_month, format="%Y-%m")
-    except ValueError:
+        start_dt = datetime.strptime(start_date, "%Y-%m-%d")
+        end_dt = datetime.strptime(end_date, "%Y-%m-%d")
+    except ValueError as exc:
         raise HTTPException(
-            status_code=400, detail="Invalid month format. Use YYYY-MM."
-        )
+            status_code=400, detail="Invalid date format. Use YYYY-MM-DD."
+        ) from exc
 
-    # Ensure the start month is before the end month
-    if start_month_dt > end_month_dt:
+    stmt = (
+        select(WaveDataModel)
+        .where(WaveDataModel.datetime.between(start_dt, end_dt))
+        .order_by(WaveDataModel.datetime.desc())
+        .limit(100)
+    )
+
+    result = db.execute(stmt).scalars().all()
+    if not result:
         raise HTTPException(
-            status_code=400, detail="Start month must be before end month."
+            status_code=404, detail="No data found for the given date range."
         )
 
-    db_name = os.getenv("DB_NAME")
-    query = f"""
-        SELECT station_id, month, latitude, longitude, consistency_label, consistency_score
-        FROM {db_name}.wave_consistency_trends
-        WHERE month >= '{start_month_dt.strftime('%Y-%m-01')}'
-        AND month <= '{end_month_dt.strftime('%Y-%m-01')}'
-        AND consistency_score IS NOT NULL
-        AND consistency_score != 'NaN'
-        AND consistency_score != 'Infinity'
-        AND consistency_score != '-Infinity'
-    """
+    return result
 
-    df = pd.read_sql(query, db.bind)
 
-    if df.empty:
-        raise HTTPException(
-            status_code=404, detail="No data found for the given month range."
-        )
+@app.get("/api/v1/stations", response_model=list[StationData])
+async def get_stations(db: Session = Depends(get_wave_analytics_db)):
+    """Retrieve all available stations."""
+    stmt = select(StationModel)
+    result = db.execute(stmt).scalars().all()
 
-    # Clean the dataframe before converting to response
-    df = df.replace([float("inf"), float("-inf")], None)  # Replace infinity with None
-    df = df.dropna(subset=["consistency_score"])  # Remove rows with NaN scores
+    if not result:
+        raise HTTPException(status_code=404, detail="No stations found.")
 
-    # Format and return the response
-    return [
-        ConsistencyData(
-            station_id=row["station_id"],
-            latitude=float(row["latitude"]),
-            longitude=float(row["longitude"]),
-            consistency_label=str(row["consistency_label"]),
-            consistency_score=float(row["consistency_score"]),
-        )
-        for _, row in df.iterrows()
-    ]
+    return result
+
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint."""
+    return {"status": "healthy", "version": "1.0.0"}

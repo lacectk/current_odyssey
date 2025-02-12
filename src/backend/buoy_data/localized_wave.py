@@ -17,12 +17,13 @@ from sqlalchemy import (
     MetaData,
 )
 from dataclasses import dataclass
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+import numpy as np
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy import insert
 from src.backend.config.database import wave_analytics_engine
 from src.backend.stations.stations import StationsFetcher
-import numpy as np
+from src.backend.models import WaveDataModel, StationModel
 
 OBSERVATION_BASE_URL = "https://www.ndbc.noaa.gov/data/realtime2/"
 
@@ -133,26 +134,26 @@ class LocalizedWaveProcessor:
                     continue
 
                 data, lat, lon = result
-                if (
-                    data is not None and not data.empty
-                ):  # Check if DataFrame is not empty
-                    logger.info(f"Got data for station {station_id}: {len(data)} rows")
+                if data is not None and not data.empty:
+                    logger.info(
+                        "Got data for station %s: %d rows", station_id, len(data)
+                    )
                     processed_count += 1
                     try:
                         await self._insert_localized_wave_data_into_db(
                             station_id, data, lat, lon
                         )
                         logger.info(
-                            f"Successfully inserted data for station {station_id}"
+                            "Successfully inserted data for station %s", station_id
                         )
                     except Exception as e:
                         logger.error(
-                            f"Failed to insert data for station {station_id}: {e}"
+                            "Failed to insert data for station %s: %s", station_id, e
                         )
                 else:
-                    logger.warning(f"No valid data for station {station_id}")
+                    logger.warning("No valid data for station %s", station_id)
 
-            logger.info(f"Processed {processed_count} stations successfully")
+            logger.info("Processed %d stations successfully", processed_count)
 
     async def _fetch_station_data(self, session, station_id):
         """
@@ -163,8 +164,9 @@ class LocalizedWaveProcessor:
         all_dfs = []
         lat, lon = None, None
 
-        # Add debug logging
-        logger.info(f"Fetching data for station {station_id}, files: {file_variants}")
+        logger.info(
+            "Fetching data for station %s, files: %s", station_id, file_variants
+        )
 
         for file_name in file_variants:
             request_url = f"{OBSERVATION_BASE_URL}{file_name}"
@@ -172,8 +174,7 @@ class LocalizedWaveProcessor:
                 async with session.get(request_url) as resp:
                     if resp.status == 200:
                         response = await resp.text()
-                        # Add debug logging
-                        logger.info(f"Got response for {file_name}")
+                        logger.info("Got response for %s", file_name)
 
                         if file_name.endswith(".drift"):
                             df = pd.read_csv(
@@ -311,8 +312,7 @@ class LocalizedWaveProcessor:
             )
             return aggregated_df, lat, lon
 
-        # Add debug logging
-        logger.warning(f"No data found for station {station_id}")
+        logger.warning("No data found for station %s", station_id)
         return None, lat, lon
 
     async def _insert_localized_wave_data_into_db(self, station_id, data, lat, lon):
@@ -334,16 +334,13 @@ class LocalizedWaveProcessor:
             )
             try:
                 with Session(self.engine) as session:
-                    result = (
-                        session.query(
-                            self.stations_table.c.latitude,
-                            self.stations_table.c.longitude,
-                        )
-                        .filter(self.stations_table.c.station_id == station_id)
+                    station = (
+                        session.query(StationModel)
+                        .filter(StationModel.station_id == station_id)
                         .first()
                     )
-                    if result:
-                        lat, lon = result
+                    if station:
+                        lat, lon = station.latitude, station.longitude
                         logger.info(
                             "Found lat/lon in stations table for %s: %s, %s",
                             station_id,
@@ -372,32 +369,22 @@ class LocalizedWaveProcessor:
                 if pd.isna(row["datetime"]):
                     continue
 
-                # Skip rows where required fields are missing
-                if pd.isna(row.get("APD")):
-                    logger.debug(
-                        f"Skipping row for station {station_id} due to missing APD"
+                # Create WaveDataModel instance directly
+                try:
+                    wave_data = WaveDataModel(
+                        station_id=station_id,
+                        datetime=row["datetime"],
+                        latitude=lat,
+                        longitude=lon,
+                        wave_height=row.get("WVHT"),
+                        dominant_period=row.get("DPD"),
+                        average_period=row.get("APD"),
+                        mean_wave_direction=row.get("MWD"),
                     )
+                    records.append(wave_data)
+                except Exception as e:
+                    logger.debug(f"Skipping invalid row for station {station_id}: {e}")
                     continue
-
-                record = {
-                    "station_id": station_id,
-                    "datetime": row["datetime"],
-                    "latitude": lat,
-                    "longitude": lon,
-                    "wave_height(wvht)": (
-                        0.0 if pd.isna(row.get("WVHT")) else float(row.get("WVHT"))
-                    ),
-                    "dominant_period(dpd)": (
-                        0.0 if pd.isna(row.get("DPD")) else float(row.get("DPD"))
-                    ),
-                    "average_period(apd)": (
-                        0.0 if pd.isna(row.get("APD")) else float(row.get("APD"))
-                    ),
-                    "mean_wave_direction(mwd)": (
-                        0.0 if pd.isna(row.get("MWD")) else float(row.get("MWD"))
-                    ),
-                }
-                records.append(record)
 
             if not records:
                 logger.warning("No valid records to insert for station %s", station_id)
@@ -408,7 +395,7 @@ class LocalizedWaveProcessor:
             with Session(self.engine) as session:
                 for i in range(0, len(records), chunk_size):
                     chunk = records[i : i + chunk_size]
-                    session.execute(insert(self.localized_wave_table), chunk)
+                    session.add_all(chunk)
                     session.commit()
                     logger.info(
                         "Inserted chunk %d-%d for station %s",

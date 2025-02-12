@@ -12,32 +12,16 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import (
     MetaData,
     Table,
-    insert,
     create_engine,
 )
 from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.pool import QueuePool
 from src.backend.config.database import wave_analytics_engine
 from src.backend.stations.ndbc_stations_data import NDBCDataFetcher
-from sqlalchemy.pool import QueuePool
+from src.backend.models import StationModel
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
-class Station:
-    """
-    Represents a meteorological station with its location coordinates.
-
-    Attributes:
-        station_id (str): Unique identifier for the station
-        latitude (float): Station's latitude coordinate
-        longitude (float): Station's longitude coordinate
-    """
-
-    def __init__(self, station_id, latitude, longitude):
-        self.station_id = station_id
-        self.latitude = latitude
-        self.longitude = longitude
 
 
 class StationsFetcher:
@@ -82,7 +66,7 @@ class StationsFetcher:
         Fetch meteorological station data from NDBC.
 
         Returns:
-            dict: Dictionary of Station objects keyed by station_id
+            dict: Dictionary of StationModel objects keyed by station_id
                  Only includes stations with meteorological capabilities
         """
         try:
@@ -95,7 +79,9 @@ class StationsFetcher:
                     latitude = float(station["@lat"])
                     longitude = float(station["@lon"])
 
-                    station_obj = Station(station_id, latitude, longitude)
+                    station_obj = StationModel(
+                        station_id=station_id, latitude=latitude, longitude=longitude
+                    )
                     stations_list[station_id] = station_obj
 
             return stations_list
@@ -120,17 +106,10 @@ class StationsFetcher:
             return False
 
     def fetch_station_ids(self):
-        """
-        Fetch all station IDs from the database using Session query.
-
-        Returns:
-            list: List of station IDs
-        """
+        """Fetch all station IDs using StationModel."""
         try:
             with Session(self.engine) as session:
-                result = (
-                    session.query(self.stations_table.c.station_id).distinct().all()
-                )
+                result = session.query(StationModel.station_id).distinct().all()
                 return [r[0] for r in result]
         except SQLAlchemyError as e:
             logger.error("Error fetching station IDs: %s", str(e))
@@ -141,33 +120,17 @@ class StationsFetcher:
         Insert or update station data in the database using Session.
 
         Args:
-            station_list (dict): Dictionary of Station objects to insert/update
+            station_list (dict): Dictionary of StationModel objects to insert/update
         """
         with Session(self.engine) as session:
-            for station_id, station in station_list.items():
-                try:
-                    stmt = (
-                        insert(self.stations_table)
-                        .values(
-                            station_id=station.station_id,
-                            latitude=station.latitude,
-                            longitude=station.longitude,
-                        )
-                        .on_conflict_do_nothing(index_elements=["station_id"])
-                    )
-
-                    result = session.execute(stmt)
-
-                    if result.rowcount > 0:
-                        logger.info("Inserted new station %s", station_id)
-
-                except SQLAlchemyError as e:
-                    logger.error(
-                        "Error inserting data for station %s: %s", station_id, e
-                    )
-                    continue
-
-            session.commit()
+            try:
+                for _, station in station_list.items():
+                    session.merge(station)
+                session.commit()
+            except SQLAlchemyError as e:
+                session.rollback()
+                logger.error("Error inserting stations: %s", str(e))
+                raise
 
     async def close(self):
         """Clean up resources."""
