@@ -6,28 +6,16 @@ from NOAA buoy stations. It handles multiple data formats and includes support f
 localized wave measurements with geographical coordinates.
 """
 
-from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 from dagster import asset, AssetExecutionContext, MetadataValue, Output, AssetKey
-from sqlalchemy import select, Table, MetaData
+from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 import pandas as pd
 import pytz
 import aiohttp
 from src.backend.buoy_data.localized_wave import LocalizedWaveProcessor
 from src.backend.stations.stations import StationsFetcher
-
-
-@asynccontextmanager
-async def get_processor_session(station_ids, pool_size=5):
-    """Context manager for processor and database sessions."""
-    processor = None
-    try:
-        processor = LocalizedWaveProcessor(station_ids, pool_size=pool_size)
-        yield processor
-    finally:
-        if processor:
-            await processor.close()
+from src.backend.models import WaveDataModel
 
 
 @asset(
@@ -50,34 +38,18 @@ async def raw_buoy_data(context: AssetExecutionContext) -> Output[pd.DataFrame]:
         station_ids = stations.fetch_station_ids()
         context.log.info("Found %d stations to process", len(station_ids))
 
-        # Use context manager for processor
-        async with get_processor_session(station_ids) as processor:
-            # Fetch new data
+        # Use the class's own context manager
+        async with LocalizedWaveProcessor(station_ids) as processor:
             await processor.fetch_stations_data()
-
-            # Query the newly fetched data
-            metadata = MetaData(schema="raw_data")
-            wave_table = Table(
-                "localized_wave_data", metadata, autoload_with=processor.engine
-            )
 
             utc_now = datetime.now(pytz.utc)
             start_time = utc_now - timedelta(days=1)
 
             # Use connection context manager
             with processor.engine.connect() as conn:
-                query = select(
-                    wave_table.c.station_id,
-                    wave_table.c.datetime,
-                    wave_table.c.latitude,
-                    wave_table.c.longitude,
-                    wave_table.c["wave_height(wvht)"],
-                    wave_table.c["dominant_period(dpd)"],
-                    wave_table.c["mean_wave_direction(mwd)"],
-                    wave_table.c["average_period(apd)"],
-                ).where(wave_table.c.datetime >= start_time)
-
-                df = pd.read_sql(query, conn)
+                stmt = select(WaveDataModel).where(WaveDataModel.datetime >= start_time)
+                result = conn.execute(stmt)
+                df = pd.DataFrame(result.fetchall())
 
                 # Limit to 10 records if more exist. For testing purposes only.
                 # if len(df) > 10:
