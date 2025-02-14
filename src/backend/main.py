@@ -80,7 +80,10 @@ async def root():
     response_model=list[WaveData],
     responses={
         404: {"model": ErrorResponse, "description": "No data found"},
-        400: {"model": ValidationErrorResponse, "description": "Invalid request parameters"},
+        400: {
+            "model": ValidationErrorResponse,
+            "description": "Invalid request parameters",
+        },
         500: {"model": DatabaseErrorResponse, "description": "Internal server error"},
     },
 )
@@ -101,29 +104,15 @@ async def get_wave_data(
     try:
         start_dt, end_dt = validate_date_range(start_date, end_date)
 
-        # Query database
-        try:
-            stmt = select(WaveDataModel).where(
-                WaveDataModel.datetime.between(start_dt, end_dt)
-            )
+        stmt = select(WaveDataModel).where(
+            WaveDataModel.datetime.between(start_dt, end_dt)
+        )
 
-            if station_id:
-                stmt = stmt.where(WaveDataModel.station_id == station_id)
+        if station_id:
+            stmt = stmt.where(WaveDataModel.station_id == station_id)
 
-            result = db.execute(stmt).scalars().all()
+        result = db.execute(stmt).scalars().all()
 
-        except SQLAlchemyError as e:
-            raise HTTPException(
-                status_code=500,
-                detail=DatabaseErrorResponse(
-                    detail="Database error occurred",
-                    error_code="DATABASE_ERROR",
-                    retry_after=30,
-                    additional_info={"error_type": e.__class__.__name__},
-                ).model_dump(),
-            ) from e
-
-        # Handle no results
         if not result:
             raise HTTPException(
                 status_code=404,
@@ -134,6 +123,17 @@ async def get_wave_data(
             )
 
         return result
+
+    except SQLAlchemyError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=DatabaseErrorResponse(
+                detail="Database error occurred",
+                error_code="DATABASE_ERROR",
+                retry_after=30,
+                additional_info={"error_type": e.__class__.__name__},
+            ).model_dump(),
+        ) from e
 
 
 @app.get("/api/v1/stations", response_model=list[StationData])
@@ -147,8 +147,7 @@ async def get_stations(db: Session = Depends(get_wave_analytics_db)):
             raise HTTPException(
                 status_code=404,
                 detail=ErrorResponse(
-                    detail="No stations found",
-                    error_code="STATIONS_NOT_FOUND"
+                    detail="No stations found", error_code="STATIONS_NOT_FOUND"
                 ).model_dump(),
             )
 
